@@ -24,7 +24,7 @@ type GitCodeAuthentication struct {
 	payload   *bytes.Buffer
 	EventType string
 	EventGUID string
-	signKey   string
+	SignKey   string
 }
 
 func (a *GitCodeAuthentication) GetPayload() *bytes.Buffer {
@@ -68,7 +68,7 @@ func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) err
 	}
 
 	// Validate the payload with our HMAC secret.
-	if !signSuccess(token, a.signKey) {
+	if !signSuccess(token, a.SignKey) {
 		return handleErr(w, http.StatusUnauthorized, "403 Forbidden: Invalid X-GitCode-Token")
 	}
 

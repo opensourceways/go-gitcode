@@ -16,7 +16,7 @@ package openapi_test
 import (
 	"context"
 	"encoding/json"
-	"github.com/opensourceways/go-gitcode/gitcode/openapi"
+	"github.com/opensourceways/go-gitcode/openapi"
 	"net/http"
 	"os"
 	"testing"

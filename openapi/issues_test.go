@@ -14,7 +14,7 @@
 package openapi_test
 
 import (
-	"github.com/opensourceways/go-gitcode/gitcode/openapi"
+	"github.com/opensourceways/go-gitcode/openapi"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
