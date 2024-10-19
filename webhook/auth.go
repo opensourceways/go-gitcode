@@ -22,9 +22,17 @@ import (
 
 type GitCodeAuthentication struct {
 	payload   *bytes.Buffer
-	EventType string
-	EventGUID string
-	SignKey   string
+	eventType string
+	eventGUID string
+	signKey   string
+}
+
+func (a *GitCodeAuthentication) SetSignKey(token []byte) error {
+	if token == nil {
+		return errors.New("token should be non-nil")
+	}
+	a.signKey = string(token)
+	return nil
 }
 
 func (a *GitCodeAuthentication) GetPayload() *bytes.Buffer {
@@ -32,11 +40,11 @@ func (a *GitCodeAuthentication) GetPayload() *bytes.Buffer {
 }
 
 func (a *GitCodeAuthentication) GetEventType() *string {
-	return &a.EventType
+	return &a.eventType
 }
 
 func (a *GitCodeAuthentication) GetEventGUID() *string {
-	return &a.EventGUID
+	return &a.eventGUID
 }
 
 func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) error {
@@ -58,7 +66,7 @@ func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) err
 		return handleErr(w, http.StatusBadRequest, "400 Bad Request: Hook only accepts content-type: application/json")
 	}
 
-	if a.EventType = r.Header.Get("X-GitCode-Event"); a.EventType == "" {
+	if a.eventType = r.Header.Get("X-GitCode-Event"); a.eventType == "" {
 		return handleErr(w, http.StatusBadRequest, "400 Bad Request: Missing X-GitCode-Event Header")
 	}
 
@@ -68,7 +76,7 @@ func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) err
 	}
 
 	// Validate the payload with our HMAC secret.
-	if !signSuccess(token, a.SignKey) {
+	if !signSuccess(token, a.signKey) {
 		return handleErr(w, http.StatusUnauthorized, "403 Forbidden: Invalid X-GitCode-Token")
 	}
 
