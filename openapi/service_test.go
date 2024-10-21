@@ -11,59 +11,98 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package openapi_test
+package openapi
 
 import (
-	"bytes"
-	"encoding/gob"
-	"net/http"
-	"reflect"
+	"encoding/json"
+	"github.com/stretchr/testify/assert"
+	"io/fs"
+	"net/url"
+	"os"
+	"path/filepath"
 	"testing"
 )
 
-func assertMethod(t *testing.T, r *http.Request, want string) {
-	t.Helper()
-	if got := r.Method; got != want {
-		t.Errorf("Request method: %v, want %v", got, want)
-	}
-}
+func LoadJsonFile(t *testing.T, path string, ptr any) {
 
-func assertReqBody(t *testing.T, r *http.Request, want any) {
-	t.Helper()
-	if got := r.Body; got != want {
-		t.Errorf("Request body: %v, want %v", got, want)
-	}
-}
-
-func assertDataLa(t *testing.T, got any, want any) {
-	t.Helper()
-	t1, t2 := reflect.TypeOf(got), reflect.TypeOf(want)
-	if t1.String() != t2.String() {
-		t.Errorf("mismatch data type, got: %v, want %v", t1.String(), t2.String())
+retry:
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		t.Errorf("%s not found", path)
 	}
 
-	buf := new(bytes.Buffer)
-	enc := gob.NewEncoder(buf)
-	if err := enc.Encode(got); err != nil {
-		t.Errorf("got: %v", err)
-	}
-	gotBytes := buf.Bytes()
-
-	buf1 := new(bytes.Buffer)
-	enc1 := gob.NewEncoder(buf1)
-	if err := enc1.Encode(want); err != nil {
-		t.Errorf("want: %v", err)
-	}
-	wantBytes := buf1.Bytes()
-
-	if len(gotBytes) != len(wantBytes) {
-		t.Errorf("mismatch data length, got: %v, want %v", len(gotBytes), len(wantBytes))
-	}
-
-	for i := 0; i < len(wantBytes); i++ {
-		if gotBytes[i] != wantBytes[i] {
-			t.Errorf("data different, got: %v, want %v", gotBytes, wantBytes)
-			break
+	stat, err := os.Stat(absPath)
+	if err != nil {
+		if path[:2] != ".." {
+			path = "../" + path
+			goto retry
 		}
+
+		t.Errorf("get %s info occur err: %v", absPath, err)
+		return
+	}
+	if stat.Mode() != fs.ModeType {
+		data, _ := os.ReadFile(absPath)
+		err = json.Unmarshal(data, ptr)
+		if err != nil {
+			t.Errorf("json data convert to struct, occur error: %v", err)
+		}
+	}
+}
+
+func Test_PreOperate(t *testing.T) {
+	t.Parallel()
+
+	type args struct {
+		h    RequestHandler
+		uri  *url.URL
+		body any
+	}
+	testCases := map[string]struct {
+		in  args
+		out error
+		fn  func(i *args)
+	}{
+		"case1": {
+			args{
+				RequestHandler{},
+				&url.URL{},
+				nil,
+			},
+			nil,
+			nil,
+		},
+		"case2": {
+			args{
+				RequestHandler{t: Query},
+				&url.URL{},
+				nil,
+			},
+			nil,
+			func(i *args) {
+				assert.Equal(t, i.uri.RawQuery, "")
+			},
+		},
+		"case3": {
+			args{
+				RequestHandler{t: Query},
+				&url.URL{},
+				url.Values{},
+			},
+			nil,
+			func(i *args) {
+				assert.Equal(t, i.uri.RawQuery, "")
+			},
+		},
+	}
+
+	for name, tt := range testCases {
+		t.Run(name, func(t *testing.T) {
+			got := tt.in.h.PreOperate(tt.in.uri, tt.in.body)
+			assert.Equal(t, tt.out, got)
+			if tt.fn != nil {
+				tt.fn(&tt.in)
+			}
+		})
 	}
 }

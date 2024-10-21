@@ -11,10 +11,9 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package openapi_test
+package openapi
 
 import (
-	"github.com/opensourceways/go-gitcode/openapi"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -24,7 +23,7 @@ import (
 // setup sets up a test HTTP server along with a github.api that is
 // configured to talk to that test server. Tests should register handlers on
 // mux which provide mock responses for the API method being tested.
-func mockServer(t *testing.T) (client *openapi.APIClient, mux *http.ServeMux, serverURL string) {
+func mockServer(t *testing.T) (client *APIClient, mux *http.ServeMux, serverURL string) {
 	t.Helper()
 	// mux is the HTTP request multiplexer used with the test server.
 	mux = http.NewServeMux()
@@ -41,7 +40,7 @@ func mockServer(t *testing.T) (client *openapi.APIClient, mux *http.ServeMux, se
 
 	// api is the GitHub api being tested and is
 	// configured to use test server.
-	client = openapi.NewAPIClientWithAuthorization([]byte("1111111111"))
+	client = NewAPIClientWithAuthorization([]byte("1111111111"))
 	uri, _ := url.Parse(server.URL + handlerPath)
 	client.BaseURL = uri
 

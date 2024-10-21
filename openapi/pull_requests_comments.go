@@ -25,7 +25,7 @@ import (
 //
 // API Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#4-%e6%8f%90%e4%ba%a4pull-request-%e8%af%84%e8%ae%ba
 func (s *PullRequestsService) CreatePullRequestComment(ctx context.Context, owner, repo, number string, comment *PullRequestComment) (*PullRequestComment, bool, error) {
-	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%d/comments", owner, repo, number)
+	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/comments", owner, repo, number)
 	req, err := s.api.newRequest(http.MethodPost, urlStr, comment)
 	if err != nil {
 		return nil, false, err
@@ -40,7 +40,7 @@ func (s *PullRequestsService) CreatePullRequestComment(ctx context.Context, owne
 //
 // API Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#27-%e7%bc%96%e8%be%91%e8%af%84%e8%ae%ba
 func (s *PullRequestsService) EditPullRequestComment(ctx context.Context, owner, repo, number string, comment *PullRequestComment) (*PullRequestComment, bool, error) {
-	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%d/comments", owner, repo, number)
+	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/comments", owner, repo, number)
 	req, err := s.api.newRequest(http.MethodPost, urlStr, comment)
 	if err != nil {
 		return nil, false, err

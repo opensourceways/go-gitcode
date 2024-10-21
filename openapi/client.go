@@ -142,6 +142,9 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 	case nil:
 	case io.Writer:
 		_, err = io.Copy(receiver, resp.Body)
+		if err == io.EOF {
+
+		}
 	default:
 		decErr := json.NewDecoder(resp.Body).Decode(receiver)
 		if decErr == io.EOF {
