@@ -23,8 +23,9 @@ import (
 )
 
 var (
-	tokenNilError  = errors.New("token should be non-nil/non-empty")
-	responseNilErr = errors.New("http response should be non-nil")
+	TokenNilError  = errors.New("token should be non-nil/non-empty")
+	ResponseNilErr = errors.New("http response should be non-nil")
+	RequestNilErr  = errors.New("http request should be non-nil")
 )
 
 type GitCodeAuthentication struct {
@@ -36,7 +37,7 @@ type GitCodeAuthentication struct {
 
 func (a *GitCodeAuthentication) SetSignKey(token []byte) error {
 	if len(token) == 0 {
-		return tokenNilError
+		return TokenNilError
 	}
 	a.signKey = string(token)
 	return nil
@@ -66,18 +67,13 @@ const (
 )
 
 func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) error {
-	defer func(b io.ReadCloser) {
-		if b != nil {
-			_ = b.Close()
-		}
-	}(r.Body)
-	var payload bytes.Buffer
-	if r.Body != nil && r.Body != http.NoBody {
-		if _, err := io.Copy(&payload, r.Body); err != nil {
-			http.Error(w, bodyReadErrorMessage, http.StatusBadRequest)
-			return err
-		}
-		a.payload = &payload
+	if r == nil {
+		return RequestNilErr
+	}
+
+	var err error
+	if a.payload, err = ReadPayload(w, r); err != nil {
+		return err
 	}
 
 	// Header checks: It must be a POST with an event type and a signature.
@@ -106,6 +102,24 @@ func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) err
 	return nil
 }
 
+func ReadPayload(w http.ResponseWriter, r *http.Request) (*bytes.Buffer, error) {
+	if r.Body == nil {
+		return nil, nil
+	}
+
+	defer func() {
+		_ = r.Body.Close()
+	}()
+	var payload bytes.Buffer
+	if r.Body != http.NoBody {
+		if _, err := io.Copy(&payload, r.Body); err != nil {
+			http.Error(w, bodyReadErrorMessage, http.StatusBadRequest)
+			return nil, err
+		}
+	}
+	return &payload, nil
+}
+
 func handleErr(w http.ResponseWriter, errCode int, errMsg string) error {
 	if errCode < http.StatusBadRequest ||
 		(errCode > http.StatusUnavailableForLegalReasons && errCode < http.StatusInternalServerError) ||
@@ -113,9 +127,9 @@ func handleErr(w http.ResponseWriter, errCode int, errMsg string) error {
 		return fmt.Errorf(httpStatusCodeIncorrectErrorFormat, errCode)
 	}
 	if w == nil {
-		return responseNilErr
+		return ResponseNilErr
 	}
-	// logging
+
 	http.Error(w, errMsg, errCode)
 	return errors.New(errMsg)
 }

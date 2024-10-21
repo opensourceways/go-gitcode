@@ -134,9 +134,7 @@ func Test_Auth(t *testing.T) {
 			"",
 			func(i *args) {
 				assert.Equal(t, "Note Hook", i.r.eventType)
-				if i.r.payload != nil {
-					t.Error("payload should be nil")
-				}
+				assert.Equal(t, *i.r.payload, bytes.Buffer{})
 				assert.Equal(t, "1234", i.r.signKey)
 			},
 		},
@@ -169,7 +167,6 @@ func Test_Auth(t *testing.T) {
 				assert.Equal(t, "1234", i.r.signKey)
 			},
 		},
-
 		{
 			"case8",
 			args{
@@ -195,6 +192,16 @@ func Test_Auth(t *testing.T) {
 			func(i *args) {
 				assert.Equal(t, i.r.payload.String(), "")
 			},
+		},
+		{
+			"case9",
+			args{
+				GitCodeAuthentication{signKey: "1234"},
+				httptest.NewRecorder(),
+				nil,
+			},
+			RequestNilErr.Error(),
+			nil,
 		},
 	}
 
@@ -231,7 +238,7 @@ func Test_SetSignKey(t *testing.T) {
 				GitCodeAuthentication{},
 				nil,
 			},
-			tokenNilError,
+			TokenNilError,
 			nil,
 		},
 		{
@@ -240,7 +247,7 @@ func Test_SetSignKey(t *testing.T) {
 				GitCodeAuthentication{},
 				[]byte(""),
 			},
-			tokenNilError,
+			TokenNilError,
 			nil,
 		},
 		{
@@ -446,7 +453,7 @@ func Test_handleErr(t *testing.T) {
 	t.Parallel()
 
 	assert.Equal(t, fmt.Errorf(httpStatusCodeIncorrectErrorFormat, http.StatusAccepted), handleErr(httptest.NewRecorder(), http.StatusAccepted, ""))
-	assert.Equal(t, responseNilErr, handleErr(nil, http.StatusBadRequest, ""))
+	assert.Equal(t, ResponseNilErr, handleErr(nil, http.StatusBadRequest, ""))
 
 	w := httptest.NewRecorder()
 	assert.Equal(t, "1234", handleErr(w, http.StatusBadRequest, "1234").Error())
