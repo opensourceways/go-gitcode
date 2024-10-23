@@ -20,6 +20,7 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"reflect"
 )
 
 const (
@@ -53,19 +54,29 @@ type RequestHandler struct {
 	t   RequestHandlerType
 }
 
-func (b RequestHandler) PreOperate(uri *url.URL, body any) error {
+func (b *RequestHandler) PreOperate(uri *url.URL, body any) error {
 	var err error
 	if body != nil {
 		switch b.t {
 		case Query:
 			// set url query
-			if body, ok := body.(*url.Values); ok {
-				uri.RawQuery = body.Encode()
+			if query, ok := body.(*url.Values); ok {
+				uri.RawQuery = query.Encode()
 			}
 		case Form:
 			// set form data
-			if body, ok := body.(*url.Values); ok {
-				b.buf = bytes.NewBufferString(body.Encode())
+			form, ok := body.(*url.Values)
+			if !ok {
+				v := reflect.ValueOf(body)
+				mt := v.MethodByName("Form")
+				if mt.IsValid() {
+					vs := mt.Call(nil)
+					p := vs[0].Interface()
+					form, ok = p.(*url.Values)
+				}
+			}
+			if ok {
+				b.buf = bytes.NewBufferString(form.Encode())
 			}
 		default:
 			// set json data
@@ -78,7 +89,7 @@ func (b RequestHandler) PreOperate(uri *url.URL, body any) error {
 	return err
 }
 
-func (b RequestHandler) PostOperate(req *http.Request) {
+func (b *RequestHandler) PostOperate(req *http.Request) {
 	switch b.t {
 	case Form:
 		req.Header.Set(HeaderContentTypeName, HeaderContentTypeFormValue)

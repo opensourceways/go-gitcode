@@ -13,14 +13,24 @@
 // limitations under the License.
 package openapi
 
-import "time"
+import (
+	"net/url"
+	"time"
+)
 
 // Label represents a GitCode label on an Issue
 type Label struct {
-	ID           *int64  `json:"id,omitempty"`
-	Name         *string `json:"name,omitempty"`
-	Color        *string `json:"color,omitempty"`
-	RepositoryId *int64  `json:"repository_id,omitempty"`
+	ID           int64  `json:"id,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Color        string `json:"color,omitempty"`
+	RepositoryId int64  `json:"repository_id,omitempty"`
+}
+
+func (l *Label) Form() *url.Values {
+	return &url.Values{
+		"name":  []string{l.Name},
+		"color": []string{l.Color},
+	}
 }
 
 type Issue struct {
@@ -37,9 +47,9 @@ type Issue struct {
 	Assignee         *User             `json:"assignee,omitempty"`
 	Repository       *Repository       `json:"repository,omitempty"`
 	Labels           []*Label          `json:"labels,omitempty"`
-	CreatedAt        *time.Time        `json:"created_at,omitempty"`
-	UpdatedAt        *time.Time        `json:"updated_at,omitempty"`
-	ClosedAt         *time.Time        `json:"finished_at,omitempty"`
+	CreatedAt        *timestamp        `json:"created_at,omitempty"`
+	UpdatedAt        *timestamp        `json:"updated_at,omitempty"`
+	ClosedAt         *timestamp        `json:"finished_at,omitempty"`
 	ClosedBy         *User             `json:"closed_by,omitempty"`
 
 	PullRequestLinks *PullRequestLinks `json:"pull_request,omitempty"` // TODO
@@ -61,23 +71,23 @@ type PullRequestLinks struct {
 }
 
 type IssueRequest struct {
-	Repository    *string `json:"repo,omitempty"  required:"true"` // 仓库地址
-	Title         *string `json:"title,omitempty"`
-	Body          *string `json:"body,omitempty"`
-	Labels        *string `json:"labels,omitempty"`   // 用逗号分开的标签
-	Assignee      *string `json:"assignee,omitempty"` // Issue负责人的 username
-	State         *string `json:"state,omitempty"`
-	Milestone     *int64  `json:"milestone,omitempty"`
-	SecurityHole  *string `json:"security_hole,omitempty"`  // 是否是私有issue(默认为false)
-	IssueStage    *string `json:"issue_stage,omitempty"`    // 严重程序（Accepted,Coding,Completed,New,Rejected,Revising,Testing,Verified）
-	IssueSeverity *string `json:"issue_severity,omitempty"` // 优先级 （Suggestion,Minor,Major,Fatal）
+	Repository    string `json:"repo,omitempty"  required:"true"` // 仓库地址
+	Title         string `json:"title,omitempty"`
+	Body          string `json:"body,omitempty"`
+	Labels        string `json:"labels,omitempty"`   // 用逗号分开的标签
+	Assignee      string `json:"assignee,omitempty"` // Issue负责人的 username
+	State         string `json:"state,omitempty"`
+	Milestone     int64  `json:"milestone,omitempty"`
+	SecurityHole  string `json:"security_hole,omitempty"`  // 是否是私有issue(默认为false)
+	IssueStage    string `json:"issue_stage,omitempty"`    // 严重程序（Accepted,Coding,Completed,New,Rejected,Revising,Testing,Verified）
+	IssueSeverity string `json:"issue_severity,omitempty"` // 优先级 （Suggestion,Minor,Major,Fatal）
 }
 
 type IssueComment struct {
 	ID        *int64     `json:"id,omitempty"`
 	Body      *string    `json:"body,omitempty"`
 	User      *User      `json:"user,omitempty"`
-	CreatedAt *time.Time `json:"created_at,omitempty"`
-	UpdatedAt *time.Time `json:"updated_at,omitempty"`
+	CreatedAt *timestamp `json:"created_at,omitempty"`
+	UpdatedAt *timestamp `json:"updated_at,omitempty"`
 	Target    *Issue     `json:"target,omitempty"`
 }

@@ -15,7 +15,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/opensourceways/go-gitcode/openapi"
 	"log"
@@ -30,6 +29,16 @@ func main() {
 	ctx := context.Background()
 	client := openapi.NewAPIClientWithAuthorization([]byte(token))
 
+	//issue, ok, err := client.Issues.UpdateIssue(ctx, "ibforuorg", "3", &openapi.IssueRequest{
+	//	Repository: "org-repo-role-member-manage",
+	//	Title:      "issue1",
+	//})
+	//fmt.Printf("success: %v, error: %v \n", ok, err)
+	//if ok {
+	//	d, _ := json.Marshal(issue)
+	//	fmt.Printf("pr: %v \n", string(d))
+	//}
+
 	//labels, ok, err := client.Issues.ListRepoIssueLabels(ctx, "ibforuorg", "test1")
 	//fmt.Printf("success: %v, error: %v \n", ok, err)
 	//if ok {
@@ -37,6 +46,27 @@ func main() {
 	//		d, _ := json.Marshal(label)
 	//		fmt.Printf("label: %v \n", string(d))
 	//	}
+	//}
+
+	//comment := "fajhgdahjksghj"
+	//issueComment, ok, err := client.Issues.CreateIssueComment(ctx, "ibforuorg", "test1", "1", &openapi.IssueComment{
+	//	Body: &comment,
+	//})
+	//fmt.Printf("success: %v, error: %v \n\n", ok, err)
+	//if ok {
+	//	d, _ := json.Marshal(issueComment)
+	//	fmt.Printf("pr: %v \n", string(d))
+	//}
+
+	//result, ok, err := client.Issues.CreateRepoIssueLabel(ctx, "ibforuorg", "test1", &openapi.Label{Name: "fasdsad", Color: "#fff"})
+	//result, ok, err := client.Issues.UpdateRepoIssueLabel(ctx, "ibforuorg", "test1", "giasdlkggds", "fsaghhhhh", "#000000")
+	//ok, err := client.Issues.DeleteRepoIssueLabel(ctx, "ibforuorg", "test1", "fgagasdasda")
+	//result, ok, err := client.Issues.AddLabelsToIssue(ctx, "ibforuorg", "test1", "1", []string{"fsaghhhhh"})
+	ok, err := client.Issues.RemoveLabelsFromIssue(ctx, "ibforuorg", "test1", "1", "fsaghhhhh")
+	fmt.Printf("success: %v, error: %v \n\n", ok, err)
+	//if ok {
+	//	d, _ := json.Marshal(result)
+	//	fmt.Printf("result: %v \n", string(d))
 	//}
 
 	//pr, ok, err := client.Issues.ListIssueLinkingPullRequests(ctx, "ibforuorg", "test1", "1")
@@ -48,10 +78,10 @@ func main() {
 	//	}
 	//}
 
-	pr, ok, err := client.PullRequests.GetPullRequest(ctx, "ibforuorg", "test1", "1")
-	fmt.Printf("success: %v, error: %v \n", ok, err)
-	if ok {
-		d, _ := json.Marshal(pr)
-		fmt.Printf("pr: %v \n", string(d))
-	}
+	//pr, ok, err := client.PullRequests.GetPullRequest(ctx, "ibforuorg", "test1", "1")
+	//fmt.Printf("success: %v, error: %v \n", ok, err)
+	//if ok {
+	//	d, _ := json.Marshal(pr)
+	//	fmt.Printf("pr: %v \n", string(d))
+	//}
 }

@@ -40,7 +40,7 @@ func (s *IssuesService) ListRepoIssueLabels(ctx context.Context, owner, repo str
 // API Docs: https://docs.gitcode.com/docs/openapi/repos/labels/#3-%e5%88%9b%e5%bb%ba%e4%bb%93%e5%ba%93%e4%bb%bb%e5%8a%a1%e6%a0%87%e7%ad%be
 func (s *IssuesService) CreateRepoIssueLabel(ctx context.Context, owner, repo string, newLabel *Label) (*Label, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/labels", owner, repo)
-	req, err := s.api.newRequest(http.MethodPost, urlStr, newLabel)
+	req, err := s.api.newRequest(http.MethodPost, urlStr, newLabel, RequestHandler{t: Form})
 	if err != nil {
 		return nil, false, err
 	}
@@ -55,7 +55,7 @@ func (s *IssuesService) CreateRepoIssueLabel(ctx context.Context, owner, repo st
 // API Docs: https://docs.gitcode.com/docs/openapi/repos/labels/#1-%e6%9b%b4%e6%96%b0%e4%b8%80%e4%b8%aa%e4%bb%93%e5%ba%93%e7%9a%84%e4%bb%bb%e5%8a%a1%e6%a0%87%e7%ad%be
 func (s *IssuesService) UpdateRepoIssueLabel(ctx context.Context, owner, repo, originalName, newName, color string) (*Label, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/labels/%s", owner, repo, originalName)
-	req, err := s.api.newRequest(http.MethodPatch, urlStr, url.Values{"name": []string{newName}, "color": []string{color}}, RequestHandler{t: Form})
+	req, err := s.api.newRequest(http.MethodPatch, urlStr, &url.Values{"name": []string{newName}, "color": []string{color}}, RequestHandler{t: Form})
 
 	editedLabel := new(Label)
 	resp, err := s.api.Do(ctx, req, editedLabel)

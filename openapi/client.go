@@ -103,12 +103,12 @@ func (c *APIClient) newRequest(method, urlStr string, body any, handlers ...Requ
 		return nil, err
 	}
 
-	var handler RequestHandler
+	var handler *RequestHandler
 	// 如果 body 不为空，默认以 JSON 处理
 	if len(handlers) == 0 {
-		handler = RequestHandler{t: Json}
+		handler = &RequestHandler{t: Json}
 	} else {
-		handler = handlers[0]
+		handler = &handlers[0]
 	}
 	// 处理 url query、表单、json
 	if err = handler.PreOperate(uri, body); err != nil {
@@ -130,20 +130,19 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 	var err error
 
 	retry := 3
-	for i := 1; i < retry; i++ {
+	for i := 1; i <= retry; i++ {
 		resp, err = c.BareDo(ctx, req)
-		if i > retry || (resp != nil &&
-			resp.StatusCode >= http.StatusBadRequest && resp.StatusCode <= http.StatusUnprocessableEntity) {
-			if err == nil {
-				var str strings.Builder
-				_, _ = io.Copy(&str, resp.Body)
-				err = errors.New(str.String())
-			}
+		if resp != nil && resp.StatusCode <= http.StatusUnavailableForLegalReasons {
 			break
 		}
 		time.Sleep(time.Duration(i) * time.Second)
 	}
-
+	if err == nil && resp != nil && resp.StatusCode >= http.StatusMultipleChoices {
+		var str strings.Builder
+		_, _ = io.Copy(&str, resp.Body)
+		err = errors.New(str.String())
+		_ = resp.Body.Close()
+	}
 	if err != nil {
 		return resp, err
 	}
@@ -217,5 +216,5 @@ func (c *APIClient) BareDo(ctx context.Context, req *http.Request) (*http.Respon
 
 		return nil, err
 	}
-	return resp, nil
+	return resp, err
 }
