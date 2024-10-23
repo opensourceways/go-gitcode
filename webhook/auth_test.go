@@ -15,7 +15,9 @@ package webhook
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
+	"github.com/agiledragon/gomonkey/v2"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"
@@ -216,6 +218,21 @@ func Test_Auth(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_Auth_Mock(t *testing.T) {
+	e := errors.New("fad")
+	patch := gomonkey.ApplyFunc(ReadPayload, func(w http.ResponseWriter, r *http.Request) (*bytes.Buffer, error) {
+		return nil, e
+	})
+
+	defer patch.Reset()
+
+	a := GitCodeAuthentication{signKey: "1234"}
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case8", nil)
+
+	err := a.Auth(httptest.NewRecorder(), req)
+	assert.Equal(t, err, e)
 }
 
 func Test_SetSignKey(t *testing.T) {
@@ -461,4 +478,25 @@ func Test_handleErr(t *testing.T) {
 	var got strings.Builder
 	_, _ = io.Copy(&got, w.Result().Body)
 	assert.Equal(t, "1234\n", got.String())
+}
+
+func Test_ReadPayload(t *testing.T) {
+	e := errors.New("read err")
+	patch := gomonkey.ApplyFunc(io.Copy, func(dst io.Writer, src io.Reader) (written int64, err error) {
+		return 0, e
+	})
+	defer patch.Reset()
+
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case8", func() io.Reader {
+		var b io.Reader
+		buf := &bytes.Buffer{}
+		buf.Write([]byte("{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }"))
+		b = buf
+		return b
+	}())
+	payload, err1 := ReadPayload(httptest.NewRecorder(), req)
+	var p *bytes.Buffer
+	assert.Equal(t, p, payload)
+	assert.Equal(t, e, err1)
+
 }

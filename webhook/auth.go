@@ -114,6 +114,7 @@ func ReadPayload(w http.ResponseWriter, r *http.Request) (*bytes.Buffer, error) 
 	if r.Body != http.NoBody {
 		if _, err := io.Copy(&payload, r.Body); err != nil {
 			http.Error(w, bodyReadErrorMessage, http.StatusBadRequest)
+			fmt.Println("-------------------")
 			return nil, err
 		}
 	}
