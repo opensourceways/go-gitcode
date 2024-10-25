@@ -13,19 +13,17 @@
 // limitations under the License.
 package openapi
 
-import "time"
-
 // PullRequest represents a GitHub pull request on a repository.
 type PullRequest struct {
 	ID             *int64          `json:"id,omitempty"`
-	Number         *string         `json:"number,omitempty"`
+	Number         *int64          `json:"number,omitempty"`
 	State          *string         `json:"state,omitempty"`
 	Title          *string         `json:"title,omitempty"`
 	Body           *string         `json:"body,omitempty"`
-	CreatedAt      *time.Time      `json:"created_at,omitempty"`
-	UpdatedAt      *time.Time      `json:"updated_at,omitempty"`
-	ClosedAt       *time.Time      `json:"closed_at,omitempty"`
-	MergedAt       *time.Time      `json:"merged_at,omitempty"`
+	CreatedAt      *timestamp      `json:"created_at,omitempty"`
+	UpdatedAt      *timestamp      `json:"updated_at,omitempty"`
+	ClosedAt       *timestamp      `json:"closed_at,omitempty"`
+	MergedAt       *timestamp      `json:"merged_at,omitempty"`
 	Labels         []*Label        `json:"labels,omitempty"`
 	User           *User           `json:"user,omitempty"`
 	Draft          *bool           `json:"draft,omitempty"`
@@ -69,43 +67,47 @@ type PullRequestBranch struct {
 
 // TODO
 type MergeAbleState struct {
-	MergeRequestID *int64  `json:"merge_request_id,omitempty"`
-	State          *string `json:"state,omitempty"`
+	MergeRequestID *int64 `json:"merge_request_id,omitempty"`
+	State          *bool  `json:"state,omitempty"`
 }
 
 type PullRequestRequest struct {
-	ID              *int64       `json:"id,omitempty"`
-	Body            *string      `json:"body,omitempty"`
-	State           *string      `json:"state,omitempty"`
-	Labels          *string      `json:"labels,omitempty"`
-	MilestoneNumber *string      `json:"milestone_number,omitempty"`
-	Draft           *string      `json:"draft,omitempty"`
-	Title           *string      `json:"title,omitempty"`
-	User            *User        `json:"user,omitempty"`
-	CreatedAt       *time.Time   `json:"created_at,omitempty"`
-	UpdatedAt       *time.Time   `json:"updated_at,omitempty"`
-	Target          *PullRequest `json:"target,omitempty"`
+	ID              int64       `json:"id,omitempty"`
+	Title           string      `json:"title,omitempty" required:"true"`
+	Body            string      `json:"body,omitempty" required:"true"`
+	State           string      `json:"state,omitempty"`
+	Labels          string      `json:"labels,omitempty"`
+	MilestoneNumber string      `json:"milestone_number,omitempty"`
+	Draft           string      `json:"draft,omitempty"`
+	User            User        `json:"user,omitempty"`
+	Target          PullRequest `json:"target,omitempty"`
 }
 
 type PullRequestComment struct {
-	ID        *int64       `json:"id,omitempty"`
+	ID        *string      `json:"id,omitempty"`
 	Body      *string      `json:"body,omitempty"`
 	User      *User        `json:"user,omitempty"`
-	CreatedAt *time.Time   `json:"created_at,omitempty"`
-	UpdatedAt *time.Time   `json:"updated_at,omitempty"`
+	CreatedAt *timestamp   `json:"created_at,omitempty"`
+	UpdatedAt *timestamp   `json:"updated_at,omitempty"`
 	Target    *PullRequest `json:"target,omitempty"`
+}
+
+type PullRequestCommentRequest struct {
+	Body     string `json:"body,omitempty"`
+	Path     string `json:"path,omitempty"`
+	Position string `json:"position,omitempty"`
 }
 
 // PullRequestOperationLog represents a comment in a GitHub DiscussionCommentEvent.
 type PullRequestOperationLog struct {
 	Project        *string    `json:"project,omitempty"`
-	CreatedAt      *time.Time `json:"created_at,omitempty"`
+	CreatedAt      *timestamp `json:"created_at,omitempty"`
 	DiscussionID   *int64     `json:"discussion_id,omitempty"`
 	ID             *int64     `json:"id,omitempty"`
 	Content        *string    `json:"content,omitempty"`
 	Action         *string    `json:"action,omitempty"`
 	MergeRequestId *int64     `json:"merge_request_id,omitempty"`
-	UpdatedAt      *time.Time `json:"updated_at,omitempty"`
+	UpdatedAt      *timestamp `json:"updated_at,omitempty"`
 	User           *User      `json:"user,omitempty"`
 }
 

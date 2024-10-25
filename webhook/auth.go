@@ -23,9 +23,9 @@ import (
 )
 
 var (
-	TokenNilError  = errors.New("token should be non-nil/non-empty")
-	ResponseNilErr = errors.New("http response should be non-nil")
-	RequestNilErr  = errors.New("http request should be non-nil")
+	errorNilToken    = errors.New("token should be non-nil/non-empty")
+	errorNilResponse = errors.New("http response should be non-nil")
+	errorNilRequest  = errors.New("http request should be non-nil")
 )
 
 type GitCodeAuthentication struct {
@@ -37,7 +37,7 @@ type GitCodeAuthentication struct {
 
 func (a *GitCodeAuthentication) SetSignKey(token []byte) error {
 	if len(token) == 0 {
-		return TokenNilError
+		return errorNilToken
 	}
 	a.signKey = string(token)
 	return nil
@@ -68,7 +68,7 @@ const (
 
 func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) error {
 	if r == nil {
-		return RequestNilErr
+		return errorNilRequest
 	}
 
 	var err error
@@ -114,7 +114,6 @@ func ReadPayload(w http.ResponseWriter, r *http.Request) (*bytes.Buffer, error) 
 	if r.Body != http.NoBody {
 		if _, err := io.Copy(&payload, r.Body); err != nil {
 			http.Error(w, bodyReadErrorMessage, http.StatusBadRequest)
-			fmt.Println("-------------------")
 			return nil, err
 		}
 	}
@@ -128,7 +127,7 @@ func handleErr(w http.ResponseWriter, errCode int, errMsg string) error {
 		return fmt.Errorf(httpStatusCodeIncorrectErrorFormat, errCode)
 	}
 	if w == nil {
-		return ResponseNilErr
+		return errorNilResponse
 	}
 
 	http.Error(w, errMsg, errCode)

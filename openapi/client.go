@@ -97,7 +97,7 @@ func transportDialContext(dialer *net.Dialer) func(context.Context, string, stri
 	return dialer.DialContext
 }
 
-func (c *APIClient) newRequest(method, urlStr string, body any, handlers ...RequestHandler) (*http.Request, error) {
+func newRequest(c *APIClient, method, urlStr string, body any, handlers ...RequestHandler) (*http.Request, error) {
 	uri, err := c.BaseURL.Parse(urlStr)
 	if err != nil {
 		return nil, err
@@ -142,6 +142,7 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 		_, _ = io.Copy(&str, resp.Body)
 		err = errors.New(str.String())
 		_ = resp.Body.Close()
+		fmt.Println("----------------------------=============================")
 	}
 	if err != nil {
 		return resp, err
@@ -166,7 +167,7 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 }
 
 /*
-下表显示了 GitCode API 请求可能的返回代码：https://docs.gitcode.com/docs/openapi/guide/
+下表显示了 GitCode api 请求可能的返回代码：https://docs.gitcode.com/docs/openapi/guide/
 返回值	描述
 200 OK	GET、PUT 或 DELETE 请求成功，并且资源本身以 JSON 形式返回
 201 Created	POST 请求成功，并且资源以 JSON 形式返回
@@ -174,7 +175,7 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 204 No Content	服务器已成功满足请求，并且在响应负载体中没有额外的内容发送
 301 Moved Permanently	资源已被定位到由 Location 头给出的 URL
 304 Not Modified	资源自上次请求以来未被修改
-400 Bad Request	API 请求的必需属性缺失。例如，未给出问题的标题
+400 Bad Request	api 请求的必需属性缺失。例如，未给出问题的标题
 401 Unauthorized	用户未经认证。需要有效的用户令牌
 403 Forbidden	请求不被允许。例如，用户不允许删除项目
 404 Not Found	无法访问资源。例如，无法找到资源的 ID，或者用户无权访问资源

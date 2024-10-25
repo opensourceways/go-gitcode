@@ -13,8 +13,6 @@
 // limitations under the License.
 package openapi
 
-import "time"
-
 // Repository represents a GitHub repository.
 type Repository struct {
 	ID                        *int64                 `json:"id,omitempty"`
@@ -27,9 +25,9 @@ type Repository struct {
 	Homepage                  *string                `json:"homepage,omitempty"`
 	DefaultBranch             *string                `json:"default_branch,omitempty"`
 	MasterBranch              *string                `json:"master_branch,omitempty"`
-	CreatedAt                 *time.Time             `json:"created_at,omitempty"`
-	PushedAt                  *time.Time             `json:"pushed_at,omitempty"`
-	UpdatedAt                 *time.Time             `json:"updated_at,omitempty"`
+	CreatedAt                 *timestamp             `json:"created_at,omitempty"`
+	PushedAt                  *timestamp             `json:"pushed_at,omitempty"`
+	UpdatedAt                 *timestamp             `json:"updated_at,omitempty"`
 	HTMLURL                   *string                `json:"html_url,omitempty"`
 	CloneURL                  *string                `json:"clone_url,omitempty"`
 	GitURL                    *string                `json:"git_url,omitempty"`
@@ -86,7 +84,7 @@ type Repository struct {
 	// Creating an organization repository. Required for non-owners.
 	TeamID *int64 `json:"team_id,omitempty"`
 
-	// API URLs
+	// api URLs
 	URL              *string `json:"url,omitempty"`
 	ArchiveURL       *string `json:"archive_url,omitempty"`
 	AssigneesURL     *string `json:"assignees_url,omitempty"`
@@ -130,7 +128,7 @@ type Repository struct {
 	// Can be one of public, private or internal.
 	Visibility *string `json:"visibility,omitempty"`
 
-	// RoleName is only returned by the API 'check team permissions for a repository'.
+	// RoleName is only returned by the api 'check team permissions for a repository'.
 	// See: teams.go (IsTeamRepoByID) https://docs.github.com/rest/teams/teams#check-team-permissions-for-a-repository
 	RoleName *string `json:"role_name,omitempty"`
 }
@@ -205,7 +203,7 @@ type RepositoryContent struct {
 
 // Contributor represents a repository contributor
 type Contributor struct {
-	Contributions *int    `json:"contributions,omitempty"`
+	Contributions *int64  `json:"contributions,omitempty"`
 	Name          *string `json:"name,omitempty"`
 	Email         *string `json:"email,omitempty"`
 }

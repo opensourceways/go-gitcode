@@ -15,7 +15,6 @@ package openapi
 
 import (
 	"net/url"
-	"time"
 )
 
 // Label represents a GitCode label on an Issue
@@ -52,9 +51,7 @@ type Issue struct {
 	ClosedAt         *timestamp        `json:"finished_at,omitempty"`
 	ClosedBy         *User             `json:"closed_by,omitempty"`
 
-	PullRequestLinks *PullRequestLinks `json:"pull_request,omitempty"` // TODO
-	// RepoBranchLink  // TODO
-
+	PullRequestLinks *PullRequestLinks `json:"pull_request,omitempty"`
 }
 
 type IssueStateDetail struct {
@@ -67,7 +64,7 @@ type PullRequestLinks struct {
 	HTMLURL  *string    `json:"html_url,omitempty"`
 	DiffURL  *string    `json:"diff_url,omitempty"`
 	PatchURL *string    `json:"patch_url,omitempty"`
-	MergedAt *time.Time `json:"merged_at,omitempty"`
+	MergedAt *timestamp `json:"merged_at,omitempty"`
 }
 
 type IssueRequest struct {

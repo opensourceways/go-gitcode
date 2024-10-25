@@ -11,14 +11,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package openapi_test
+package openapi
 
 import (
 	"context"
 	"encoding/json"
-	"github.com/opensourceways/go-gitcode/openapi"
+	"github.com/stretchr/testify/assert"
 	"net/http"
-	"os"
 	"testing"
 )
 
@@ -26,30 +25,35 @@ func TestListLabels(t *testing.T) {
 	t.Parallel()
 	client, mux, _ := mockServer(t)
 
-	owner, repo := "111", "222"
-
-	data, _ := os.ReadFile("./testdata/issues/list-labels.json")
-	var srcLabels []*openapi.Label
-	err := json.Unmarshal(data, &srcLabels)
-	if err != nil {
-		t.Errorf("Issues.ListLabels mock response data error: %v", err)
-	}
+	var srcLabels []*Label
+	_, _ = readTestdata(t, issuesTestDataDir+"issues_list_labels.json", &srcLabels)
 
 	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels", func(w http.ResponseWriter, r *http.Request) {
-		assertMethod(t, r, http.MethodGet)
-		assertReqBody(t, r, http.NoBody)
-		w.Header().Set(openapi.HeaderContentTypeName, openapi.HeaderContentTypeJsonValue)
-		err = json.NewEncoder(w).Encode(srcLabels)
+		w.Header().Set(HeaderContentTypeName, HeaderContentTypeJsonValue)
+		err := json.NewEncoder(w).Encode(srcLabels)
 		if err != nil {
 			t.Errorf("Issues.ListLabels mock response data error: %v", err)
 		}
 	})
 
-	ctx := context.Background()
-	targetLabels, _, err := client.Issues.ListRepoIssueLabels(ctx, owner, repo)
+	targetLabels, ok, err := client.Issues.ListRepoIssueLabels(context.Background(), owner, repo)
 	if err != nil {
 		t.Errorf("Issues.ListLabels returned error: %v", err)
 	}
+	assert.Equal(t, true, ok)
+	assert.Equal(t, srcLabels, targetLabels)
 
-	assertDataLa(t, srcLabels, targetLabels)
+	repo := "333"
+	msg := "{\n    \"error_code\": 500,\n    \"error_code_name\": \"FAIL\",\n    \"error_message\": \"系统错误\",\n    \"trace_id\": \"d0834ebae0074f5cab66ef8b8fc529d5\"\n}"
+	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(HeaderContentTypeName, HeaderContentTypeJsonValue)
+		// a word wrap \n write to response
+		http.Error(w, msg, http.StatusInternalServerError)
+	})
+
+	targetLabels, ok, err = client.Issues.ListRepoIssueLabels(context.Background(), owner, repo)
+	assert.Equal(t, false, ok)
+	assert.Equal(t, 0, len(targetLabels))
+	assert.Equal(t, msg+"\n", err.Error())
+
 }

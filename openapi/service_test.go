@@ -11,59 +11,82 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package openapi_test
+package openapi
 
 import (
-	"bytes"
-	"encoding/gob"
+	"encoding/json"
 	"net/http"
-	"reflect"
+	"net/http/httptest"
+	"net/url"
+	"os"
+	"path/filepath"
+	"runtime"
 	"testing"
 )
 
-func assertMethod(t *testing.T, r *http.Request, want string) {
+const (
+	owner = "111"
+	repo  = "222"
+
+	testDataDir       = "testdata"
+	issuesTestDataDir = testDataDir + string(os.PathSeparator) + "issues" + string(os.PathSeparator)
+	prTestDataDir     = testDataDir + string(os.PathSeparator) + "pr" + string(os.PathSeparator)
+	reposTestDataDir  = testDataDir + string(os.PathSeparator) + "repos" + string(os.PathSeparator)
+)
+
+// setup sets up a test HTTP server along with a github.api that is
+// configured to talk to that test server. Tests should register handlers on
+// mux which provide mock responses for the api method being tested.
+func mockServer(t *testing.T) (client *APIClient, mux *http.ServeMux, serverURL string) {
 	t.Helper()
-	if got := r.Method; got != want {
-		t.Errorf("Request method: %v, want %v", got, want)
-	}
+	// mux is the HTTP request multiplexer used with the test server.
+	mux = http.NewServeMux()
+
+	apiHandler := http.NewServeMux()
+	handlerPath := "/api/v5/"
+	apiHandler.Handle(handlerPath, http.StripPrefix(handlerPath[:len(handlerPath)-1], mux))
+
+	// server is a test HTTP server used to provide mock api responses.
+	server := httptest.NewServer(apiHandler)
+
+	// api is the GitHub api being tested and is
+	// configured to use test server.
+	client = NewAPIClientWithAuthorization([]byte("1111111111"))
+	uri, _ := url.Parse(server.URL + handlerPath)
+	client.BaseURL = uri
+
+	t.Cleanup(server.Close)
+
+	return client, mux, server.URL
 }
 
-func assertReqBody(t *testing.T, r *http.Request, want any) {
-	t.Helper()
-	if got := r.Body; got != want {
-		t.Errorf("Request body: %v, want %v", got, want)
-	}
-}
+func readTestdata(t *testing.T, path string, ptr any) ([]byte, error) {
 
-func assertDataLa(t *testing.T, got any, want any) {
-	t.Helper()
-	t1, t2 := reflect.TypeOf(got), reflect.TypeOf(want)
-	if t1.String() != t2.String() {
-		t.Errorf("mismatch data type, got: %v, want %v", t1.String(), t2.String())
+retry:
+	i := 0
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		t.Error(absPath + "not found")
+		return nil, err
 	}
-
-	buf := new(bytes.Buffer)
-	enc := gob.NewEncoder(buf)
-	if err := enc.Encode(got); err != nil {
-		t.Errorf("got: %v", err)
-	}
-	gotBytes := buf.Bytes()
-
-	buf1 := new(bytes.Buffer)
-	enc1 := gob.NewEncoder(buf1)
-	if err := enc1.Encode(want); err != nil {
-		t.Errorf("want: %v", err)
-	}
-	wantBytes := buf1.Bytes()
-
-	if len(gotBytes) != len(wantBytes) {
-		t.Errorf("mismatch data length, got: %v, want %v", len(gotBytes), len(wantBytes))
-	}
-
-	for i := 0; i < len(wantBytes); i++ {
-		if gotBytes[i] != wantBytes[i] {
-			t.Errorf("data different, got: %v, want %v", gotBytes, wantBytes)
-			break
+	if _, err = os.Stat(absPath); !os.IsNotExist(err) {
+		data, err := os.ReadFile(absPath)
+		if err != nil {
+			return nil, err
+		}
+		err = json.Unmarshal(data, ptr)
+		if err != nil {
+			_, _, line, _ := runtime.Caller(1)
+			t.Errorf("code line: %d, error: %v", line, err)
+		}
+		return data, err
+	} else {
+		i++
+		path = ".." + string(os.PathSeparator) + path
+		if i <= 3 {
+			goto retry
 		}
 	}
+
+	return nil, err
 }

@@ -21,10 +21,10 @@ import (
 
 // AddLabelsToPullRequest 创建 Pull Request 标签
 //
-// API Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#12-%e5%88%9b%e5%bb%ba-pull-request-%e6%a0%87%e7%ad%be
-func (s *PullRequestsService) AddLabelsToPullRequest(ctx context.Context, owner, repo string, number uint, labelNameList []string) ([]*Label, bool, error) {
-	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%d/labels", owner, repo, number)
-	req, err := s.api.newRequest(http.MethodPost, urlStr, labelNameList)
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#12-%e5%88%9b%e5%bb%ba-pull-request-%e6%a0%87%e7%ad%be
+func (s *PullRequestsService) AddLabelsToPullRequest(ctx context.Context, owner, repo, number string, labelNameList []string) ([]*Label, bool, error) {
+	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/labels", owner, repo, number)
+	req, err := newRequest(s.api, http.MethodPost, urlStr, labelNameList)
 	if err != nil {
 		return nil, false, err
 	}
@@ -36,10 +36,10 @@ func (s *PullRequestsService) AddLabelsToPullRequest(ctx context.Context, owner,
 
 // RemoveLabelsFromPullRequest 删除 Pull Request 标签
 //
-// API Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#13-%e5%88%a0%e9%99%a4-pull-request-%e6%a0%87%e7%ad%be
-func (s *PullRequestsService) RemoveLabelsFromPullRequest(ctx context.Context, owner string, repo, number, labels string) (bool, error) {
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#13-%e5%88%a0%e9%99%a4-pull-request-%e6%a0%87%e7%ad%be
+func (s *PullRequestsService) RemoveLabelsFromPullRequest(ctx context.Context, owner, repo, number, labels string) (bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/labels/%s", owner, repo, number, labels)
-	req, err := s.api.newRequest(http.MethodDelete, urlStr, nil)
+	req, err := newRequest(s.api, http.MethodDelete, urlStr, nil)
 	if err != nil {
 		return false, err
 	}

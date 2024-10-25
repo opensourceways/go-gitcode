@@ -1,4 +1,4 @@
-// Copyright 2024 Chao Feng
+// Copyright (c) Huawei Technologies Co., Ltd. 2024. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/opensourceways/go-gitcode/openapi"
 	"log"
@@ -29,15 +30,15 @@ func main() {
 	ctx := context.Background()
 	client := openapi.NewAPIClientWithAuthorization([]byte(token))
 
-	//issue, ok, err := client.Issues.UpdateIssue(ctx, "ibforuorg", "3", &openapi.IssueRequest{
-	//	Repository: "org-repo-role-member-manage",
-	//	Title:      "issue1",
-	//})
-	//fmt.Printf("success: %v, error: %v \n", ok, err)
-	//if ok {
-	//	d, _ := json.Marshal(issue)
-	//	fmt.Printf("pr: %v \n", string(d))
-	//}
+	issue, ok, err := client.Issues.UpdateIssue(ctx, "ibforuorg", "2", &openapi.IssueRequest{
+		Repository: "test1",
+		Title:      "issue1",
+	})
+	fmt.Printf("success: %v, error: %v \n", ok, err)
+	if ok {
+		d, _ := json.Marshal(issue)
+		fmt.Printf("pr: %v \n", string(d))
+	}
 
 	//labels, ok, err := client.Issues.ListRepoIssueLabels(ctx, "ibforuorg", "test1")
 	//fmt.Printf("success: %v, error: %v \n", ok, err)
@@ -62,8 +63,8 @@ func main() {
 	//result, ok, err := client.Issues.UpdateRepoIssueLabel(ctx, "ibforuorg", "test1", "giasdlkggds", "fsaghhhhh", "#000000")
 	//ok, err := client.Issues.DeleteRepoIssueLabel(ctx, "ibforuorg", "test1", "fgagasdasda")
 	//result, ok, err := client.Issues.AddLabelsToIssue(ctx, "ibforuorg", "test1", "1", []string{"fsaghhhhh"})
-	ok, err := client.Issues.RemoveLabelsFromIssue(ctx, "ibforuorg", "test1", "1", "fsaghhhhh")
-	fmt.Printf("success: %v, error: %v \n\n", ok, err)
+	//ok, err := client.Issues.RemoveLabelsFromIssue(ctx, "ibforuorg", "test1", "1", "fsaghhhhh")
+	//fmt.Printf("success: %v, error: %v \n\n", ok, err)
 	//if ok {
 	//	d, _ := json.Marshal(result)
 	//	fmt.Printf("result: %v \n", string(d))
@@ -78,10 +79,20 @@ func main() {
 	//	}
 	//}
 
-	//pr, ok, err := client.PullRequests.GetPullRequest(ctx, "ibforuorg", "test1", "1")
-	//fmt.Printf("success: %v, error: %v \n", ok, err)
+	//result, ok, err := client.PullRequests.GetPullRequest(ctx, "ibforuorg", "test1", "1")
+	//result, ok, err := client.PullRequests.UpdatePullRequest(ctx, "ibforuorg", "test1", "1", &openapi.PullRequestRequest{
+	//	State: "open",
+	//})
+	//result, ok, err := client.PullRequests.ListPullRequestLinkingIssues(ctx, "ibforuorg", "test1", "1")
+	//result, ok, err := client.PullRequests.CreatePullRequestComment(ctx, "ibforuorg", "test1", "1", &openapi.PullRequestCommentRequest{
+	//	Body: "fauygiahsgdbviahsd",
+	//})
+	//result, ok, err := client.PullRequests.AddLabelsToPullRequest(ctx, "ibforuorg", "test1", "1", []string{"bug1"})
+	//ok, err := client.PullRequests.RemoveLabelsFromPullRequest(ctx, "ibforuorg", "test1", "1", "bug1")
+	//result, ok, err := client.Repository.CheckUserIsRepoMember(ctx, "ibforuorg", "test1", "ibforu2nd")
+	//fmt.Printf("success: %v, error: %v \n\n", result, err)
 	//if ok {
-	//	d, _ := json.Marshal(pr)
-	//	fmt.Printf("pr: %v \n", string(d))
+	//	d, _ := json.Marshal(result)
+	//	fmt.Printf("result: %v \n", string(d))
 	//}
 }

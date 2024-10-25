@@ -11,41 +11,81 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package openapi_test
+package openapi
 
 import (
-	"github.com/opensourceways/go-gitcode/openapi"
+	"context"
+	"encoding/json"
+	"github.com/stretchr/testify/assert"
 	"net/http"
-	"net/http/httptest"
-	"net/url"
 	"testing"
 )
 
-// setup sets up a test HTTP server along with a github.api that is
-// configured to talk to that test server. Tests should register handlers on
-// mux which provide mock responses for the API method being tested.
-func mockServer(t *testing.T) (client *openapi.APIClient, mux *http.ServeMux, serverURL string) {
-	t.Helper()
-	// mux is the HTTP request multiplexer used with the test server.
-	mux = http.NewServeMux()
+func TestUpdateIssue(t *testing.T) {
+	t.Parallel()
+	client, mux, _ := mockServer(t)
 
-	// We want to ensure that tests catch mistakes where the endpoint URL is
-	// specified as absolute rather than relative. It only makes a difference
-	// when there's a non-empty base URL path. So, use that. See issue #752.
-	apiHandler := http.NewServeMux()
-	handlerPath := "/api/v5/"
-	apiHandler.Handle(handlerPath, http.StripPrefix(handlerPath[:len(handlerPath)-1], mux))
+	issue := new(Issue)
+	_, _ = readTestdata(t, issuesTestDataDir+"issues_update.json", issue)
 
-	// server is a test HTTP server used to provide mock API responses.
-	server := httptest.NewServer(apiHandler)
+	mux.HandleFunc("/repos/"+owner+"/issues/1", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(HeaderContentTypeName, HeaderContentTypeJsonValue)
+		err := json.NewEncoder(w).Encode(issue)
+		if err != nil {
+			t.Errorf("Issues.UpdateIssue mock response data error: %v", err)
+		}
+	})
 
-	// api is the GitHub api being tested and is
-	// configured to use test server.
-	client = openapi.NewAPIClientWithAuthorization([]byte("1111111111"))
-	uri, _ := url.Parse(server.URL + handlerPath)
-	client.BaseURL = uri
+	ctx := context.Background()
+	result, ok, err := client.Issues.UpdateIssue(ctx, owner, "1", &IssueRequest{
+		Repository: repo,
+		Title:      "issue1",
+	})
+	if err != nil {
+		t.Errorf("Issues.UpdateIssue returned error: %v", err)
+	}
+	assert.Equal(t, true, ok)
+	assert.Equal(t, issue, result)
 
-	t.Cleanup(server.Close)
+	errMsg := "{\n    \"error_code\": 403,\n    \"error_code_name\": \"FORBIDDEN\",\n    \"error_message\": \"no scopes:read_projects\",\n    \"trace_id\": \"33809e888a654b78bb2be8e7c97c9423\"\n}"
+	mux.HandleFunc("/repos/"+owner+"/issues/2", func(w http.ResponseWriter, r *http.Request) {
+		http.Error(w, errMsg, http.StatusBadRequest)
+	})
 
-	return client, mux, server.URL
+	result, ok, err = client.Issues.UpdateIssue(context.Background(), owner, "2", &IssueRequest{
+		Repository: repo,
+		Title:      "issue2",
+	})
+
+	assert.Equal(t, false, ok)
+	assert.Equal(t, Issue{}, *result)
+	assert.Equal(t, errMsg+"\n", err.Error())
+}
+
+func TestListIssueLinkingPullRequests(t *testing.T) {
+	t.Parallel()
+	client, mux, _ := mockServer(t)
+
+	prs := new([]*PullRequest)
+	_, _ = readTestdata(t, issuesTestDataDir+"issues_linking_prs.json", prs)
+
+	mux.HandleFunc("/repos/"+owner+"/issues/1/pull_requests", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(HeaderContentTypeName, HeaderContentTypeJsonValue)
+		err := json.NewEncoder(w).Encode(prs)
+		if err != nil {
+			t.Errorf("Issues.ListIssueLinkingPullRequests mock response data error: %v", err)
+		}
+	})
+
+	ctx := context.Background()
+	result, ok, err := client.Issues.ListIssueLinkingPullRequests(ctx, owner, repo, "1")
+	if err != nil {
+		t.Errorf("Issues.ListIssueLinkingPullRequests returned error: %v", err)
+	}
+	assert.Equal(t, true, ok)
+	for i := range *prs {
+		d1, _ := json.Marshal(*(*prs)[i])
+		d2, _ := json.Marshal(*result[i])
+		assert.Equal(t, d1, d2)
+	}
 }

@@ -21,10 +21,10 @@ import (
 
 // CreateIssueComment 创建Issue评论
 //
-// API Docs: https://docs.gitcode.com/docs/openapi/repos/issues/#11%e5%88%9b%e5%bb%baissue%e8%af%84%e8%ae%ba
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/issues/#11%e5%88%9b%e5%bb%baissue%e8%af%84%e8%ae%ba
 func (s *IssuesService) CreateIssueComment(ctx context.Context, owner, repo, number string, comment *IssueComment) (*IssueComment, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/issues/%s/comments", owner, repo, number)
-	req, err := s.api.newRequest(http.MethodPost, urlStr, comment)
+	req, err := newRequest(s.api, http.MethodPost, urlStr, comment)
 	if err != nil {
 		return nil, false, err
 	}

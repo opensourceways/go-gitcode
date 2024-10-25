@@ -13,8 +13,6 @@
 // limitations under the License.
 package openapi
 
-import "time"
-
 // Organization represents a GitHub organization account.
 type Organization struct {
 	Login        *string    `json:"login,omitempty"`
@@ -28,8 +26,8 @@ type Organization struct {
 	PrivateRepos *int       `json:"private_repos,omitempty"`
 	Followers    *int       `json:"followers,omitempty"`
 	FollowCount  *int       `json:"follow_count,omitempty"`
-	CreatedAt    *time.Time `json:"created_at,omitempty"`
-	UpdatedAt    *time.Time `json:"updated_at,omitempty"`
+	CreatedAt    *timestamp `json:"created_at,omitempty"`
+	UpdatedAt    *timestamp `json:"updated_at,omitempty"`
 	Members      *string    `json:"members,omitempty"`
 	Public       *bool      `json:"public,omitempty"`
 	Type         *string    `json:"type,omitempty"`

@@ -22,10 +22,10 @@ import (
 
 // GetRepoAllMember 获取仓库的所有成员
 //
-// API Docs: https://docs.gitcode.com/docs/openapi/repos/member/#3-%e8%8e%b7%e5%8f%96%e4%bb%93%e5%ba%93%e7%9a%84%e6%89%80%e6%9c%89%e6%88%90%e5%91%98
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/member/#3-%e8%8e%b7%e5%8f%96%e4%bb%93%e5%ba%93%e7%9a%84%e6%89%80%e6%9c%89%e6%88%90%e5%91%98
 func (s *RepositoryService) GetRepoAllMember(ctx context.Context, owner, repo, page string) ([]*User, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/collaborators", owner, repo)
-	req, err := s.api.newRequest(http.MethodGet, urlStr,
+	req, err := newRequest(s.api, http.MethodGet, urlStr,
 		url.Values{"page": []string{page}, "per_page": []string{"100"}}, RequestHandler{t: Query})
 	if err != nil {
 		return nil, false, err
@@ -38,10 +38,10 @@ func (s *RepositoryService) GetRepoAllMember(ctx context.Context, owner, repo, p
 
 // GetRepoMemberPermission 查看仓库成员的权限
 //
-// API Docs: https://docs.gitcode.com/docs/openapi/repos/member/#5-%e6%9f%a5%e7%9c%8b%e4%bb%93%e5%ba%93%e6%88%90%e5%91%98%e7%9a%84%e6%9d%83%e9%99%90
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/member/#5-%e6%9f%a5%e7%9c%8b%e4%bb%93%e5%ba%93%e6%88%90%e5%91%98%e7%9a%84%e6%9d%83%e9%99%90
 func (s *RepositoryService) GetRepoMemberPermission(ctx context.Context, owner, repo, username string) (*User, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/collaborators/%s/permission", owner, repo, username)
-	req, err := s.api.newRequest(http.MethodGet, urlStr, nil)
+	req, err := newRequest(s.api, http.MethodGet, urlStr, nil)
 	if err != nil {
 		return nil, false, err
 	}
@@ -53,14 +53,14 @@ func (s *RepositoryService) GetRepoMemberPermission(ctx context.Context, owner, 
 
 // CheckUserIsRepoMember 判断用户是否为仓库成员
 //
-// API Docs: https://docs.gitcode.com/docs/openapi/repos/member/#4-%e5%88%a4%e6%96%ad%e7%94%a8%e6%88%b7%e6%98%af%e5%90%a6%e4%b8%ba%e4%bb%93%e5%ba%93%e6%88%90%e5%91%98
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/member/#4-%e5%88%a4%e6%96%ad%e7%94%a8%e6%88%b7%e6%98%af%e5%90%a6%e4%b8%ba%e4%bb%93%e5%ba%93%e6%88%90%e5%91%98
 func (s *RepositoryService) CheckUserIsRepoMember(ctx context.Context, owner, repo, username string) (bool, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/collaborators/%s", owner, repo, username)
-	req, err := s.api.newRequest(http.MethodGet, urlStr, nil)
+	req, err := newRequest(s.api, http.MethodGet, urlStr, nil)
 	if err != nil {
 		return false, false, err
 	}
 
 	resp, err := s.api.Do(ctx, req, nil)
-	return successGetData(resp), resp != nil && resp.StatusCode == http.StatusNotFound, err
+	return resp != nil && resp.StatusCode == http.StatusOK || resp.StatusCode == http.StatusNoContent, resp != nil && resp.StatusCode == http.StatusNotFound, err
 }
