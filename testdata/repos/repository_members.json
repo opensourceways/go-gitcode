@@ -1,0 +1,31 @@
+[
+  {
+    "id": "708",
+    "name": "Lzm_0916",
+    "username": "Lzm_0916",
+    "nick_name": null,
+    "state": null,
+    "avatar": null,
+    "avatar_url": null,
+    "email": null,
+    "name_cn": null,
+    "web_url": "https://test.gitcode.net/Lzm_0916",
+    "access_level": null,
+    "expires_at": null,
+    "limited": null,
+    "type": "ProjectMember",
+    "last_owner": null,
+    "is_current_source_member": null,
+    "last_source_owner": null,
+    "join_way": null,
+    "source_name": null,
+    "member_roles": null,
+    "iam_id": null,
+    "committer_system_from": null,
+    "permissions": {
+      "pull": null,
+      "push": null,
+      "admin": true
+    }
+  }
+]

@@ -96,8 +96,8 @@ func (s *IssuesService) AddLabelsToIssue(ctx context.Context, owner, repo, numbe
 // RemoveLabelsFromIssue 删除Issue标签
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/issues/#10%e5%88%a0%e9%99%a4issue%e6%a0%87%e7%ad%be
-func (s *IssuesService) RemoveLabelsFromIssue(ctx context.Context, owner, repo, number, labels string) (bool, error) {
-	urlStr := fmt.Sprintf("repos/%s/%s/issues/%s/labels/%s", owner, repo, number, labels)
+func (s *IssuesService) RemoveLabelsFromIssue(ctx context.Context, owner, repo, number, label string) (bool, error) {
+	urlStr := fmt.Sprintf("repos/%s/%s/issues/%s/labels/%s", owner, repo, number, label)
 	req, err := newRequest(s.api, http.MethodDelete, urlStr, nil)
 	if err != nil {
 		return false, err

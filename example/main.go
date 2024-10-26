@@ -30,13 +30,15 @@ func main() {
 	ctx := context.Background()
 	client := openapi.NewAPIClientWithAuthorization([]byte(token))
 
-	issue, ok, err := client.Issues.UpdateIssue(ctx, "ibforuorg", "2", &openapi.IssueRequest{
-		Repository: "test1",
-		Title:      "issue1",
-	})
+	contributors, ok, err := client.Repository.GetRepoContributors(ctx, "ibforuorg", "test1", "")
+
+	//issue, ok, err := client.Issues.UpdateIssue(ctx, "ibforuorg", "2", &openapi.IssueRequest{
+	//	Repository: "test1",
+	//	Title:      "issue1",
+	//})
 	fmt.Printf("success: %v, error: %v \n", ok, err)
 	if ok {
-		d, _ := json.Marshal(issue)
+		d, _ := json.Marshal(contributors)
 		fmt.Printf("pr: %v \n", string(d))
 	}
 
@@ -95,4 +97,14 @@ func main() {
 	//	d, _ := json.Marshal(result)
 	//	fmt.Printf("result: %v \n", string(d))
 	//}
+
+	//request, err := http.NewRequest(http.MethodGet, "https://api.gitcode.com/api/v5/repos/ibforuorg/test1/contributors", nil)
+	//request.Header.Set("Authorization", "Bearer gouQ2vVmbEqMhzMxCoTTQfdN")
+	//
+	//do, err := http.DefaultClient.Do(request)
+	//if err != nil {
+	//	fmt.Printf("err: %v \n", err)
+	//}
+	//
+	//fmt.Printf("resp: %v \n", do)
 }

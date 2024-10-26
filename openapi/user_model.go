@@ -18,9 +18,8 @@ type User struct {
 	Login       *string     `json:"login,omitempty"`
 	ID          *string     `json:"id,omitempty"`
 	AvatarURL   *string     `json:"avatar_url,omitempty"`
-	HTMLURL     *string     `json:"html_url,omitempty"`
-	Name        *string     `json:"name,omitempty"`
-	Company     *string     `json:"company,omitempty"`
+	HTMLURL     *string     `json:"web_url,omitempty"`
+	Name        *string     `json:"username,omitempty"`
 	Blog        *string     `json:"blog,omitempty"`
 	Email       *string     `json:"email,omitempty"`
 	Bio         *string     `json:"bio,omitempty"`

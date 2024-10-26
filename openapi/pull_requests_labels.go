@@ -17,6 +17,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // AddLabelsToPullRequest 创建 Pull Request 标签
@@ -37,8 +38,8 @@ func (s *PullRequestsService) AddLabelsToPullRequest(ctx context.Context, owner,
 // RemoveLabelsFromPullRequest 删除 Pull Request 标签
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#13-%e5%88%a0%e9%99%a4-pull-request-%e6%a0%87%e7%ad%be
-func (s *PullRequestsService) RemoveLabelsFromPullRequest(ctx context.Context, owner, repo, number, labels string) (bool, error) {
-	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/labels/%s", owner, repo, number, labels)
+func (s *PullRequestsService) RemoveLabelsFromPullRequest(ctx context.Context, owner, repo, number string, labels []string) (bool, error) {
+	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/labels/%s", owner, repo, number, strings.Join(labels, ","))
 	req, err := newRequest(s.api, http.MethodDelete, urlStr, nil)
 	if err != nil {
 		return false, err

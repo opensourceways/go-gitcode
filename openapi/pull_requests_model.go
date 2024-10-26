@@ -84,12 +84,11 @@ type PullRequestRequest struct {
 }
 
 type PullRequestComment struct {
-	ID        *string      `json:"id,omitempty"`
-	Body      *string      `json:"body,omitempty"`
-	User      *User        `json:"user,omitempty"`
-	CreatedAt *timestamp   `json:"created_at,omitempty"`
-	UpdatedAt *timestamp   `json:"updated_at,omitempty"`
-	Target    *PullRequest `json:"target,omitempty"`
+	ID        *string    `json:"id,omitempty"`
+	Body      *string    `json:"body,omitempty"`
+	User      *User      `json:"user,omitempty"`
+	CreatedAt *timestamp `json:"created_at,omitempty"`
+	UpdatedAt *timestamp `json:"updated_at,omitempty"`
 }
 
 type PullRequestCommentRequest struct {

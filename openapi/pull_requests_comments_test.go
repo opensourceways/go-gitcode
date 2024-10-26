@@ -21,29 +21,26 @@ import (
 	"testing"
 )
 
-func TestCreateIssueComment(t *testing.T) {
+func TestCreatePullRequestComment(t *testing.T) {
 	t.Parallel()
 	client, mux, _ := mockServer(t)
 
-	var comments IssueComment
-	_ = readTestdata(t, issuesTestDataDir+"issues_comment.json", &comments)
+	want := new(PullRequestComment)
+	_ = readTestdata(t, prTestDataDir+"pull_requests_create_comment.json", want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/issues/1/comments", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("/repos/"+owner+"/"+repo+"/pulls/25/comments", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
-		err := json.NewEncoder(w).Encode(comments)
-		if err != nil {
-			t.Errorf("Issues.ListLabels mock response data error: %v", err)
-		}
+		_ = json.NewEncoder(w).Encode(want)
 	})
 
-	comment := "123987u41"
-	result, ok, err := client.Issues.CreateIssueComment(context.Background(), owner, repo, "1", &IssueComment{
-		Body: &comment,
+	ctx := context.Background()
+	got, ok, err := client.PullRequests.CreatePullRequestComment(ctx, owner, repo, "25", &PullRequestCommentRequest{
+		Body: "fgujhgasd",
 	})
-	if err != nil {
-		t.Errorf("Issues.CreateIssueComment returned error: %v", err)
-	}
+	assert.Equal(t, nil, err)
 	assert.Equal(t, true, ok)
-	assert.Equal(t, comments, *result)
 
+	d1, _ := json.Marshal(*want)
+	d2, _ := json.Marshal(*got)
+	assert.Equal(t, d1, d2)
 }

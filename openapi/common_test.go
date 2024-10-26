@@ -37,87 +37,92 @@ func TestNewRequestError(t *testing.T) {
 	assert.Equal(t, 0, len(targetLabels))
 	assert.Equal(t, msg1, err.Error())
 
-	issue, ok, err := client.Issues.UpdateIssue(context.Background(), "ibforuorg", "2", &IssueRequest{
-		Repository: "test1",
+	issue, ok, err := client.Issues.UpdateIssue(context.Background(), owner, "2", &IssueRequest{
+		Repository: repo,
 		Title:      "issue1",
 	})
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*Issue)(nil), issue)
 	assert.Equal(t, msg1, err.Error())
 
-	pr, ok, err := client.Issues.ListIssueLinkingPullRequests(context.Background(), "ibforuorg", "test1", "1")
+	pr, ok, err := client.Issues.ListIssueLinkingPullRequests(context.Background(), owner, repo, "1")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*PullRequest)(nil), pr)
 	assert.Equal(t, msg1, err.Error())
 
 	comment := "fajhgdahjksghj"
-	issueComment, ok, err := client.Issues.CreateIssueComment(context.Background(), "ibforuorg", "test1", "1", &IssueComment{
+	issueComment, ok, err := client.Issues.CreateIssueComment(context.Background(), owner, repo, "1", &IssueComment{
 		Body: &comment,
 	})
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*IssueComment)(nil), issueComment)
 	assert.Equal(t, msg1, err.Error())
 
-	labels, ok, err := client.Issues.ListRepoIssueLabels(context.Background(), "ibforuorg", "test1")
+	labels, ok, err := client.Issues.ListRepoIssueLabels(context.Background(), owner, repo)
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*Label)(nil), labels)
 	assert.Equal(t, msg1, err.Error())
-	result1, ok, err := client.Issues.CreateRepoIssueLabel(context.Background(), "ibforuorg", "test1", &Label{Name: "fasdsad", Color: "#fff"})
+	result1, ok, err := client.Issues.CreateRepoIssueLabel(context.Background(), owner, repo, &Label{Name: "fasdsad", Color: "#fff"})
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*Label)(nil), result1)
 	assert.Equal(t, msg1, err.Error())
-	result2, ok, err := client.Issues.UpdateRepoIssueLabel(context.Background(), "ibforuorg", "test1", "giasdlkggds", "fsaghhhhh", "#000000")
+	result2, ok, err := client.Issues.UpdateRepoIssueLabel(context.Background(), owner, repo, "giasdlkggds", "fsaghhhhh", "#000000")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*Label)(nil), result2)
 	assert.Equal(t, msg1, err.Error())
-	ok, err = client.Issues.DeleteRepoIssueLabel(context.Background(), "ibforuorg", "test1", "fgagasdasda")
+	ok, err = client.Issues.DeleteRepoIssueLabel(context.Background(), owner, repo, "fgagasdasda")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, msg1, err.Error())
-	result3, ok, err := client.Issues.AddLabelsToIssue(context.Background(), "ibforuorg", "test1", "1", []string{"fsaghhhhh"})
+	result3, ok, err := client.Issues.AddLabelsToIssue(context.Background(), owner, repo, "1", []string{"fsaghhhhh"})
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*Label)(nil), result3)
 	assert.Equal(t, msg1, err.Error())
-	ok, err = client.Issues.RemoveLabelsFromIssue(context.Background(), "ibforuorg", "test1", "1", "fsaghhhhh")
+	ok, err = client.Issues.RemoveLabelsFromIssue(context.Background(), owner, repo, "1", "fsaghhhhh")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, msg1, err.Error())
 
-	result4, ok, err := client.PullRequests.GetPullRequest(context.Background(), "ibforuorg", "test1", "1")
+	result4, ok, err := client.PullRequests.GetPullRequest(context.Background(), owner, repo, "1")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*PullRequest)(nil), result4)
 	assert.Equal(t, msg1, err.Error())
-	result5, ok, err := client.PullRequests.UpdatePullRequest(context.Background(), "ibforuorg", "test1", "1", &PullRequestRequest{
+	result5, ok, err := client.PullRequests.UpdatePullRequest(context.Background(), owner, repo, "1", &PullRequestRequest{
 		State: "open",
 	})
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*PullRequest)(nil), result5)
 	assert.Equal(t, msg1, err.Error())
-	result6, ok, err := client.PullRequests.ListPullRequestLinkingIssues(context.Background(), "ibforuorg", "test1", "1")
+	result6, ok, err := client.PullRequests.ListPullRequestLinkingIssues(context.Background(), owner, repo, "1")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*Issue)(nil), result6)
 	assert.Equal(t, msg1, err.Error())
-	result7, ok, err := client.PullRequests.CreatePullRequestComment(context.Background(), "ibforuorg", "test1", "1", &PullRequestCommentRequest{
+	result7, ok, err := client.PullRequests.CreatePullRequestComment(context.Background(), owner, repo, "1", &PullRequestCommentRequest{
 		Body: "fauygiahsgdbviahsd",
 	})
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*PullRequestComment)(nil), result7)
 	assert.Equal(t, msg1, err.Error())
-	result8, ok, err := client.PullRequests.AddLabelsToPullRequest(context.Background(), "ibforuorg", "test1", "1", []string{"bug1"})
+	result8, ok, err := client.PullRequests.AddLabelsToPullRequest(context.Background(), owner, repo, "1", []string{"bug1"})
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*Label)(nil), result8)
 	assert.Equal(t, msg1, err.Error())
-	ok, err = client.PullRequests.RemoveLabelsFromPullRequest(context.Background(), "ibforuorg", "test1", "1", "bug1")
-	result9, ok, err := client.Repository.CheckUserIsRepoMember(context.Background(), "ibforuorg", "test1", "ibforu2nd")
+	ok, err = client.PullRequests.RemoveLabelsFromPullRequest(context.Background(), owner, repo, "1", []string{"bug1"})
+	result9, ok, err := client.Repository.CheckUserIsRepoMember(context.Background(), owner, repo, "ibforu2nd")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, false, result9)
 	assert.Equal(t, msg1, err.Error())
 
-	result10, ok, err := client.Repository.GetRepoAllMember(context.Background(), "ibforuorg", "test1", "1")
+	result10, ok, err := client.Repository.GetRepoAllMember(context.Background(), owner, repo, "1")
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*User)(nil), result10)
 	assert.Equal(t, msg1, err.Error())
 
-	result11, ok, err := client.Repository.GetRepoMemberPermission(context.Background(), "ibforuorg", "test1", "1")
+	result11, ok, err := client.Repository.GetRepoMemberPermission(context.Background(), owner, repo, "1")
 	assert.Equal(t, false, ok)
-	assert.Equal(t, (*User)(nil), result11)
+	assert.Equal(t, false, result11)
+	assert.Equal(t, msg1, err.Error())
+
+	result12, ok, err := client.Repository.GetRepoContributors(context.Background(), owner, repo, "")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, ([]*Contributor)(nil), result12)
 	assert.Equal(t, msg1, err.Error())
 }

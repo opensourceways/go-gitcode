@@ -26,14 +26,14 @@ import (
 const (
 	defaultBaseURL = "https://api.gitcode.com/api/v5/"
 
-	HeaderAuthorization        = "Authorization"
-	HeaderUserAgentName        = "User-Agent"
-	HeaderUserAgentValue       = "OpenSourceCommunityRobot/1.0.0"
-	HeaderMediaTypeName        = "Accept"
-	HeaderMediaTypeValue       = "application/json"
-	HeaderContentTypeName      = "Content-Type"
-	HeaderContentTypeJsonValue = "application/json"
-	HeaderContentTypeFormValue = "application/x-www-form-urlencoded"
+	headerAuthorization        = "Authorization"
+	headerUserAgentName        = "User-Agent"
+	headerUserAgentValue       = "OpenSourceCommunityRobot/1.0.0"
+	headerMediaTypeName        = "Accept"
+	headerMediaTypeValue       = "application/json"
+	headerContentTypeName      = "Content-Type"
+	headerContentTypeJsonValue = "application/json"
+	headerContentTypeFormValue = "application/x-www-form-urlencoded"
 )
 
 var (
@@ -92,11 +92,11 @@ func (b *RequestHandler) PreOperate(uri *url.URL, body any) error {
 func (b *RequestHandler) PostOperate(req *http.Request) {
 	switch b.t {
 	case Form:
-		req.Header.Set(HeaderContentTypeName, HeaderContentTypeFormValue)
+		req.Header.Set(headerContentTypeName, headerContentTypeFormValue)
 	case Query:
 		fallthrough
 	default:
-		req.Header.Set(HeaderContentTypeName, HeaderContentTypeJsonValue)
+		req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 	}
 }
 

@@ -53,33 +53,36 @@ func mockServer(t *testing.T) (client *APIClient, mux *http.ServeMux, serverURL 
 	// configured to use test server.
 	client = NewAPIClientWithAuthorization([]byte("1111111111"))
 	uri, _ := url.Parse(server.URL + handlerPath)
-	client.BaseURL = uri
+	client.baseURL = uri
 
 	t.Cleanup(server.Close)
 
 	return client, mux, server.URL
 }
 
-func readTestdata(t *testing.T, path string, ptr any) ([]byte, error) {
+func readTestdata(t *testing.T, path string, ptr any) []byte {
 
-retry:
 	i := 0
+retry:
 	absPath, err := filepath.Abs(path)
 	if err != nil {
-		t.Error(absPath + "not found")
-		return nil, err
+		t.Error(path + " not found")
+		return nil
 	}
 	if _, err = os.Stat(absPath); !os.IsNotExist(err) {
 		data, err := os.ReadFile(absPath)
 		if err != nil {
-			return nil, err
+			t.Error(path + " read failed")
+			return nil
 		}
-		err = json.Unmarshal(data, ptr)
-		if err != nil {
-			_, _, line, _ := runtime.Caller(1)
-			t.Errorf("code line: %d, error: %v", line, err)
+		if ptr != nil {
+			err = json.Unmarshal(data, ptr)
+			if err != nil {
+				_, _, line, _ := runtime.Caller(1)
+				t.Errorf("code line: %d, error: %v", line, err)
+			}
 		}
-		return data, err
+		return data
 	} else {
 		i++
 		path = ".." + string(os.PathSeparator) + path
@@ -88,5 +91,6 @@ retry:
 		}
 	}
 
-	return nil, err
+	t.Error(path + " not found")
+	return nil
 }

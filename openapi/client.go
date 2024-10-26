@@ -30,7 +30,7 @@ import (
 // APIClient 一个客户端，管理与 GitCode OpenAPI 的通信
 type APIClient struct {
 	client  *http.Client
-	BaseURL *url.URL
+	baseURL *url.URL
 
 	common service // Reuse a single struct instead of allocating one for each service on the heap.
 	// 各个模块的服务
@@ -51,9 +51,9 @@ func NewAPIClientWithAuthorization(token []byte) *APIClient {
 		Transport: roundTripperFunc(
 			func(req *http.Request) (*http.Response, error) {
 				req = req.Clone(req.Context())
-				req.Header.Set(HeaderAuthorization, "Bearer "+string(token))
-				req.Header.Set(HeaderUserAgentName, HeaderUserAgentValue)
-				req.Header.Set(HeaderMediaTypeName, HeaderMediaTypeValue)
+				req.Header.Set(headerAuthorization, "Bearer "+string(token))
+				req.Header.Set(headerUserAgentName, headerUserAgentValue)
+				req.Header.Set(headerMediaTypeName, headerMediaTypeValue)
 				return createTransport(nil).RoundTrip(req)
 			},
 		),
@@ -62,8 +62,8 @@ func NewAPIClientWithAuthorization(token []byte) *APIClient {
 
 	c := &APIClient{client: httpClient}
 
-	if c.BaseURL == nil {
-		c.BaseURL, _ = url.Parse(defaultBaseURL)
+	if c.baseURL == nil {
+		c.baseURL, _ = url.Parse(defaultBaseURL)
 	}
 	c.common.api = c
 
@@ -98,7 +98,7 @@ func transportDialContext(dialer *net.Dialer) func(context.Context, string, stri
 }
 
 func newRequest(c *APIClient, method, urlStr string, body any, handlers ...RequestHandler) (*http.Request, error) {
-	uri, err := c.BaseURL.Parse(urlStr)
+	uri, err := c.baseURL.Parse(urlStr)
 	if err != nil {
 		return nil, err
 	}

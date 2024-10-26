@@ -19,9 +19,7 @@ import (
 	"net/http"
 )
 
-// 获取某个Pull Request的所有评论
-
-// CreatePullRequestComment 提交pull request 评论
+// CreatePullRequestComment 提交 pull request 评论
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#4-%e6%8f%90%e4%ba%a4pull-request-%e8%af%84%e8%ae%ba
 func (s *PullRequestsService) CreatePullRequestComment(ctx context.Context, owner, repo, number string, comment *PullRequestCommentRequest) (*PullRequestComment, bool, error) {

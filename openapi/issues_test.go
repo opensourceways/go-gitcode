@@ -26,10 +26,10 @@ func TestUpdateIssue(t *testing.T) {
 	client, mux, _ := mockServer(t)
 
 	issue := new(Issue)
-	_, _ = readTestdata(t, issuesTestDataDir+"issues_update.json", issue)
+	_ = readTestdata(t, issuesTestDataDir+"issues_update.json", issue)
 
 	mux.HandleFunc("/repos/"+owner+"/issues/1", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set(HeaderContentTypeName, HeaderContentTypeJsonValue)
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(issue)
 		if err != nil {
 			t.Errorf("Issues.UpdateIssue mock response data error: %v", err)
@@ -67,10 +67,10 @@ func TestListIssueLinkingPullRequests(t *testing.T) {
 	client, mux, _ := mockServer(t)
 
 	prs := new([]*PullRequest)
-	_, _ = readTestdata(t, issuesTestDataDir+"issues_linking_prs.json", prs)
+	_ = readTestdata(t, issuesTestDataDir+"issues_linking_prs.json", prs)
 
 	mux.HandleFunc("/repos/"+owner+"/issues/1/pull_requests", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set(HeaderContentTypeName, HeaderContentTypeJsonValue)
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(prs)
 		if err != nil {
 			t.Errorf("Issues.ListIssueLinkingPullRequests mock response data error: %v", err)

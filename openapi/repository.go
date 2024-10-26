@@ -25,7 +25,12 @@ import (
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/#9-%e8%8e%b7%e5%8f%96%e4%bb%93%e5%ba%93%e8%b4%a1%e7%8c%ae%e8%80%85
 func (s *RepositoryService) GetRepoContributors(ctx context.Context, owner, repo, category string) ([]*Contributor, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/contributors", owner, repo)
-	req, err := newRequest(s.api, http.MethodGet, urlStr, url.Values{"type": []string{category}}, RequestHandler{t: Query})
+	var query url.Values
+	if category != "" {
+		query = url.Values{}
+		query.Set("type", category)
+	}
+	req, err := newRequest(s.api, http.MethodGet, urlStr, &query, RequestHandler{t: Query})
 	if err != nil {
 		return nil, false, err
 	}
