@@ -1,4 +1,4 @@
-// Copyright 2024 Chao Feng
+// Copyright (c) Huawei Technologies Co., Ltd. 2024. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ func TestGetRepoContributors(t *testing.T) {
 	want := new([]*Contributor)
 	_ = readTestdata(t, reposTestDataDir+"repository_contributors.json", want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/contributors", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/contributors", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		_ = json.NewEncoder(w).Encode(want)
 

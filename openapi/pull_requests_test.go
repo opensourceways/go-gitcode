@@ -1,4 +1,4 @@
-// Copyright 2024 Chao Feng
+// Copyright (c) Huawei Technologies Co., Ltd. 2024. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ func TestGetPullRequest(t *testing.T) {
 	want := new(PullRequest)
 	_ = readTestdata(t, prTestDataDir+"pull_requests.json", want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/pulls/11", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/11", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		_ = json.NewEncoder(w).Encode(want)
 	})
@@ -49,7 +49,7 @@ func TestUpdatePullRequest(t *testing.T) {
 	want := new(PullRequest)
 	_ = readTestdata(t, prTestDataDir+"pull_requests_closed.json", want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/pulls/12", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/12", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		_ = json.NewEncoder(w).Encode(want)
 	})
@@ -67,7 +67,7 @@ func TestUpdatePullRequest(t *testing.T) {
 	want1 := new(PullRequest)
 	_ = readTestdata(t, prTestDataDir+"pull_requests_open.json", want1)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/pulls/13", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/13", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		_ = json.NewEncoder(w).Encode(want1)
 	})
@@ -89,7 +89,7 @@ func TestListPullRequestLinkingIssues(t *testing.T) {
 	want := new([]*Issue)
 	_ = readTestdata(t, prTestDataDir+"pull_requests_linking_issues.json", want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/pulls/15/issues", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/15/issues", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		_ = json.NewEncoder(w).Encode(want)
 	})

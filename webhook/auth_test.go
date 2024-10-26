@@ -26,6 +26,11 @@ import (
 	"testing"
 )
 
+const (
+	noteEvent   = "Note Hook"
+	payloadData = "{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }"
+)
+
 func TestGitCodeAuthenticationAuth(t *testing.T) {
 	t.Parallel()
 
@@ -74,7 +79,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 				httptest.NewRecorder(),
 				func() *http.Request {
 					req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case3", nil)
-					req.Header.Set("Content-Type", "application/json")
+					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					return req
 				}(),
 			},
@@ -88,8 +93,8 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 				httptest.NewRecorder(),
 				func() *http.Request {
 					req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case4", nil)
-					req.Header.Set("Content-Type", "application/json")
-					req.Header.Set("X-GitCode-Event", "Note Hook")
+					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
+					req.Header.Set(headerEventType, noteEvent)
 					return req
 				}(),
 			},
@@ -107,9 +112,9 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 						b = &bytes.Buffer{}
 						return b
 					}())
-					req.Header.Set("Content-Type", "application/json")
-					req.Header.Set("X-GitCode-Event", "Note Hook")
-					req.Header.Set("X-GitCode-Token", "12345")
+					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
+					req.Header.Set(headerEventType, noteEvent)
+					req.Header.Set(headerEventToken, "123451")
 					return req
 				}(),
 			},
@@ -127,15 +132,15 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 						b = &bytes.Buffer{}
 						return b
 					}())
-					req.Header.Set("Content-Type", "application/json")
-					req.Header.Set("X-GitCode-Event", "Note Hook")
-					req.Header.Set("X-GitCode-Token", "1234")
+					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
+					req.Header.Set(headerEventType, noteEvent)
+					req.Header.Set(headerEventToken, "1234")
 					return req
 				}(),
 			},
 			"",
 			func(i *args) {
-				assert.Equal(t, "Note Hook", i.r.eventType)
+				assert.Equal(t, noteEvent, i.r.eventType)
 				assert.Equal(t, *i.r.payload, bytes.Buffer{})
 				assert.Equal(t, "1234", i.r.signKey)
 			},
@@ -149,23 +154,23 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case7", func() io.Reader {
 						var b io.Reader
 						buf := &bytes.Buffer{}
-						buf.Write([]byte("{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }"))
+						buf.Write([]byte(payloadData))
 						b = buf
 						return b
 					}())
-					req.Header.Set("Content-Type", "application/json")
-					req.Header.Set("X-GitCode-Event", "Note Hook")
-					req.Header.Set("X-GitCode-Token", "1234")
+					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
+					req.Header.Set(headerEventType, noteEvent)
+					req.Header.Set(headerEventToken, "1234")
 					return req
 				}(),
 			},
 			"",
 			func(i *args) {
-				assert.Equal(t, "Note Hook", i.r.eventType)
+				assert.Equal(t, noteEvent, i.r.eventType)
 				if i.r.payload == nil {
 					t.Error("payload should be non-nil")
 				}
-				assert.Equal(t, i.r.payload.String(), "{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }")
+				assert.Equal(t, i.r.payload.String(), payloadData)
 				assert.Equal(t, "1234", i.r.signKey)
 			},
 		},
@@ -178,13 +183,13 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case8", func() io.Reader {
 						var b io.Reader
 						buf := &bytes.Buffer{}
-						buf.Write([]byte("{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }"))
+						buf.Write([]byte(payloadData))
 						b = buf
 						return b
 					}())
-					req.Header.Set("Content-Type", "application/json")
-					req.Header.Set("X-GitCode-Event", "Note Hook")
-					req.Header.Set("X-GitCode-Token", "1234")
+					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
+					req.Header.Set(headerEventType, noteEvent)
+					req.Header.Set(headerEventToken, "1234")
 
 					_, _ = io.Copy(io.Discard, req.Body)
 					return req
@@ -490,7 +495,7 @@ func TestReadPayload(t *testing.T) {
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case9", func() io.Reader {
 		var b io.Reader
 		buf := &bytes.Buffer{}
-		buf.Write([]byte("{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }"))
+		buf.Write([]byte(payloadData))
 		b = buf
 		return b
 	}())

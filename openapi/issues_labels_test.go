@@ -28,11 +28,11 @@ func TestListLabels(t *testing.T) {
 	var srcLabels []*Label
 	_ = readTestdata(t, issuesTestDataDir+"issues_list_labels.json", &srcLabels)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/labels", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(srcLabels)
 		if err != nil {
-			t.Errorf("Issues.ListLabels mock response data error: %v", err)
+			t.Errorf("Issues.ListRepoIssueLabels mock response data error: %v", err)
 		}
 	})
 
@@ -45,7 +45,7 @@ func TestListLabels(t *testing.T) {
 
 	repo := "333"
 	msg := "{\n    \"error_code\": 500,\n    \"error_code_name\": \"FAIL\",\n    \"error_message\": \"系统错误\",\n    \"trace_id\": \"d0834ebae0074f5cab66ef8b8fc529d5\"\n}"
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/labels", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		// a word wrap \n write to response
 		http.Error(w, msg, http.StatusInternalServerError)
@@ -65,11 +65,11 @@ func TestCreateRepoIssueLabel(t *testing.T) {
 	var srcLabels Label
 	_ = readTestdata(t, issuesTestDataDir+"issues_create_label.json", &srcLabels)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/"+"labels", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(srcLabels)
 		if err != nil {
-			t.Errorf("Issues.ListLabels mock response data error: %v", err)
+			t.Errorf("Issues.CreateRepoIssueLabel mock response data error: %v", err)
 		}
 	})
 
@@ -89,11 +89,11 @@ func TestUpdateRepoIssueLabel(t *testing.T) {
 	var srcLabels Label
 	_ = readTestdata(t, issuesTestDataDir+"issues_create_label.json", &srcLabels)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels/123", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/labels/123", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(srcLabels)
 		if err != nil {
-			t.Errorf("Issues.ListLabels mock response data error: %v", err)
+			t.Errorf("Issues.UpdateRepoIssueLabel mock response data error: %v", err)
 		}
 	})
 
@@ -110,20 +110,19 @@ func TestDeleteRepoIssueLabel(t *testing.T) {
 	t.Parallel()
 	client, mux, _ := mockServer(t)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels/gga3g", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/labels/gga3g", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 	})
 
 	ok, err := client.Issues.DeleteRepoIssueLabel(context.Background(), owner, repo, "gga3g")
 	if err != nil {
-		t.Errorf("Issues.UpdateRepoIssueLabel returned error: %v", err)
+		t.Errorf("Issues.DeleteRepoIssueLabel returned error: %v", err)
 	}
 	assert.Equal(t, true, ok)
 
-	//var str strings.Builder
 	data := readTestdata(t, issuesTestDataDir+"issues_delete_label_failed.json", nil)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/labels/ccs", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/labels/ccs", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusNotFound)
 		_, _ = w.Write(data)
@@ -142,18 +141,18 @@ func TestAddLabelsToIssue(t *testing.T) {
 	var want []*Label
 	_ = readTestdata(t, issuesTestDataDir+"issues_add_labels.json", &want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/issues/fasd/labels", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/issues/fasd/labels", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusCreated)
 		err := json.NewEncoder(w).Encode(want)
 		if err != nil {
-			t.Errorf("Issues.ListLabels mock response data error: %v", err)
+			t.Errorf("Issues.AddLabelsToIssue mock response data error: %v", err)
 		}
 	})
 
 	got, ok, err := client.Issues.AddLabelsToIssue(context.Background(), owner, repo, "fasd", []string{"858"})
 	if err != nil {
-		t.Errorf("Issues.UpdateRepoIssueLabel returned error: %v", err)
+		t.Errorf("Issues.AddLabelsToIssue returned error: %v", err)
 	}
 	assert.Equal(t, true, ok)
 	for i := range want {
@@ -166,7 +165,7 @@ func TestRemoveLabelsFromIssue(t *testing.T) {
 	t.Parallel()
 	client, mux, _ := mockServer(t)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/issues/623/labels/0gjds", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/issues/623/labels/0gjds", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusNoContent)
 	})

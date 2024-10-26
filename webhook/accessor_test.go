@@ -1,4 +1,4 @@
-// Copyright 2024 Chao Feng
+// Copyright (c) Huawei Technologies Co., Ltd. 2024. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import (
 
 const (
 	webhookTestDataDir = "testdata" + string(os.PathSeparator) + "webhook" + string(os.PathSeparator)
+	htmlUrl            = "https://gitcode.com/ibforuorg/test1"
 )
 
 func TestGetAccessor(t *testing.T) {
@@ -64,7 +65,7 @@ func createIssue(t *testing.T) {
 	assert.Equal(t, "opened", *issue.GetState())
 	assert.Equal(t, "ibforuorg", *issue.GetOrg())
 	assert.Equal(t, "test1", *issue.GetRepo())
-	assert.Equal(t, "https://gitcode.com/ibforuorg/test1", *issue.GetHtmlURL())
+	assert.Equal(t, htmlUrl, *issue.GetHtmlURL())
 	assert.Equal(t, (*string)(nil), issue.GetBase())
 	assert.Equal(t, (*string)(nil), issue.GetHead())
 	assert.Equal(t, "4", *issue.GetNumber())
@@ -114,7 +115,7 @@ func createPR(t *testing.T) {
 	assert.Equal(t, "opened", *pr.GetState())
 	assert.Equal(t, "ibforuorg", *pr.GetOrg())
 	assert.Equal(t, "test1", *pr.GetRepo())
-	assert.Equal(t, "https://gitcode.com/ibforuorg/test1", *pr.GetHtmlURL())
+	assert.Equal(t, htmlUrl, *pr.GetHtmlURL())
 	assert.Equal(t, (*string)(nil), pr.GetBase())
 	assert.Equal(t, (*string)(nil), pr.GetHead())
 	assert.Equal(t, "4", *pr.GetNumber())
@@ -164,7 +165,7 @@ func notePR(t *testing.T) {
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
-	assert.Equal(t, "https://gitcode.com/ibforuorg/test1", *note.GetHtmlURL())
+	assert.Equal(t, htmlUrl, *note.GetHtmlURL())
 	assert.Equal(t, (*string)(nil), note.GetBase())
 	assert.Equal(t, (*string)(nil), note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())
@@ -200,7 +201,7 @@ func noteIssue(t *testing.T) {
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
-	assert.Equal(t, "https://gitcode.com/ibforuorg/test1", *note.GetHtmlURL())
+	assert.Equal(t, htmlUrl, *note.GetHtmlURL())
 	assert.Equal(t, (*string)(nil), note.GetBase())
 	assert.Equal(t, (*string)(nil), note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())

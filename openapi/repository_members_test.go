@@ -1,4 +1,4 @@
-// Copyright 2024 Chao Feng
+// Copyright (c) Huawei Technologies Co., Ltd. 2024. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ func TestGetRepoAllMember(t *testing.T) {
 	want := new([]*User)
 	_ = readTestdata(t, reposTestDataDir+"repository_members.json", want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/collaborators", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		_ = json.NewEncoder(w).Encode(want)
 
@@ -54,7 +54,7 @@ func TestGetRepoMemberPermission(t *testing.T) {
 	t.Parallel()
 	client, mux, _ := mockServer(t)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/collaborators/fasfa/permission", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/fasfa/permission", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusNoContent)
 	})
@@ -66,7 +66,7 @@ func TestGetRepoMemberPermission(t *testing.T) {
 	assert.Equal(t, true, got)
 
 	msg := "{\"message\":\"404 Not Found\"}"
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/collaborators/145123/permission", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/145123/permission", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusNotFound)
 		_, _ = w.Write([]byte(msg))
@@ -83,7 +83,7 @@ func TestCheckUserIsRepoMember(t *testing.T) {
 	t.Parallel()
 	client, mux, _ := mockServer(t)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/collaborators/fasdagsdf", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/fasdagsdf", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusNoContent)
 	})
@@ -95,7 +95,7 @@ func TestCheckUserIsRepoMember(t *testing.T) {
 	assert.Equal(t, true, got)
 
 	msg := "{\"message\":\"404 Not Found\"}"
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/collaborators/63453", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/63453", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusNotFound)
 		_, _ = w.Write([]byte(msg))

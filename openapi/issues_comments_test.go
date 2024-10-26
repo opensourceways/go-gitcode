@@ -1,4 +1,4 @@
-// Copyright 2024 Chao Feng
+// Copyright (c) Huawei Technologies Co., Ltd. 2024. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ func TestCreateIssueComment(t *testing.T) {
 	var comments IssueComment
 	_ = readTestdata(t, issuesTestDataDir+"issues_comment.json", &comments)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/issues/1/comments", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/issues/1/comments", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(comments)
 		if err != nil {
-			t.Errorf("Issues.ListLabels mock response data error: %v", err)
+			t.Errorf("Issues.CreateIssueComment mock response data error: %v", err)
 		}
 	})
 

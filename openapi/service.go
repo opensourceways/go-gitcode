@@ -37,8 +37,7 @@ const (
 )
 
 var (
-	nilContentError    = errors.New("request context should be non-nil")
-	pathForbiddenError = errors.New("post http request body should be non-nil")
+	nilContentError = errors.New("request context should be non-nil")
 )
 
 type RequestHandlerType string
@@ -65,19 +64,7 @@ func (b *RequestHandler) PreOperate(uri *url.URL, body any) error {
 			}
 		case Form:
 			// set form data
-			form, ok := body.(*url.Values)
-			if !ok {
-				v := reflect.ValueOf(body)
-				mt := v.MethodByName("Form")
-				if mt.IsValid() {
-					vs := mt.Call(nil)
-					p := vs[0].Interface()
-					form, ok = p.(*url.Values)
-				}
-			}
-			if ok {
-				b.buf = bytes.NewBufferString(form.Encode())
-			}
+			b.buf = buildRequestForm(body)
 		default:
 			// set json data
 			b.buf = &bytes.Buffer{}
@@ -87,6 +74,27 @@ func (b *RequestHandler) PreOperate(uri *url.URL, body any) error {
 		}
 	}
 	return err
+}
+
+func buildRequestForm(body any) *bytes.Buffer {
+	if body == nil {
+		return nil
+	}
+	form, ok := body.(*url.Values)
+	if !ok {
+		v := reflect.ValueOf(body)
+		mt := v.MethodByName("Form")
+		if mt.IsValid() {
+			vs := mt.Call(nil)
+			p := vs[0].Interface()
+			form, ok = p.(*url.Values)
+		}
+	}
+	if ok {
+		return bytes.NewBufferString(form.Encode())
+	}
+
+	return nil
 }
 
 func (b *RequestHandler) PostOperate(req *http.Request) {

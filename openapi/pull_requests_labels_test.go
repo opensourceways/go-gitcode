@@ -1,4 +1,4 @@
-// Copyright 2024 Chao Feng
+// Copyright (c) Huawei Technologies Co., Ltd. 2024. All rights reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ func TestAddLabelsToPullRequest(t *testing.T) {
 	want := new([]*Label)
 	_ = readTestdata(t, prTestDataDir+"pull_requests_add_labels.json", want)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/pulls/33/labels", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/33/labels", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		_ = json.NewEncoder(w).Encode(want)
 	})
@@ -47,7 +47,7 @@ func TestRemoveLabelsFromPullRequest(t *testing.T) {
 	t.Parallel()
 	client, mux, _ := mockServer(t)
 
-	mux.HandleFunc("/repos/"+owner+"/"+repo+"/pulls/34/labels/fa,fsw", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/34/labels/fa,fsw", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		w.WriteHeader(http.StatusNoContent)
 	})

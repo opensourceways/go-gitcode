@@ -142,7 +142,6 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 		_, _ = io.Copy(&str, resp.Body)
 		err = errors.New(str.String())
 		_ = resp.Body.Close()
-		fmt.Println("----------------------------=============================")
 	}
 	if err != nil {
 		return resp, err

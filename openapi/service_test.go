@@ -25,8 +25,9 @@ import (
 )
 
 const (
-	owner = "111"
-	repo  = "222"
+	prefixUrlPath = "/repos/"
+	owner         = "111"
+	repo          = "222"
 
 	testDataDir       = "testdata"
 	issuesTestDataDir = testDataDir + string(os.PathSeparator) + "issues" + string(os.PathSeparator)

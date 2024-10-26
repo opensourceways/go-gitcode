@@ -28,7 +28,7 @@ func TestUpdateIssue(t *testing.T) {
 	issue := new(Issue)
 	_ = readTestdata(t, issuesTestDataDir+"issues_update.json", issue)
 
-	mux.HandleFunc("/repos/"+owner+"/issues/1", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/issues/1", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(issue)
 		if err != nil {
@@ -48,7 +48,7 @@ func TestUpdateIssue(t *testing.T) {
 	assert.Equal(t, issue, result)
 
 	errMsg := "{\n    \"error_code\": 403,\n    \"error_code_name\": \"FORBIDDEN\",\n    \"error_message\": \"no scopes:read_projects\",\n    \"trace_id\": \"33809e888a654b78bb2be8e7c97c9423\"\n}"
-	mux.HandleFunc("/repos/"+owner+"/issues/2", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/issues/2", func(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, errMsg, http.StatusBadRequest)
 	})
 
@@ -69,7 +69,7 @@ func TestListIssueLinkingPullRequests(t *testing.T) {
 	prs := new([]*PullRequest)
 	_ = readTestdata(t, issuesTestDataDir+"issues_linking_prs.json", prs)
 
-	mux.HandleFunc("/repos/"+owner+"/issues/1/pull_requests", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/issues/1/pull_requests", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(prs)
 		if err != nil {
