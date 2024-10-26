@@ -18,15 +18,23 @@ import (
 	"strconv"
 )
 
+type PRPart struct {
+	Action *string       `json:"action,omitempty"`
+	State  *string       `json:"state,omitempty"`
+	Number *int          `json:"iid,omitempty"`
+	Author *openapi.User `json:"author,omitempty"`
+}
+
 type PullRequestEvent struct {
 	UUID        *string          `json:"uuid,omitempty"`
 	EventType   *string          `json:"event_type,omitempty"`
 	ObjectKind  *string          `json:"object_kind,omitempty"`
-	ManualBuild *string          `json:"manual_build,omitempty"`
+	ManualBuild *bool            `json:"manual_build,omitempty"`
 	Attributes  *Attributes      `json:"object_attributes,omitempty"`
 	User        *openapi.User    `json:"user,omitempty"`
-	Repository  *Project         `json:"repository,omitempty"`
+	Repository  *Project         `json:"project,omitempty"`
 	Labels      []*openapi.Label `json:"labels,omitempty"`
+	PR          *PRPart          `json:"merge_request,omitempty"`
 }
 
 func (pr *PullRequestEvent) GetAction() *string {
@@ -71,20 +79,28 @@ func (pr *PullRequestEvent) GetHead() *string {
 	return nil
 }
 func (pr *PullRequestEvent) GetNumber() *string {
-	if pr.Attributes == nil || pr.Attributes.Number == nil {
-		return nil
+	if pr.Attributes != nil && pr.Attributes.Number != nil {
+		n := strconv.Itoa(*pr.Attributes.Number)
+		return &n
 	}
 
-	n := strconv.Itoa(*pr.Attributes.Number)
+	if pr.PR != nil && pr.PR.Number != nil {
+		n := strconv.Itoa(*pr.PR.Number)
+		return &n
+	}
 
-	return &n
+	return nil
 }
 func (pr *PullRequestEvent) GetAuthor() *string {
 	if pr.User == nil {
 		return nil
 	}
 
-	return pr.User.Login
+	if pr.User.Login != nil {
+		return pr.User.Login
+	}
+
+	return pr.User.UserName
 }
 func (pr *PullRequestEvent) GetComment() *string {
 	return nil

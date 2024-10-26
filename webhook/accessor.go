@@ -13,25 +13,39 @@
 // limitations under the License.
 package webhook
 
-import "net/http"
+import (
+	"encoding/json"
+	"net/http"
+)
 
 type GitCodeAccessor struct {
 	Issues *IssueEvent
 	PR     *PullRequestEvent
+	Note   *NoteEvent
 }
 
-func (a *GitCodeAccessor) GetAccessor(r *http.Request) (any, *string, *string, bool) {
+func (a *GitCodeAccessor) GetAccessor(w http.ResponseWriter, r *http.Request) (any, *string, *string, bool) {
+	payload, err := ReadPayload(w, r)
+	if err != nil {
+		return nil, nil, nil, false
+	}
 
-	eventGUID := r.Header.Get("X-GitCode-Delivery")
-	eventType := r.Header.Get("X-GitCode-Event")
+	eventGUID := r.Header.Get(headerEventGUID)
+	eventType := r.Header.Get(headerEventType)
+
 	switch eventType {
 	case "issue_hooks":
 		a.Issues = new(IssueEvent)
+		_ = json.Unmarshal(payload.Bytes(), a.Issues)
 		return a.Issues, &eventType, &eventGUID, false
 	case "merge_request_hooks":
 		a.PR = new(PullRequestEvent)
+		_ = json.Unmarshal(payload.Bytes(), a.PR)
 		return a.PR, &eventType, &eventGUID, false
 	case "note_hooks":
+		a.Note = new(NoteEvent)
+		_ = json.Unmarshal(payload.Bytes(), a.Note)
+		return a.Note, &eventType, &eventGUID, a.Note != nil && a.Note.PR != nil
 	default:
 
 	}

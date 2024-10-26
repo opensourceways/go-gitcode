@@ -25,21 +25,32 @@ type Project struct {
 }
 
 type Attributes struct {
-	Action *string `json:"action,omitempty"`
-	State  *string `json:"state,omitempty"`
-	Number *int    `json:"iid,omitempty"`
+	Action          *string `json:"action,omitempty"`
+	State           *string `json:"state,omitempty"`
+	Number          *int    `json:"iid,omitempty"`
+	CommentID       *string `json:"discussion_id,omitempty"`
+	Comment         *string `json:"note,omitempty"`
+	CommentCategory *string `json:"noteable_type,omitempty"`
+}
+
+type IssuePart struct {
+	Action *string       `json:"action,omitempty"`
+	State  *string       `json:"state,omitempty"`
+	Number *int          `json:"iid,omitempty"`
+	Author *openapi.User `json:"author,omitempty"`
 }
 
 type IssueEvent struct {
 	UUID        *string          `json:"uuid,omitempty"`
 	EventType   *string          `json:"event_type,omitempty"`
 	ObjectKind  *string          `json:"object_kind,omitempty"`
-	ManualBuild *string          `json:"manual_build,omitempty"`
+	ManualBuild *bool            `json:"manual_build,omitempty"`
 	Attributes  *Attributes      `json:"object_attributes,omitempty"`
 	User        *openapi.User    `json:"user,omitempty"`
 	Assignees   []*openapi.User  `json:"assignees,omitempty"`
-	Repository  *Project         `json:"repository,omitempty"`
+	Repository  *Project         `json:"project,omitempty"`
 	Labels      []*openapi.Label `json:"labels,omitempty"`
+	Issue       *IssuePart       `json:"issue,omitempty"`
 }
 
 func (iss *IssueEvent) GetAction() *string {
@@ -84,20 +95,27 @@ func (iss *IssueEvent) GetHead() *string {
 	return nil
 }
 func (iss *IssueEvent) GetNumber() *string {
-	if iss.Attributes == nil || iss.Attributes.Number == nil {
-		return nil
+	if iss.Attributes != nil && iss.Attributes.Number != nil {
+		n := strconv.Itoa(*iss.Attributes.Number)
+		return &n
 	}
 
-	n := strconv.Itoa(*iss.Attributes.Number)
+	if iss.Issue != nil && iss.Issue.Number != nil {
+		n := strconv.Itoa(*iss.Issue.Number)
+		return &n
+	}
 
-	return &n
+	return nil
 }
 func (iss *IssueEvent) GetAuthor() *string {
 	if iss.User == nil {
 		return nil
 	}
+	if iss.User.Login != nil {
+		return iss.User.Login
+	}
 
-	return iss.User.Login
+	return iss.User.UserName
 }
 func (iss *IssueEvent) GetComment() *string {
 	return nil

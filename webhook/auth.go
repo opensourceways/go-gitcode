@@ -56,6 +56,9 @@ func (a *GitCodeAuthentication) GetEventGUID() string {
 }
 
 const (
+	headerEventType = "X-GitCode-Event"
+	headerEventGUID = "X-GitCode-Delivery"
+
 	httpStatusCodeIncorrectErrorFormat = "http response status code can not be setting to %d"
 
 	// error message constants
@@ -85,7 +88,7 @@ func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) err
 		return handleErr(w, http.StatusBadRequest, headerContentTypeErrorMessage)
 	}
 
-	if a.eventType = r.Header.Get("X-GitCode-Event"); a.eventType == "" {
+	if a.eventType = r.Header.Get(headerEventType); a.eventType == "" {
 		return handleErr(w, http.StatusBadRequest, headerEventErrorMessage)
 	}
 

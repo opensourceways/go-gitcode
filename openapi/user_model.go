@@ -16,10 +16,10 @@ package openapi
 // User represents a GitHub user.
 type User struct {
 	Login       *string     `json:"login,omitempty"`
-	ID          *string     `json:"id,omitempty"`
 	AvatarURL   *string     `json:"avatar_url,omitempty"`
 	HTMLURL     *string     `json:"web_url,omitempty"`
-	Name        *string     `json:"username,omitempty"`
+	UserName    *string     `json:"username,omitempty"`
+	Name        *string     `json:"name,omitempty"`
 	Blog        *string     `json:"blog,omitempty"`
 	Email       *string     `json:"email,omitempty"`
 	Bio         *string     `json:"bio,omitempty"`
