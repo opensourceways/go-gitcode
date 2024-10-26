@@ -65,7 +65,6 @@ type PullRequestBranch struct {
 	User  *User       `json:"user,omitempty"`
 }
 
-// TODO
 type MergeAbleState struct {
 	MergeRequestID *int64 `json:"merge_request_id,omitempty"`
 	State          *bool  `json:"state,omitempty"`
