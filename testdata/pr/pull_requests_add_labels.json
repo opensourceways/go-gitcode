@@ -1,0 +1,29 @@
+[
+  {
+    "id": 12739264,
+    "color": "#ED4014",
+    "name": "bug",
+    "repository_id": 4163304,
+    "created_at": "2024-10-15T09:30:05+08:00",
+    "updated_at": "2024-10-15T09:30:05+08:00",
+    "text_color": "#FFFFFF"
+  },
+  {
+    "id": 12741438,
+    "color": "#009926",
+    "name": "fa",
+    "repository_id": 4163304,
+    "created_at": "2024-10-26T00:43:41+08:00",
+    "updated_at": "2024-10-26T00:43:41+08:00",
+    "text_color": "#FFFFFF"
+  },
+  {
+    "id": 12741439,
+    "color": "#009926",
+    "name": "fasfg",
+    "repository_id": 4163304,
+    "created_at": "2024-10-26T00:43:41+08:00",
+    "updated_at": "2024-10-26T00:43:41+08:00",
+    "text_color": "#FFFFFF"
+  }
+]

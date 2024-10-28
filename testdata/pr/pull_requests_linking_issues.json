@@ -1,0 +1,37 @@
+[
+  {
+    "number": "2",
+    "title": "issue1",
+    "state": "open",
+    "url": "https://api.gitcode.com/api/v5/repos/ibforuorg/test1/issues/2",
+    "html_url": "https://gitcode.com/ibforuorg/test1/issues/2",
+    "id": 501782,
+    "body": "gvasdadsadsa",
+    "user": {
+      "id": "670f35d43e7d0562a1c12a8d",
+      "login": "ibforu2nd",
+      "name": "ibforu2nd",
+      "html_url": "https://gitcode.com/ibforu2nd"
+    },
+    "labels": [
+      {
+        "id": 12739501,
+        "color": "#009926",
+        "name": "gasad",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 12739502,
+        "color": "#009926",
+        "name": "ghasdc",
+        "text_color": "#FFFFFF"
+      },
+      {
+        "id": 12739529,
+        "color": "#2865E0",
+        "name": "kind/123132",
+        "text_color": "#FFFFFF"
+      }
+    ]
+  }
+]

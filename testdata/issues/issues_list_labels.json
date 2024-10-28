@@ -1,0 +1,86 @@
+[
+  {
+    "id": 12739271,
+    "name": "wontfix",
+    "color": "#CCCCCC",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739270,
+    "name": "question",
+    "color": "#D876E3",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739269,
+    "name": "invalid",
+    "color": "#CFD240",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739268,
+    "name": "help wanted",
+    "color": "#008672",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739267,
+    "name": "enhancement",
+    "color": "#51D3D4",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739266,
+    "name": "duplicate",
+    "color": "#B4B4B4",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739265,
+    "name": "documentation",
+    "color": "#0075CA",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739264,
+    "name": "bug",
+    "color": "#ED4014",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739472,
+    "name": "123123213",
+    "color": "#428BCA",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12741302,
+    "name": "bug1",
+    "color": "#009926",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12741016,
+    "name": "fsaghhhhh",
+    "color": "#000000",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739501,
+    "name": "gasad",
+    "color": "#009926",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739502,
+    "name": "ghasdc",
+    "color": "#009926",
+    "repository_id": 4163304
+  },
+  {
+    "id": 12739529,
+    "name": "kind/123132",
+    "color": "#2865E0",
+    "repository_id": 4163304
+  }
+]
