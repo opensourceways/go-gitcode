@@ -44,7 +44,19 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 		in  args
 		out string
 		fn  func(i *args)
-	}{
+	}{{
+		"case0",
+		args{
+			GitCodeAuthentication{},
+			httptest.NewRecorder(),
+			func() *http.Request {
+				req, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/case0", nil)
+				return req
+			}(),
+		},
+		headerUserAgentErrorMessage,
+		nil,
+	},
 		{
 			"case1",
 			args{
@@ -52,6 +64,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 				httptest.NewRecorder(),
 				func() *http.Request {
 					req, _ := http.NewRequest(http.MethodGet, "http://localhost:8080/case1", nil)
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					return req
 				}(),
 			},
@@ -65,6 +78,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 				httptest.NewRecorder(),
 				func() *http.Request {
 					req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case2", nil)
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					return req
 				}(),
 			},
@@ -78,6 +92,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 				httptest.NewRecorder(),
 				func() *http.Request {
 					req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case3", nil)
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					return req
 				}(),
@@ -92,6 +107,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 				httptest.NewRecorder(),
 				func() *http.Request {
 					req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case4", nil)
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
 					return req
@@ -111,6 +127,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 						b = &bytes.Buffer{}
 						return b
 					}())
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
 					req.Header.Set(headerEventToken, "123451")
@@ -131,6 +148,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 						b = &bytes.Buffer{}
 						return b
 					}())
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
 					req.Header.Set(headerEventToken, "1234")
@@ -157,6 +175,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 						b = buf
 						return b
 					}())
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
 					req.Header.Set(headerEventToken, "1234")
@@ -186,6 +205,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 						b = buf
 						return b
 					}())
+					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
 					req.Header.Set(headerEventToken, "1234")
@@ -213,7 +233,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 
 	for i := range testCases {
 		t.Run(testCases[i].no, func(t *testing.T) {
-			got := testCases[i].in.r.Auth(testCases[i].in.w, testCases[i].in.req)
+			got, _ := testCases[i].in.r.Auth(testCases[i].in.w, testCases[i].in.req)
 			if got != nil {
 				assert.Equal(t, testCases[i].out, got.Error())
 			}
@@ -234,8 +254,9 @@ func TestGitCodeAuthenticationAuthByMock(t *testing.T) {
 
 	a := GitCodeAuthentication{signKey: "1234"}
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/case8", nil)
+	req.Header.Set(headerUserAgent, headerUserAgentValue)
 
-	err := a.Auth(httptest.NewRecorder(), req)
+	err, _ := a.Auth(httptest.NewRecorder(), req)
 	assert.Equal(t, err, e)
 }
 

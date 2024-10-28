@@ -52,3 +52,7 @@ func (a *GitCodeAccessor) GetAccessor(w http.ResponseWriter, r *http.Request) (a
 
 	return nil, &eventType, &eventGUID, false
 }
+
+func GetEventTypeFromHeader(r *http.Request) string {
+	return r.Header.Get(headerEventType)
+}
