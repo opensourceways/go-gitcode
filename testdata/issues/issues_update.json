@@ -1,0 +1,52 @@
+{
+  "id": 501782,
+  "html_url": "https://gitcode.com/ibforuorg/test1/issues/2",
+  "number": "2",
+  "state": "open",
+  "issue_state": "进行中",
+  "title": "issue1",
+  "body": "gvasdadsadsa",
+  "user": {
+    "login": "ibforu2nd",
+    "id": "670f35d43e7d0562a1c12a8d",
+    "avatar_url": "https://cdn-img.gitcode.com/ca/ba/2c80ab6ae4d96106c2272ec7d33d0d4bb6a7aca1802084ad7b6be6e2ccedfe50.png?time=1729050131497",
+    "html_url": "https://gitcode.com/ibforu2nd",
+    "name": "ibforu2nd"
+  },
+  "assignee": {
+    "login": "ibforu",
+    "id": "667e681b492cef0e2f04ec50",
+    "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+    "html_url": "https://gitcode.com/ibforu",
+    "name": "ibforu"
+  },
+  "repository": {
+    "id": 501782,
+    "name": "test1",
+    "path": "test1",
+    "full_name": "ibforuorg/test1",
+    "description": "1111",
+    "created_at": "2024-10-16T11:47:57+08:00",
+    "updated_at": "2024-10-25T17:55:59+08:00"
+  },
+  "labels": [
+    {
+      "id": 12739501,
+      "name": "gasad",
+      "color": "#009926"
+    },
+    {
+      "id": 12739502,
+      "name": "ghasdc",
+      "color": "#009926"
+    },
+    {
+      "id": 12739529,
+      "name": "kind/123132",
+      "color": "#2865E0"
+    }
+  ],
+  "created_at": "2024-10-16T11:47:57+08:00",
+  "updated_at": "2024-10-25T17:55:59+08:00",
+  "finished_at": ""
+}

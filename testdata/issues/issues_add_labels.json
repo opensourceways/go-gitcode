@@ -1,0 +1,22 @@
+[
+  {
+    "id": 12741435,
+    "color": "#428BCA",
+    "name": "fasd",
+    "repository_id": 4163304,
+    "url": "",
+    "created_at": "2024-10-25T23:40:15+08:00",
+    "updated_at": "2024-10-25T23:40:15+08:00",
+    "text_color": "#FFFFFF"
+  },
+  {
+    "id": 12741436,
+    "color": "#428BCA",
+    "name": "gfasd",
+    "repository_id": 4163304,
+    "url": "",
+    "created_at": "2024-10-25T23:40:15+08:00",
+    "updated_at": "2024-10-25T23:40:15+08:00",
+    "text_color": "#FFFFFF"
+  }
+]
