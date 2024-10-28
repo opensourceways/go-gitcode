@@ -56,9 +56,11 @@ func (a *GitCodeAuthentication) GetEventGUID() string {
 }
 
 const (
-	headerEventType  = "X-GitCode-Event"
-	headerEventGUID  = "X-GitCode-Delivery"
-	headerEventToken = "X-GitCode-Token"
+	headerEventType      = "X-GitCode-Event"
+	headerEventGUID      = "X-GitCode-Delivery"
+	headerEventToken     = "X-GitCode-Token"
+	headerUserAgent      = "User-Agent"
+	headerUserAgentValue = "git-gitcode-hook"
 
 	headerContentTypeName      = "Content-Type"
 	headerContentTypeJsonValue = "application/json"
@@ -69,44 +71,49 @@ const (
 	bodyReadErrorMessage           = "400 Bad Request: Failed to read request body"
 	headerContentTypeErrorMessage  = "400 Bad Request: Hook only accepts content-type: application/json"
 	headerEventErrorMessage        = "400 Bad Request: Missing X-GitCode-Event Header"
+	headerUserAgentErrorMessage    = "400 Bad Request: Invalid User-Agent Header"
 	headerEmptyTokenErrorMessage   = "401 Unauthorized: Missing X-GitCode-Token"
 	headerInvalidTokenErrorMessage = "403 Forbidden: Invalid X-GitCode-Token"
 )
 
-func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) error {
+func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) (error, bool) {
 	if r == nil {
-		return errorNilRequest
+		return errorNilRequest, false
+	}
+
+	if r.Header.Get(headerUserAgent) != headerUserAgentValue {
+		return errors.New(headerUserAgentErrorMessage), true
 	}
 
 	var err error
 	if a.payload, err = ReadPayload(w, r); err != nil {
-		return err
+		return err, false
 	}
 
 	// Header checks: It must be a POST with an event type and a signature.
 	if r.Method != http.MethodPost {
-		return handleErr(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed))
+		return handleErr(w, http.StatusMethodNotAllowed, http.StatusText(http.StatusMethodNotAllowed)), false
 	}
 
 	if v := r.Header.Get(headerContentTypeName); !strings.HasPrefix(v, headerContentTypeJsonValue) {
-		return handleErr(w, http.StatusBadRequest, headerContentTypeErrorMessage)
+		return handleErr(w, http.StatusBadRequest, headerContentTypeErrorMessage), false
 	}
 
 	if a.eventType = r.Header.Get(headerEventType); a.eventType == "" {
-		return handleErr(w, http.StatusBadRequest, headerEventErrorMessage)
+		return handleErr(w, http.StatusBadRequest, headerEventErrorMessage), false
 	}
 
 	token := r.Header.Get(headerEventToken)
 	if token == "" {
-		return handleErr(w, http.StatusUnauthorized, headerEmptyTokenErrorMessage)
+		return handleErr(w, http.StatusUnauthorized, headerEmptyTokenErrorMessage), false
 	}
 
 	// Validate the payload with our HMAC secret.
 	if !signSuccess(token, a.signKey) {
-		return handleErr(w, http.StatusUnauthorized, headerInvalidTokenErrorMessage)
+		return handleErr(w, http.StatusUnauthorized, headerInvalidTokenErrorMessage), false
 	}
 
-	return nil
+	return nil, false
 }
 
 func ReadPayload(w http.ResponseWriter, r *http.Request) (*bytes.Buffer, error) {
