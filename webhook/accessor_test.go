@@ -45,7 +45,7 @@ func createIssue(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/0", buf)
-	req.Header.Set(headerEventType, "issue_hooks")
+	req.Header.Set(headerEventType, "Issue Hook")
 	req.Header.Set(headerEventGUID, "1231321")
 	w := httptest.NewRecorder()
 
@@ -55,7 +55,7 @@ func createIssue(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "issue_hooks", *got2)
+	assert.Equal(t, "Issue Hook", *got2)
 	assert.Equal(t, "1231321", *got3)
 	assert.Equal(t, false, got4)
 
@@ -95,7 +95,7 @@ func createPR(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
-	req.Header.Set(headerEventType, "merge_request_hooks")
+	req.Header.Set(headerEventType, "Merge Request Hook")
 	req.Header.Set(headerEventGUID, "fasgasd")
 	w := httptest.NewRecorder()
 
@@ -105,7 +105,7 @@ func createPR(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "merge_request_hooks", *got2)
+	assert.Equal(t, "Merge Request Hook", *got2)
 	assert.Equal(t, "fasgasd", *got3)
 	assert.Equal(t, false, got4)
 
@@ -145,7 +145,7 @@ func notePR(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/2", buf)
-	req.Header.Set(headerEventType, "note_hooks")
+	req.Header.Set(headerEventType, "Note Hook")
 	req.Header.Set(headerEventGUID, "651234123")
 	w := httptest.NewRecorder()
 
@@ -155,7 +155,7 @@ func notePR(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "note_hooks", *got2)
+	assert.Equal(t, "Note Hook", *got2)
 	assert.Equal(t, "651234123", *got3)
 	assert.Equal(t, true, got4)
 
@@ -181,7 +181,7 @@ func noteIssue(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/2", buf)
-	req.Header.Set(headerEventType, "note_hooks")
+	req.Header.Set(headerEventType, "Note Hook")
 	req.Header.Set(headerEventGUID, "151231321")
 	w := httptest.NewRecorder()
 
@@ -191,7 +191,7 @@ func noteIssue(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "note_hooks", *got2)
+	assert.Equal(t, "Note Hook", *got2)
 	assert.Equal(t, "151231321", *got3)
 	assert.Equal(t, false, got4)
 

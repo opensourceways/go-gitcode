@@ -35,15 +35,15 @@ func (a *GitCodeAccessor) GetAccessor(w http.ResponseWriter, r *http.Request) (a
 	eventType := r.Header.Get(headerEventType)
 
 	switch eventType {
-	case "issue_hooks":
+	case "Issue Hook":
 		a.Issues = new(IssueEvent)
 		_ = json.Unmarshal(payload.Bytes(), a.Issues)
 		return a.Issues, payload, &eventType, &eventGUID, false
-	case "merge_request_hooks":
+	case "Merge Request Hook":
 		a.PR = new(PullRequestEvent)
 		_ = json.Unmarshal(payload.Bytes(), a.PR)
 		return a.PR, payload, &eventType, &eventGUID, false
-	case "note_hooks":
+	case "Note Hook":
 		a.Note = new(NoteEvent)
 		_ = json.Unmarshal(payload.Bytes(), a.Note)
 		return a.Note, payload, &eventType, &eventGUID, a.Note != nil && a.Note.PR != nil
