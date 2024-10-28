@@ -1,0 +1,133 @@
+{
+  "produce_random_id": "2248ca24477441e3a5cb44ad49d62314",
+  "event_type": "issue",
+  "object_attributes": {
+    "iid": 4,
+    "milestone_id": null,
+    "created_at": "2024-10-26T10:28:03.116+08:00",
+    "description": "42134132151243hdfgedgf",
+    "title": "141fsdfs",
+    "updated_at": "2024-10-26T10:28:03.116+08:00",
+    "project_id": 4163304,
+    "last_edited_at": null,
+    "action": "open",
+    "id": 515443,
+    "state": "opened",
+    "last_edited_by_id": null,
+    "confidential": false,
+    "relative_position": 1073743823,
+    "assignee_id": null,
+    "severity": null,
+    "closed_at": null,
+    "author": {
+      "id": 858059,
+      "name": "ibforu",
+      "username": "ibforu",
+      "iam_id": "9f43d08aa4264f7b8ddc87a768b0ba95",
+      "nick_name": "ibforu",
+      "state": "active",
+      "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+      "avatar_path": null,
+      "email": "feng0chao@gmail.com",
+      "name_cn": "",
+      "web_url": "https://gitcode.com/ibforu",
+      "tenant_name": null,
+      "is_member": null
+    },
+    "due_date": null,
+    "url": "https://gitcode.com/ibforuorg/test1/issues/4",
+    "moved_to_id": null,
+    "time_estimate": 0,
+    "total_time_spent": 0,
+    "stage": null,
+    "human_time_estimate": 0,
+    "human_total_time_spent": 0,
+    "updated_by_id": null,
+    "category": null,
+    "assignee_ids": []
+  },
+  "changes": {
+    "iid": {
+      "current": 4,
+      "previous": null
+    },
+    "created_at": {
+      "current": "2024-10-26T10:28:03.116+08:00",
+      "previous": null
+    },
+    "description": {
+      "current": "42134132151243hdfgedgf",
+      "previous": null
+    },
+    "moderation_result": {
+      "current": false,
+      "previous": null
+    },
+    "title": {
+      "current": "141fsdfs",
+      "previous": null
+    },
+    "updated_at": {
+      "current": "2024-10-26T10:28:03.116+08:00",
+      "previous": null
+    },
+    "project_id": {
+      "current": 4163304,
+      "previous": null
+    },
+    "moderation_time": {
+      "current": 0,
+      "previous": null
+    },
+    "id": {
+      "current": 515443,
+      "previous": null
+    },
+    "state": {
+      "current": "opened",
+      "previous": null
+    },
+    "author_id": {
+      "current": 858059,
+      "previous": null
+    },
+    "confidential": {
+      "current": false,
+      "previous": null
+    },
+    "relative_position": {
+      "current": 1073743823,
+      "previous": null
+    }
+  },
+  "project": {
+    "path_with_namespace": "ibforuorg/test1",
+    "ssh_url": "git@gitcode.com:ibforuorg/test1.git",
+    "description": "1111",
+    "git_http_url": "https://gitcode.com/ibforuorg/test1.git",
+    "git_ssh_url": "git@gitcode.com:ibforuorg/test1.git",
+    "url": "git@gitcode.com:ibforuorg/test1.git",
+    "http_url": "https://gitcode.com/ibforuorg/test1.git",
+    "ci_config_path": null,
+    "web_url": "https://gitcode.com/ibforuorg/test1",
+    "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+    "name": "test1",
+    "namespace": "ibforuorg",
+    "visibility_level": 20,
+    "default_branch": "main",
+    "id": 4163304,
+    "homepage": "https://gitcode.com/ibforuorg/test1"
+  },
+  "user": {
+    "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+    "name": "ibforu",
+    "id": 858059,
+    "email": "feng0chao@gmail.com",
+    "username": "ibforu"
+  },
+  "manual_build": false,
+  "object_kind": "issue",
+  "labels": [],
+  "extend_attributes": null,
+  "uuid": "ae975cad-692f-41a3-ab6a-840412052d85"
+}
