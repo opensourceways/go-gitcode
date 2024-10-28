@@ -50,7 +50,7 @@ func createIssue(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.Issues)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
@@ -100,7 +100,7 @@ func createPR(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.PR)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
@@ -150,7 +150,7 @@ func notePR(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.Note)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
@@ -186,7 +186,7 @@ func noteIssue(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.Note)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
