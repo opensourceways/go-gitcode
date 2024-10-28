@@ -22,7 +22,7 @@ import (
 )
 
 func TestCreateIssueComment(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	var comments IssueComment

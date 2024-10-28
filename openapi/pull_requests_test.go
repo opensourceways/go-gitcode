@@ -22,7 +22,7 @@ import (
 )
 
 func TestGetPullRequest(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	want := new(PullRequest)
@@ -43,7 +43,7 @@ func TestGetPullRequest(t *testing.T) {
 }
 
 func TestUpdatePullRequest(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	want := new(PullRequest)
@@ -83,7 +83,7 @@ func TestUpdatePullRequest(t *testing.T) {
 }
 
 func TestListPullRequestLinkingIssues(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	want := new([]*Issue)

@@ -22,7 +22,7 @@ import (
 )
 
 func TestGetRepoAllMember(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	want := new([]*User)
@@ -51,7 +51,7 @@ func TestGetRepoAllMember(t *testing.T) {
 }
 
 func TestGetRepoMemberPermission(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/fasfa/permission", func(w http.ResponseWriter, r *http.Request) {
@@ -80,7 +80,7 @@ func TestGetRepoMemberPermission(t *testing.T) {
 }
 
 func TestCheckUserIsRepoMember(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/fasdagsdf", func(w http.ResponseWriter, r *http.Request) {

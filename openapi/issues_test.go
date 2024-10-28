@@ -22,7 +22,7 @@ import (
 )
 
 func TestUpdateIssue(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	issue := new(Issue)
@@ -63,7 +63,7 @@ func TestUpdateIssue(t *testing.T) {
 }
 
 func TestListIssueLinkingPullRequests(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	prs := new([]*PullRequest)

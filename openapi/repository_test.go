@@ -22,7 +22,7 @@ import (
 )
 
 func TestGetRepoContributors(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	want := new([]*Contributor)

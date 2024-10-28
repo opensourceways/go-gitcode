@@ -22,7 +22,7 @@ import (
 )
 
 func TestListLabels(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	var srcLabels []*Label
@@ -59,7 +59,7 @@ func TestListLabels(t *testing.T) {
 }
 
 func TestCreateRepoIssueLabel(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	var srcLabels Label
@@ -83,7 +83,7 @@ func TestCreateRepoIssueLabel(t *testing.T) {
 }
 
 func TestUpdateRepoIssueLabel(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	var srcLabels Label
@@ -107,7 +107,7 @@ func TestUpdateRepoIssueLabel(t *testing.T) {
 }
 
 func TestDeleteRepoIssueLabel(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/labels/gga3g", func(w http.ResponseWriter, r *http.Request) {
@@ -135,7 +135,7 @@ func TestDeleteRepoIssueLabel(t *testing.T) {
 }
 
 func TestAddLabelsToIssue(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	var want []*Label
@@ -162,7 +162,7 @@ func TestAddLabelsToIssue(t *testing.T) {
 }
 
 func TestRemoveLabelsFromIssue(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/issues/623/labels/0gjds", func(w http.ResponseWriter, r *http.Request) {

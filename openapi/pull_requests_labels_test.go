@@ -22,7 +22,7 @@ import (
 )
 
 func TestAddLabelsToPullRequest(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	want := new([]*Label)
@@ -44,7 +44,7 @@ func TestAddLabelsToPullRequest(t *testing.T) {
 }
 
 func TestRemoveLabelsFromPullRequest(t *testing.T) {
-	t.Parallel()
+
 	client, mux, _ := mockServer(t)
 
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/34/labels/fa,fsw", func(w http.ResponseWriter, r *http.Request) {

@@ -31,7 +31,6 @@ const (
 )
 
 func TestGetAccessor(t *testing.T) {
-	t.Parallel()
 
 	createIssue(t)
 	createPR(t)

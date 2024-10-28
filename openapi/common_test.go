@@ -23,7 +23,7 @@ import (
 )
 
 func TestNewRequestError(t *testing.T) {
-	t.Parallel()
+
 	client, _, _ := mockServer(t)
 
 	msg1 := "1231412"

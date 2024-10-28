@@ -32,7 +32,6 @@ const (
 )
 
 func TestGitCodeAuthenticationAuth(t *testing.T) {
-	t.Parallel()
 
 	type args struct {
 		r   GitCodeAuthentication
@@ -241,7 +240,6 @@ func TestGitCodeAuthenticationAuthByMock(t *testing.T) {
 }
 
 func TestGitCodeAuthenticationSetSignKey(t *testing.T) {
-	t.Parallel()
 
 	type args struct {
 		r     GitCodeAuthentication
@@ -308,7 +306,6 @@ func TestGitCodeAuthenticationSetSignKey(t *testing.T) {
 }
 
 func TestGitCodeAuthenticationGetPayload(t *testing.T) {
-	t.Parallel()
 
 	type args struct {
 		r GitCodeAuthentication
@@ -356,7 +353,6 @@ func TestGitCodeAuthenticationGetPayload(t *testing.T) {
 }
 
 func TestGitCodeAuthenticationGetEventType(t *testing.T) {
-	t.Parallel()
 
 	type args struct {
 		r GitCodeAuthentication
@@ -410,7 +406,6 @@ func TestGitCodeAuthenticationGetEventType(t *testing.T) {
 }
 
 func TestGitCodeAuthenticationGetEventGUID(t *testing.T) {
-	t.Parallel()
 
 	type args struct {
 		r GitCodeAuthentication
@@ -464,7 +459,6 @@ func TestGitCodeAuthenticationGetEventGUID(t *testing.T) {
 }
 
 func TestGitCodeAuthenticationsignSuccess(t *testing.T) {
-	t.Parallel()
 
 	assert.Equal(t, false, signSuccess("", " "))
 	assert.Equal(t, true, signSuccess("", ""))
@@ -472,7 +466,6 @@ func TestGitCodeAuthenticationsignSuccess(t *testing.T) {
 }
 
 func TestGitCodeAuthenticationhandleErr(t *testing.T) {
-	t.Parallel()
 
 	assert.Equal(t, fmt.Errorf(httpStatusCodeIncorrectErrorFormat, http.StatusAccepted), handleErr(httptest.NewRecorder(), http.StatusAccepted, ""))
 	assert.Equal(t, errorNilResponse, handleErr(nil, http.StatusBadRequest, ""))
