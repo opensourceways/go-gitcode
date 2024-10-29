@@ -99,7 +99,7 @@
     "http_url": "https://gitcode.com/ibforuorg/test1.git",
     "ci_config_path": null,
     "web_url": "https://gitcode.com/ibforuorg/test1",
-    "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+    "avatar_url": "https://123.cn/fjkhagsdb",
     "name": "test1",
     "namespace": "ibforuorg",
     "visibility_level": 20,
@@ -129,12 +129,12 @@
     "merge_when_pipeline_succeeds": false,
     "last_commit": {
       "author": {
-        "name": "ibforu",
-        "email": "feng0chao@gmail.com"
+        "name": "******",
+        "email": "dummy@123.com"
       },
-      "id": "7057de8ea1bf7b36d571cc2eea14089352907d8c",
+      "id": "12314124",
       "message": "241241241231",
-      "url": "https://gitcode.com/ibforuorg/test1/commits/detail/7057de8ea1bf7b36d571cc2eea14089352907d8c",
+      "url": "https://41232123132",
       "timestamp": "2024-10-26T02:32:14Z"
     },
     "iid": 4,
@@ -153,7 +153,7 @@
       "http_url": "https://gitcode.com/ibforuorg/test1.git",
       "ci_config_path": null,
       "web_url": "https://gitcode.com/ibforuorg/test1",
-      "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+      "avatar_url": "https://123.cn/fjkhagsdb",
       "name": "test1",
       "namespace": "ibforuorg",
       "visibility_level": 20,
@@ -166,12 +166,12 @@
     "source_branch": "24124124124",
     "target_branch_commit": {
       "author": {
-        "name": "ibforu",
-        "email": "feng0chao@gmail.com"
+        "name": "******",
+        "email": "dummy@123.com"
       },
-      "id": "7d4a831f43bf640007053d98936a6e2a89936c53",
-      "message": "merge main into main\n\n1232141243132131\n\nCreated-by: ibforu2nd\nAuthor-id: 1710427\nMR-id: 183821\nCommit-by: ibforu2nd\nMerged-by: ibforu\nE2E-issues: \nDescription: bodybodybodybodybodybodybody\n\nSee merge request: ibforuorg/test1!2",
-      "url": "https://gitcode.com/ibforuorg/test1/commits/detail/7d4a831f43bf640007053d98936a6e2a89936c53",
+      "id": "4123",
+      "message": "merge main into main\n\n1232141243132131\n\nCreated-by: 4512312321\nAuthor-id: 4213\nMR-id: 183821\nCommit-by: 4512312321\nMerged-by: ibforu\nE2E-issues: \nDescription: bodybodybodybodybodybodybody\n\nSee merge request: ibforuorg/test1!2",
+      "url": "512312231233",
       "timestamp": "2024-10-16T09:23:04Z"
     },
     "need_review": false,
@@ -190,11 +190,11 @@
     "merge_error": null,
     "work_in_progress": true,
     "author": {
-      "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
-      "name": "ibforu",
+      "avatar_url": "https://123.cn/fjkhagsdb",
+      "name": "******",
       "id": 858059,
-      "email": "feng0chao@gmail.com",
-      "username": "ibforu"
+      "email": "dummy@123.com",
+      "username": "****"
     },
     "update_reason": "",
     "target_branch": "main",
@@ -210,7 +210,7 @@
       "http_url": "https://gitcode.com/ibforuorg/test1.git",
       "ci_config_path": null,
       "web_url": "https://gitcode.com/ibforuorg/test1",
-      "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+      "avatar_url": "https://123.cn/fjkhagsdb",
       "name": "test1",
       "namespace": "ibforuorg",
       "visibility_level": 20,
@@ -233,11 +233,11 @@
   },
   "git_target_branch_commit_no": "7d4a831f43bf640007053d98936a6e2a89936c53",
   "user": {
-    "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
-    "name": "ibforu",
+    "avatar_url": "https://123.cn/fjkhagsdb",
+    "name": "******",
     "id": 858059,
-    "email": "feng0chao@gmail.com",
-    "username": "ibforu"
+    "email": "dummy@123.com",
+    "username": "****"
   },
   "manual_build": false,
   "uuid": "4_16bdbe47-7138-4158-b1d6-a21480109af7"

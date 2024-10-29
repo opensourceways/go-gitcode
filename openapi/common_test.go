@@ -125,4 +125,9 @@ func TestNewRequestError(t *testing.T) {
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*Contributor)(nil), result12)
 	assert.Equal(t, msg1, err.Error())
+
+	result13, ok, err := client.User.GetUserInfo(context.Background())
+	assert.Equal(t, false, ok)
+	assert.Equal(t, (*User)(nil), result13)
+	assert.Equal(t, msg1, err.Error())
 }

@@ -33,6 +33,7 @@ const (
 	issuesTestDataDir = testDataDir + string(os.PathSeparator) + "issues" + string(os.PathSeparator)
 	prTestDataDir     = testDataDir + string(os.PathSeparator) + "pr" + string(os.PathSeparator)
 	reposTestDataDir  = testDataDir + string(os.PathSeparator) + "repos" + string(os.PathSeparator)
+	userTestDataDir   = testDataDir + string(os.PathSeparator) + "user" + string(os.PathSeparator)
 )
 
 // setup sets up a test HTTP server along with a github.api that is
