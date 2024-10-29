@@ -21,16 +21,16 @@
     "closed_at": null,
     "author": {
       "id": 858059,
-      "name": "ibforu",
-      "username": "ibforu",
+      "name": "1234123",
+      "username": "12555",
       "iam_id": "9f43d08aa4264f7b8ddc87a768b0ba95",
-      "nick_name": "ibforu",
+      "nick_name": "412312",
       "state": "active",
-      "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+      "avatar_url": "https://123.cn/fjkhagsdb",
       "avatar_path": null,
-      "email": "feng0chao@gmail.com",
+      "email": "dummy@123.com",
       "name_cn": "",
-      "web_url": "https://gitcode.com/ibforu",
+      "web_url": "https://fgads.com/gfikal",
       "tenant_name": null,
       "is_member": null
     },
@@ -110,7 +110,7 @@
     "http_url": "https://gitcode.com/ibforuorg/test1.git",
     "ci_config_path": null,
     "web_url": "https://gitcode.com/ibforuorg/test1",
-    "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
+    "avatar_url": "https://123.cn/fjkhagsdb",
     "name": "test1",
     "namespace": "ibforuorg",
     "visibility_level": 20,
@@ -119,11 +119,11 @@
     "homepage": "https://gitcode.com/ibforuorg/test1"
   },
   "user": {
-    "avatar_url": "https://cdn-img.gitcode.com/bb/ca/b334b716792155ca98a563333bbf2351ddc34c55171ef2f0440aeb877d28ea09.png?time=1723001909430",
-    "name": "ibforu",
+    "avatar_url": "https://123.cn/fjkhagsdb",
+    "name": "1234123",
     "id": 858059,
-    "email": "feng0chao@gmail.com",
-    "username": "ibforu"
+    "email": "dummy@123.com",
+    "username": "12555"
   },
   "manual_build": false,
   "object_kind": "issue",
