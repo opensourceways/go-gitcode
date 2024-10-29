@@ -3,8 +3,8 @@
   "event_type": "note",
   "user": {
     "id": 1710427,
-    "name": "312414123",
-    "username": "4512312321",
+    "name": "******",
+    "username": "****",
     "avatar_url": "https://faljhsdgblkahjb/9848918234",
     "email": "dummy@123.com"
   },
@@ -133,14 +133,14 @@
       "timestamp": "2024-10-26T02:32:14Z",
       "url": "https://gitc4123141231223",
       "author": {
-        "name": "1234123",
+        "name": "******",
         "email": "dummy@123.com"
       }
     },
     "author": {
       "id": 858059,
-      "name": "1234123",
-      "username": "12555",
+      "name": "******",
+      "username": "****",
       "avatar_url": "https://123.cn/fjkhagsdb",
       "email": "dummy@123.com"
     },
@@ -154,7 +154,7 @@
       "timestamp": "2024-10-16T09:23:04Z",
       "url": "https://gitcode4123214124",
       "author": {
-        "name": "1234123",
+        "name": "******",
         "email": "dummy@123.com"
       }
     },

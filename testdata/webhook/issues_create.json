@@ -21,8 +21,8 @@
     "closed_at": null,
     "author": {
       "id": 858059,
-      "name": "1234123",
-      "username": "12555",
+      "name": "******",
+      "username": "****",
       "iam_id": "9f43d08aa4264f7b8ddc87a768b0ba95",
       "nick_name": "412312",
       "state": "active",
@@ -120,10 +120,10 @@
   },
   "user": {
     "avatar_url": "https://123.cn/fjkhagsdb",
-    "name": "1234123",
+    "name": "******",
     "id": 858059,
     "email": "dummy@123.com",
-    "username": "12555"
+    "username": "*****"
   },
   "manual_build": false,
   "object_kind": "issue",

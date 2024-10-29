@@ -129,7 +129,7 @@
     "merge_when_pipeline_succeeds": false,
     "last_commit": {
       "author": {
-        "name": "1234123",
+        "name": "******",
         "email": "dummy@123.com"
       },
       "id": "12314124",
@@ -166,7 +166,7 @@
     "source_branch": "24124124124",
     "target_branch_commit": {
       "author": {
-        "name": "1234123",
+        "name": "******",
         "email": "dummy@123.com"
       },
       "id": "4123",
@@ -191,10 +191,10 @@
     "work_in_progress": true,
     "author": {
       "avatar_url": "https://123.cn/fjkhagsdb",
-      "name": "1234123",
+      "name": "******",
       "id": 858059,
       "email": "dummy@123.com",
-      "username": "12555"
+      "username": "****"
     },
     "update_reason": "",
     "target_branch": "main",
@@ -234,10 +234,10 @@
   "git_target_branch_commit_no": "7d4a831f43bf640007053d98936a6e2a89936c53",
   "user": {
     "avatar_url": "https://123.cn/fjkhagsdb",
-    "name": "1234123",
+    "name": "******",
     "id": 858059,
     "email": "dummy@123.com",
-    "username": "12555"
+    "username": "****"
   },
   "manual_build": false,
   "uuid": "4_16bdbe47-7138-4158-b1d6-a21480109af7"

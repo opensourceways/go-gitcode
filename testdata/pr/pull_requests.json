@@ -31,8 +31,8 @@
   "mergeable": true,
   "user": {
     "id": "fgas123123",
-    "login": "1234123",
-    "name": "1234123",
+    "login": "******",
+    "name": "******",
     "avatar_url": "https://123.cn/fjkhagsdb",
     "html_url": "https://fgads.com/gfikal"
   },
@@ -49,8 +49,8 @@
     },
     "user": {
       "id": "fgas123123",
-      "login": "1234123",
-      "name": "1234123",
+      "login": "******",
+      "name": "******",
       "avatar_url": "https://123.cn/fjkhagsdb",
       "html_url": "https://fgads.com/gfikal"
     }

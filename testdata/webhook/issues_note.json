@@ -3,8 +3,8 @@
   "event_type": "note",
   "user": {
     "id": 1710427,
-    "name": "312414123",
-    "username": "4512312321",
+    "name": "******",
+    "username": "****",
     "avatar_url": "https://faljhsdgblkahjb/9848918234",
     "email": "dummy@123.com"
   },
@@ -67,10 +67,10 @@
     "author": {
       "avatar_url": "https://123.cn/fjkhagsdb",
       "web_url": "https://fgads.com/gfikal",
-      "name": "1234123",
+      "name": "******",
       "id": 858059,
       "email": "dummy@123.com",
-      "username": "12555"
+      "username": "****"
     },
     "closed_at": null,
     "confidential": false,
