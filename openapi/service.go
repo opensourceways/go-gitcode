@@ -117,3 +117,5 @@ type IssuesService service
 type PullRequestsService service
 
 type RepositoryService service
+
+type UserService service

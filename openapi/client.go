@@ -37,6 +37,7 @@ type APIClient struct {
 	Issues       *IssuesService
 	PullRequests *PullRequestsService
 	Repository   *RepositoryService
+	User         *UserService
 }
 
 // roundTripperFunc creates a RoundTripper (transport)
@@ -70,6 +71,7 @@ func NewAPIClientWithAuthorization(token []byte) *APIClient {
 	c.Issues = (*IssuesService)(&c.common)
 	c.PullRequests = (*PullRequestsService)(&c.common)
 	c.Repository = (*RepositoryService)(&c.common)
+	c.User = (*UserService)(&c.common)
 
 	return c
 }
