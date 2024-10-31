@@ -26,7 +26,7 @@ import (
 func (s *RepositoryService) GetRepoAllMember(ctx context.Context, owner, repo, page string) ([]*User, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/collaborators", owner, repo)
 	req, err := newRequest(s.api, http.MethodGet, urlStr,
-		url.Values{"page": []string{page}, "per_page": []string{"100"}}, RequestHandler{t: Query})
+		&url.Values{"page": []string{page}, "per_page": []string{"100"}}, RequestHandler{t: Query})
 	if err != nil {
 		return nil, false, err
 	}
