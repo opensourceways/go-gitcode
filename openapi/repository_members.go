@@ -33,7 +33,7 @@ func (s *RepositoryService) GetRepoAllMember(ctx context.Context, owner, repo, p
 
 	var members []*User
 	resp, err := s.api.Do(ctx, req, &members)
-	return members, successGetData(resp), err
+	return members, successGetData(resp) && len(members) != 0, err
 }
 
 // GetRepoMemberPermission 查看仓库成员的权限
