@@ -39,15 +39,16 @@ func (s *RepositoryService) GetRepoAllMember(ctx context.Context, owner, repo, p
 // GetRepoMemberPermission 查看仓库成员的权限
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/member/#5-%e6%9f%a5%e7%9c%8b%e4%bb%93%e5%ba%93%e6%88%90%e5%91%98%e7%9a%84%e6%9d%83%e9%99%90
-func (s *RepositoryService) GetRepoMemberPermission(ctx context.Context, owner, repo, login string) (bool, bool, error) {
+func (s *RepositoryService) GetRepoMemberPermission(ctx context.Context, owner, repo, login string) (*User, [2]bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/collaborators/%s/permission", owner, repo, login)
 	req, err := newRequest(s.api, http.MethodGet, urlStr, nil)
 	if err != nil {
-		return false, false, err
+		return nil, [2]bool{false, false}, err
 	}
 
-	resp, err := s.api.Do(ctx, req, nil)
-	return successModified(resp), resp != nil && resp.StatusCode == http.StatusNotFound, err
+	user := new(User)
+	resp, err := s.api.Do(ctx, req, user)
+	return user, [2]bool{successModified(resp), resp != nil && resp.StatusCode == http.StatusNotFound}, err
 }
 
 // CheckUserIsRepoMember 判断用户是否为仓库成员

@@ -33,7 +33,7 @@ func TestGetRepoAllMember(t *testing.T) {
 		_ = json.NewEncoder(w).Encode(want)
 
 		if r.URL.RawQuery != "" {
-			assert.Equal(t, r.URL.RawQuery, "type=jghjhdas")
+			assert.Equal(t, r.URL.RawQuery, "page=1&per_page=100")
 		}
 	})
 
@@ -54,16 +54,19 @@ func TestGetRepoMemberPermission(t *testing.T) {
 
 	client, mux, _ := mockServer(t)
 
+	user := "{\n    \"id\": 412,\n    \"login\": \"fasfa\",\n    \"permission\": \"admin\"\n}"
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/fasfa/permission", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
-		w.WriteHeader(http.StatusNoContent)
+		w.WriteHeader(http.StatusOK)
+		_, _ = w.Write([]byte(user))
 	})
 
 	ctx := context.Background()
 	got, ok, err := client.Repository.GetRepoMemberPermission(ctx, owner, repo, "fasfa")
 	assert.Equal(t, nil, err)
-	assert.Equal(t, false, ok)
-	assert.Equal(t, true, got)
+	assert.Equal(t, [2]bool{true, false}, ok)
+	assert.Equal(t, "fasfa", *got.Login)
+	assert.Equal(t, "admin", *got.Permission)
 
 	msg := "{\"message\":\"404 Not Found\"}"
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/collaborators/145123/permission", func(w http.ResponseWriter, r *http.Request) {
@@ -75,8 +78,8 @@ func TestGetRepoMemberPermission(t *testing.T) {
 	ctx1 := context.Background()
 	got, ok, err = client.Repository.GetRepoMemberPermission(ctx1, owner, repo, "145123")
 	assert.Equal(t, msg, err.Error())
-	assert.Equal(t, true, ok)
-	assert.Equal(t, false, got)
+	assert.Equal(t, [2]bool{false, true}, ok)
+	assert.Equal(t, User{}, *got)
 }
 
 func TestCheckUserIsRepoMember(t *testing.T) {

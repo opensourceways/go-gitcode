@@ -17,11 +17,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/url"
+	"reflect"
 	"runtime"
 	"strings"
 	"time"
@@ -148,21 +148,25 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 	if err != nil {
 		return resp, err
 	}
+
+	return parseResp(resp, receiver)
+}
+
+func parseResp(resp *http.Response, receiver any) (*http.Response, error) {
 	defer resp.Body.Close()
 
-	switch receiver := receiver.(type) {
-	case nil:
-	case io.Writer:
-		_, err = io.Copy(receiver, resp.Body)
-	default:
-		decErr := json.NewDecoder(resp.Body).Decode(receiver)
-		if decErr == io.EOF {
-			decErr = nil // ignore EOF errors caused by empty response body
-		}
-		if decErr != nil {
-			fmt.Println(decErr)
-			err = decErr
-		}
+	if receiver == nil {
+		return resp, nil
+	}
+
+	t := reflect.TypeOf(receiver)
+	if t.Kind() != reflect.Pointer {
+		return resp, respReceiverNotAnPointerError
+	}
+
+	err := json.NewDecoder(resp.Body).Decode(receiver)
+	if err == io.EOF {
+		err = nil // ignore EOF errors caused by empty response body
 	}
 	return resp, err
 }
