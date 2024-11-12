@@ -27,7 +27,7 @@ import (
 
 const (
 	webhookTestDataDir = "testdata" + string(os.PathSeparator) + "webhook" + string(os.PathSeparator)
-	htmlUrl            = "https://gitcode.com/ibforuorg/test1"
+	htmlUrl            = "https://gitcode.com/ibforuorg/test1/issues/4"
 )
 
 func TestGetAccessor(t *testing.T) {
@@ -36,6 +36,21 @@ func TestGetAccessor(t *testing.T) {
 	createPR(t)
 	notePR(t)
 	noteIssue(t)
+	pushCode(t)
+
+	buf := &bytes.Buffer{}
+	buf.Write([]byte("kjhygadsskhj"))
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
+	req.Header.Set(headerEventType, "Dummy Hook")
+	req.Header.Set(headerEventGUID, "fasgasd")
+	w := httptest.NewRecorder()
+
+	a := new(GitCodeAccessor)
+	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	assert.Equal(t, nil, got1)
+	assert.Equal(t, "Dummy Hook", *got2)
+	assert.Equal(t, "fasgasd", *got3)
+	assert.Equal(t, false, got4)
 }
 
 func createIssue(t *testing.T) {
@@ -71,7 +86,9 @@ func createIssue(t *testing.T) {
 	assert.Equal(t, "*****", *issue.GetAuthor())
 	assert.Equal(t, (*string)(nil), issue.GetComment())
 	assert.Equal(t, (*string)(nil), issue.GetCommenter())
-	assert.Equal(t, 0, len(issue.ListLabels()))
+	assert.Equal(t, "enhancement", *issue.ListLabels()[0])
+	assert.Equal(t, "question", *issue.ListLabels()[1])
+	assert.Equal(t, 2, len(issue.ListLabels()))
 
 	issue = new(IssueEvent)
 	assert.Equal(t, (*string)(nil), issue.GetAction())
@@ -86,6 +103,56 @@ func createIssue(t *testing.T) {
 	assert.Equal(t, (*string)(nil), issue.GetComment())
 	assert.Equal(t, (*string)(nil), issue.GetCommenter())
 	assert.Equal(t, 0, len(issue.ListLabels()))
+}
+
+func pushCode(t *testing.T) {
+	want := GitCodeAccessor{Push: new(PushEvent)}
+	data := readWebHookTestdata(t, webhookTestDataDir+"push_code.json", want.Push)
+
+	buf := &bytes.Buffer{}
+	buf.Write(data)
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
+	req.Header.Set(headerEventType, "Push Hook")
+	req.Header.Set(headerEventGUID, "fasgasd")
+	w := httptest.NewRecorder()
+
+	a := new(GitCodeAccessor)
+	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	d1, _ := json.Marshal(want.Push)
+	d2, _ := json.Marshal(got1)
+	assert.Equal(t, d1, d2)
+
+	assert.Equal(t, "Push Hook", *got2)
+	assert.Equal(t, "fasgasd", *got3)
+	assert.Equal(t, false, got4)
+
+	pr, _ := got1.(*PushEvent)
+	assert.Equal(t, (*string)(nil), pr.GetAction())
+	assert.Equal(t, (*string)(nil), pr.GetState())
+	assert.Equal(t, "ibforuorg", *pr.GetOrg())
+	assert.Equal(t, "org-repo-role-member-manage", *pr.GetRepo())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/org-repo-role-member-manage", *pr.GetHtmlURL())
+	assert.Equal(t, "dev", *pr.GetBase())
+	assert.Equal(t, (*string)(nil), pr.GetHead())
+	assert.Equal(t, (*string)(nil), pr.GetNumber())
+	assert.Equal(t, "ibforu", *pr.GetAuthor())
+	assert.Equal(t, (*string)(nil), pr.GetComment())
+	assert.Equal(t, (*string)(nil), pr.GetCommenter())
+	assert.Equal(t, 0, len(pr.ListLabels()))
+
+	pr = new(PushEvent)
+	assert.Equal(t, (*string)(nil), pr.GetAction())
+	assert.Equal(t, (*string)(nil), pr.GetState())
+	assert.Equal(t, (*string)(nil), pr.GetOrg())
+	assert.Equal(t, (*string)(nil), pr.GetRepo())
+	assert.Equal(t, (*string)(nil), pr.GetHtmlURL())
+	assert.Equal(t, (*string)(nil), pr.GetBase())
+	assert.Equal(t, (*string)(nil), pr.GetHead())
+	assert.Equal(t, (*string)(nil), pr.GetNumber())
+	assert.Equal(t, (*string)(nil), pr.GetAuthor())
+	assert.Equal(t, (*string)(nil), pr.GetComment())
+	assert.Equal(t, (*string)(nil), pr.GetCommenter())
+	assert.Equal(t, 0, len(pr.ListLabels()))
 }
 
 func createPR(t *testing.T) {
@@ -114,14 +181,16 @@ func createPR(t *testing.T) {
 	assert.Equal(t, "opened", *pr.GetState())
 	assert.Equal(t, "ibforuorg", *pr.GetOrg())
 	assert.Equal(t, "test1", *pr.GetRepo())
-	assert.Equal(t, htmlUrl, *pr.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), pr.GetBase())
-	assert.Equal(t, (*string)(nil), pr.GetHead())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/merge_requests/4", *pr.GetHtmlURL())
+	assert.Equal(t, "main", *pr.GetBase())
+	assert.Equal(t, "ibforuorg/test1/24124124124", *pr.GetHead())
 	assert.Equal(t, "4", *pr.GetNumber())
 	assert.Equal(t, "****", *pr.GetAuthor())
 	assert.Equal(t, (*string)(nil), pr.GetComment())
 	assert.Equal(t, (*string)(nil), pr.GetCommenter())
-	assert.Equal(t, 0, len(pr.ListLabels()))
+	assert.Equal(t, "duplicate", *pr.ListLabels()[0])
+	assert.Equal(t, "invalid", *pr.ListLabels()[1])
+	assert.Equal(t, 2, len(pr.ListLabels()))
 
 	pr = new(PullRequestEvent)
 	assert.Equal(t, (*string)(nil), pr.GetAction())
@@ -164,9 +233,9 @@ func notePR(t *testing.T) {
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
-	assert.Equal(t, htmlUrl, *note.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), note.GetBase())
-	assert.Equal(t, (*string)(nil), note.GetHead())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/merge_requests/4#note_71e9657489bcddbed4c0a9d2b1e29eb7c8ab26c3", *note.GetHtmlURL())
+	assert.Equal(t, "main", *note.GetBase())
+	assert.Equal(t, "ibforuorg/test1/24124124124", *note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())
 	assert.Equal(t, "****", *note.GetAuthor())
 	assert.Equal(t, "/lgtm\n/approve", *note.GetComment())
@@ -200,7 +269,7 @@ func noteIssue(t *testing.T) {
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
-	assert.Equal(t, htmlUrl, *note.GetHtmlURL())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/issues/4#note_d3ab73b290d6fcd8800177e2d34545c755af3af1", *note.GetHtmlURL())
 	assert.Equal(t, (*string)(nil), note.GetBase())
 	assert.Equal(t, (*string)(nil), note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())

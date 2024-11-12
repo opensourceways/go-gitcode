@@ -27,7 +27,6 @@ import (
 )
 
 const (
-	noteEvent   = "Note Hook"
 	payloadData = "{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }"
 )
 
@@ -486,7 +485,7 @@ func TestGitCodeAuthenticationsignSuccess(t *testing.T) {
 	assert.Equal(t, true, signSuccess("1231", "1231"))
 }
 
-func TestGitCodeAuthenticationhandleErr(t *testing.T) {
+func TestGitCodeAuthenticationHandleErr(t *testing.T) {
 
 	assert.Equal(t, fmt.Errorf(httpStatusCodeIncorrectErrorFormat, http.StatusAccepted), handleErr(httptest.NewRecorder(), http.StatusAccepted, ""))
 	assert.Equal(t, errorNilResponse, handleErr(nil, http.StatusBadRequest, ""))

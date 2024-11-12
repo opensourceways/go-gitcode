@@ -19,10 +19,9 @@ import (
 
 // Label represents a GitCode label on an Issue
 type Label struct {
-	ID           int64  `json:"id,omitempty"`
-	Name         string `json:"name,omitempty"`
-	Color        string `json:"color,omitempty"`
-	RepositoryId int64  `json:"repository_id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Color string `json:"color,omitempty"`
+	Title string `json:"title,omitempty"`
 }
 
 func (l *Label) Form() *url.Values {

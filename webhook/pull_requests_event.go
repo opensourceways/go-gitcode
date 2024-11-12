@@ -19,10 +19,13 @@ import (
 )
 
 type PRPart struct {
-	Action *string       `json:"action,omitempty"`
-	State  *string       `json:"state,omitempty"`
-	Number *int          `json:"iid,omitempty"`
-	Author *openapi.User `json:"author,omitempty"`
+	Action       *string       `json:"action,omitempty"`
+	State        *string       `json:"state,omitempty"`
+	Number       *int          `json:"iid,omitempty"`
+	Author       *openapi.User `json:"author,omitempty"`
+	TargetBranch *string       `json:"target_branch,omitempty"`
+	Source       *Project      `json:"source,omitempty"`
+	SourceBranch *string       `json:"source_branch,omitempty"`
 }
 
 type PullRequestEvent struct {
@@ -66,26 +69,31 @@ func (pr *PullRequestEvent) GetRepo() *string {
 	return pr.Repository.Name
 }
 func (pr *PullRequestEvent) GetHtmlURL() *string {
-	if pr.Repository == nil {
+	if pr.Attributes == nil {
 		return nil
 	}
 
-	return pr.Repository.HTMLURL
+	return pr.Attributes.URL
 }
 func (pr *PullRequestEvent) GetBase() *string {
-	return nil
+	if pr.Attributes == nil {
+		return nil
+	}
+
+	return pr.Attributes.TargetBranch
 }
 func (pr *PullRequestEvent) GetHead() *string {
-	return nil
+	if pr.Attributes == nil || pr.Attributes.SourceBranch == nil ||
+		pr.Attributes.Source == nil || pr.Attributes.Source.Path == nil {
+		return nil
+	}
+
+	head := *pr.Attributes.Source.Path + "/" + *pr.Attributes.SourceBranch
+	return &head
 }
 func (pr *PullRequestEvent) GetNumber() *string {
 	if pr.Attributes != nil && pr.Attributes.Number != nil {
 		n := strconv.Itoa(*pr.Attributes.Number)
-		return &n
-	}
-
-	if pr.PR != nil && pr.PR.Number != nil {
-		n := strconv.Itoa(*pr.PR.Number)
 		return &n
 	}
 
@@ -94,10 +102,6 @@ func (pr *PullRequestEvent) GetNumber() *string {
 func (pr *PullRequestEvent) GetAuthor() *string {
 	if pr.User == nil {
 		return nil
-	}
-
-	if pr.User.Login != nil {
-		return pr.User.Login
 	}
 
 	return pr.User.UserName
@@ -115,7 +119,7 @@ func (pr *PullRequestEvent) ListLabels() []*string {
 
 	labels := make([]*string, 0, len(pr.Labels))
 	for _, p := range pr.Labels {
-		labels = append(labels, &p.Name)
+		labels = append(labels, &p.Title)
 	}
 	return labels
 }

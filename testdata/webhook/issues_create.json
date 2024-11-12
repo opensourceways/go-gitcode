@@ -127,7 +127,34 @@
   },
   "manual_build": false,
   "object_kind": "issue",
-  "labels": [],
+  "labels": [
+    {
+      "template": false,
+      "expires_at": null,
+      "color": "#51D3D4",
+      "updated_at": "2024-10-15T09:30:05.838+08:00",
+      "group_id": null,
+      "project_id": 4163304,
+      "created_at": "2024-10-15T09:30:05.838+08:00",
+      "description": "New feature or request",
+      "id": 12739267,
+      "title": "enhancement",
+      "type": "ProjectLabel"
+    },
+    {
+      "template": false,
+      "expires_at": null,
+      "color": "#D876E3",
+      "updated_at": "2024-10-15T09:30:06.020+08:00",
+      "group_id": null,
+      "project_id": 4163304,
+      "created_at": "2024-10-15T09:30:06.020+08:00",
+      "description": "Further information is requested",
+      "id": 12739270,
+      "title": "question",
+      "type": "ProjectLabel"
+    }
+  ],
   "extend_attributes": null,
   "uuid": "ae975cad-692f-41a3-ab6a-840412052d85"
 }

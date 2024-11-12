@@ -55,7 +55,7 @@ func NewAPIClientWithAuthorization(token []byte) *APIClient {
 				req.Header.Set(headerAuthorization, "Bearer "+string(token))
 				req.Header.Set(headerUserAgentName, headerUserAgentValue)
 				req.Header.Set(headerMediaTypeName, headerMediaTypeValue)
-				return createTransport(nil).RoundTrip(req)
+				return createTransport().RoundTrip(req)
 			},
 		),
 		Timeout: 90 * time.Second,
@@ -76,13 +76,10 @@ func NewAPIClientWithAuthorization(token []byte) *APIClient {
 	return c
 }
 
-func createTransport(localAddr net.Addr) *http.Transport {
+func createTransport() *http.Transport {
 	dialer := &net.Dialer{
 		Timeout:   30 * time.Second,
 		KeepAlive: 30 * time.Second,
-	}
-	if localAddr != nil {
-		dialer.LocalAddr = localAddr
 	}
 	return &http.Transport{
 		DialContext:           transportDialContext(dialer),
