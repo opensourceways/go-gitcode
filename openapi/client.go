@@ -21,7 +21,6 @@ import (
 	"net"
 	"net/http"
 	"net/url"
-	"reflect"
 	"runtime"
 	"strings"
 	"time"
@@ -154,11 +153,6 @@ func parseResp(resp *http.Response, receiver any) (*http.Response, error) {
 
 	if receiver == nil {
 		return resp, nil
-	}
-
-	t := reflect.TypeOf(receiver)
-	if t.Kind() != reflect.Pointer {
-		return resp, respReceiverNotAnPointerError
 	}
 
 	err := json.NewDecoder(resp.Body).Decode(receiver)

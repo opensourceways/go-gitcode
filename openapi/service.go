@@ -57,6 +57,11 @@ type RequestHandler struct {
 func (b *RequestHandler) PreOperate(uri *url.URL, body any) error {
 	var err error
 	if body != nil {
+
+		if reflect.TypeOf(body).Kind() != reflect.Pointer {
+			return respReceiverNotAnPointerError
+		}
+
 		switch b.t {
 		case Query:
 			// set url query
