@@ -21,6 +21,7 @@ import (
 	"net"
 	"net/http"
 	"net/url"
+	"reflect"
 	"runtime"
 	"strings"
 	"time"
@@ -124,6 +125,11 @@ func newRequest(c *APIClient, method, urlStr string, body any, handlers ...Reque
 }
 
 func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*http.Response, error) {
+
+	if receiver != nil && reflect.TypeOf(receiver).Kind() != reflect.Pointer {
+		return nil, respReceiverNotAnPointerError
+	}
+
 	var resp *http.Response
 	var err error
 

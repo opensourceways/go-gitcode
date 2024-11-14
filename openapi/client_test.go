@@ -14,7 +14,9 @@
 package openapi
 
 import (
+	"context"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 )
@@ -25,12 +27,6 @@ func TestParseResp(t *testing.T) {
 	resp1, err := parseResp(resp, nil)
 	assert.Equal(t, resp, resp1)
 	assert.Equal(t, nil, err)
-	//assert.Equal(t, nilContentError, err)
-
-	r1 := struct{}{}
-	resp1, err = parseResp(resp, r1)
-	assert.Equal(t, resp, resp1)
-	assert.Equal(t, respReceiverNotAnPointerError, err)
 
 	r2 := new(struct{})
 	resp1, err = parseResp(resp, r2)
@@ -52,4 +48,11 @@ func TestParseResp(t *testing.T) {
 	assert.Equal(t, resp3, resp4)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, simple{A: "4123", B: 912}, *r4)
+}
+
+func TestDo(t *testing.T) {
+	api := &APIClient{}
+	result, err := api.Do(context.Background(), httptest.NewRequest(http.MethodPost, "http://localhost:8080/", nil), struct{}{})
+	assert.Equal(t, (*http.Response)(nil), result)
+	assert.Equal(t, respReceiverNotAnPointerError, err)
 }
