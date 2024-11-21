@@ -478,13 +478,6 @@ func TestGitCodeAuthenticationGetEventGUID(t *testing.T) {
 	}
 }
 
-func TestGitCodeAuthenticationsignSuccess(t *testing.T) {
-
-	assert.Equal(t, false, signSuccess("", " "))
-	assert.Equal(t, true, signSuccess("", ""))
-	assert.Equal(t, true, signSuccess("1231", "1231"))
-}
-
 func TestGitCodeAuthenticationHandleErr(t *testing.T) {
 
 	assert.Equal(t, fmt.Errorf(httpStatusCodeIncorrectErrorFormat, http.StatusAccepted), handleErr(httptest.NewRecorder(), http.StatusAccepted, ""))
@@ -517,4 +510,61 @@ func TestReadPayload(t *testing.T) {
 	assert.Equal(t, p, payload)
 	assert.Equal(t, e, err1)
 
+}
+
+func TestSignSuccess(t *testing.T) {
+	type args struct {
+		token   string
+		signKey string
+		payload *bytes.Buffer
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "Test with valid token",
+			args: args{
+				token:   "sha256=3938a65bf0a111e17a7dfe928ea0c73a38c5af80006a939a81c46b372e8f8815",
+				signKey: "secret",
+				payload: bytes.NewBufferString("{\n    \"content\": \"MTI0MTQxMjQxMjQ=\",\n    \"message\": \"fas\",\n    \"branch\": \"test1-patch-1\"\n}"),
+			},
+			want: true,
+		},
+		{
+			name: "Test with invalid token prefix",
+			args: args{
+				token:   "md5=123456",
+				signKey: "secret",
+				payload: bytes.NewBufferString("test payload"),
+			},
+			want: false,
+		},
+		{
+			name: "Test with empty token",
+			args: args{
+				token:   "",
+				signKey: "secret",
+				payload: bytes.NewBufferString("test payload"),
+			},
+			want: false,
+		},
+		{
+			name: "Test with empty payload",
+			args: args{
+				token:   "sha256=123456",
+				signKey: "secret",
+				payload: bytes.NewBufferString(""),
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := signSuccess(tt.args.token, tt.args.signKey, tt.args.payload); got != tt.want {
+				t.Errorf("signSuccess() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }
