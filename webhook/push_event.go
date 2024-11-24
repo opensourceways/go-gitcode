@@ -62,6 +62,12 @@ func (p *PushEvent) GetNumber() *string {
 func (p *PushEvent) GetAuthor() *string {
 	return p.Author
 }
+func (p *PushEvent) GetCommentID() *string {
+	return nil
+}
+func (p *PushEvent) GetCommentKind() *string {
+	return nil
+}
 func (p *PushEvent) GetComment() *string {
 	return nil
 }

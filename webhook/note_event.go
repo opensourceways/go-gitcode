@@ -115,6 +115,18 @@ func (n *NoteEvent) GetAuthor() *string {
 
 	return nil
 }
+func (n *NoteEvent) GetCommentID() *string {
+	if n.Attributes == nil || n.Attributes.CommentID == nil {
+		return nil
+	}
+	return n.Attributes.CommentID
+}
+func (n *NoteEvent) GetCommentKind() *string {
+	if n.Attributes == nil || n.Attributes.CommentKind == nil {
+		return nil
+	}
+	return n.Attributes.CommentKind
+}
 func (n *NoteEvent) GetComment() *string {
 	if n.Attributes == nil || n.Attributes.Comment == nil {
 		return nil

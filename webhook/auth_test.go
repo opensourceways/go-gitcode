@@ -150,7 +150,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
-					req.Header.Set(headerEventToken, "1234")
+					req.Header.Set(headerEventToken, "sha256=36acf017ea0974457577506ef75268ac93ed6d61864ee994f438b63916ed1736")
 					return req
 				}(),
 			},
@@ -177,7 +177,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
-					req.Header.Set(headerEventToken, "1234")
+					req.Header.Set(headerEventToken, "sha256=f585860d0ca237e0550da0e166370b9c372e8aeb2e639b0ac9884cd52681c576")
 					return req
 				}(),
 			},
@@ -207,7 +207,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
-					req.Header.Set(headerEventToken, "1234")
+					req.Header.Set(headerEventToken, "sha256=36acf017ea0974457577506ef75268ac93ed6d61864ee994f438b63916ed1736")
 
 					_, _ = io.Copy(io.Discard, req.Body)
 					return req
@@ -215,7 +215,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 			},
 			"",
 			func(i *args) {
-				assert.Equal(t, i.r.payload.String(), "")
+				assert.Equal(t, "", i.r.payload.String())
 			},
 		},
 		{

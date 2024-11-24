@@ -26,16 +26,16 @@ type Project struct {
 }
 
 type Attributes struct {
-	Action          *string  `json:"action,omitempty"`
-	State           *string  `json:"state,omitempty"`
-	Number          *int     `json:"iid,omitempty"`
-	CommentID       *string  `json:"discussion_id,omitempty"`
-	Comment         *string  `json:"note,omitempty"`
-	CommentCategory *string  `json:"noteable_type,omitempty"`
-	URL             *string  `json:"url,omitempty"`
-	TargetBranch    *string  `json:"target_branch,omitempty"`
-	Source          *Project `json:"source,omitempty"`
-	SourceBranch    *string  `json:"source_branch,omitempty"`
+	Action       *string  `json:"action,omitempty"`
+	State        *string  `json:"state,omitempty"`
+	Number       *int     `json:"iid,omitempty"`
+	CommentID    *string  `json:"discussion_id,omitempty"`
+	Comment      *string  `json:"description,omitempty"`
+	CommentKind  *string  `json:"noteable_type,omitempty"`
+	URL          *string  `json:"url,omitempty"`
+	TargetBranch *string  `json:"target_branch,omitempty"`
+	Source       *Project `json:"source,omitempty"`
+	SourceBranch *string  `json:"source_branch,omitempty"`
 }
 
 type IssuePart struct {
@@ -112,6 +112,12 @@ func (iss *IssueEvent) GetAuthor() *string {
 		return nil
 	}
 	return iss.User.UserName
+}
+func (iss *IssueEvent) GetCommentID() *string {
+	return nil
+}
+func (iss *IssueEvent) GetCommentKind() *string {
+	return nil
 }
 func (iss *IssueEvent) GetComment() *string {
 	return nil

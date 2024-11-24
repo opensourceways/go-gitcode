@@ -106,6 +106,12 @@ func (pr *PullRequestEvent) GetAuthor() *string {
 
 	return pr.User.UserName
 }
+func (pr *PullRequestEvent) GetCommentID() *string {
+	return nil
+}
+func (pr *PullRequestEvent) GetCommentKind() *string {
+	return nil
+}
 func (pr *PullRequestEvent) GetComment() *string {
 	return nil
 }
