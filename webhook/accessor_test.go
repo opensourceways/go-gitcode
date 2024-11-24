@@ -46,11 +46,10 @@ func TestGetAccessor(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
 	assert.Equal(t, nil, got1)
 	assert.Equal(t, "Dummy Hook", *got2)
 	assert.Equal(t, "fasgasd", *got3)
-	assert.Equal(t, false, got4)
 }
 
 func createIssue(t *testing.T) {
@@ -65,14 +64,13 @@ func createIssue(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.Issues)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
 	assert.Equal(t, "Issue Hook", *got2)
 	assert.Equal(t, "1231321", *got3)
-	assert.Equal(t, false, got4)
 
 	issue, _ := got1.(*IssueEvent)
 	assert.Equal(t, "open", *issue.GetAction())
@@ -121,14 +119,13 @@ func pushCode(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.Push)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
 	assert.Equal(t, "Push Hook", *got2)
 	assert.Equal(t, "fasgasd", *got3)
-	assert.Equal(t, false, got4)
 
 	pr, _ := got1.(*PushEvent)
 	assert.Equal(t, (*string)(nil), pr.GetAction())
@@ -175,14 +172,13 @@ func createPR(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.PR)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
 	assert.Equal(t, "Merge Request Hook", *got2)
 	assert.Equal(t, "fasgasd", *got3)
-	assert.Equal(t, false, got4)
 
 	pr, _ := got1.(*PullRequestEvent)
 	assert.Equal(t, "open", *pr.GetAction())
@@ -231,14 +227,13 @@ func notePR(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.Note)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
 	assert.Equal(t, "Note Hook", *got2)
 	assert.Equal(t, "651234123", *got3)
-	assert.Equal(t, true, got4)
 
 	note, _ := got1.(*NoteEvent)
 	assert.Equal(t, "open", *note.GetAction())
@@ -269,14 +264,13 @@ func noteIssue(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	a := new(GitCodeAccessor)
-	got1, _, got2, got3, got4 := a.GetAccessor(w, req)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
 	d1, _ := json.Marshal(want.Note)
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
 	assert.Equal(t, "Note Hook", *got2)
 	assert.Equal(t, "151231321", *got3)
-	assert.Equal(t, false, got4)
 
 	note, _ := got1.(*NoteEvent)
 	assert.Equal(t, (*string)(nil), note.GetAction())

@@ -33,10 +33,10 @@ const (
 	noteEvent        = "Note Hook"
 )
 
-func (a *GitCodeAccessor) GetAccessor(w http.ResponseWriter, r *http.Request) (any, *bytes.Buffer, *string, *string, bool) {
+func (a *GitCodeAccessor) GetAccessor(w http.ResponseWriter, r *http.Request) (any, *bytes.Buffer, *string, *string) {
 	payload, err := ReadPayload(w, r)
 	if err != nil {
-		return nil, nil, nil, nil, false
+		return nil, nil, nil, nil
 	}
 
 	eventGUID := r.Header.Get(headerEventGUID)
@@ -46,22 +46,22 @@ func (a *GitCodeAccessor) GetAccessor(w http.ResponseWriter, r *http.Request) (a
 	case issueEvent:
 		a.Issues = new(IssueEvent)
 		_ = json.Unmarshal(payload.Bytes(), a.Issues)
-		return a.Issues, payload, &eventType, &eventGUID, false
+		return a.Issues, payload, &eventType, &eventGUID
 	case pullRequestEvent:
 		a.PR = new(PullRequestEvent)
 		_ = json.Unmarshal(payload.Bytes(), a.PR)
-		return a.PR, payload, &eventType, &eventGUID, false
+		return a.PR, payload, &eventType, &eventGUID
 	case noteEvent:
 		a.Note = new(NoteEvent)
 		_ = json.Unmarshal(payload.Bytes(), a.Note)
-		return a.Note, payload, &eventType, &eventGUID, a.Note != nil && a.Note.PR != nil
+		return a.Note, payload, &eventType, &eventGUID
 	case pushEvent:
 		a.Push = new(PushEvent)
 		_ = json.Unmarshal(payload.Bytes(), a.Push)
-		return a.Push, payload, &eventType, &eventGUID, false
+		return a.Push, payload, &eventType, &eventGUID
 	default:
 		// do nothing
 	}
 
-	return nil, payload, &eventType, &eventGUID, false
+	return nil, payload, &eventType, &eventGUID
 }
