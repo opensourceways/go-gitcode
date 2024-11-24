@@ -116,9 +116,9 @@ func TestNewRequestError(t *testing.T) {
 	assert.Equal(t, ([]*User)(nil), result10)
 	assert.Equal(t, msg1, err.Error())
 
-	result11, ok, err := client.Repository.GetRepoMemberPermission(context.Background(), owner, repo, "1")
-	assert.Equal(t, false, ok)
-	assert.Equal(t, false, result11)
+	result11, okAndNg, err := client.Repository.GetRepoMemberPermission(context.Background(), owner, repo, "1")
+	assert.Equal(t, [2]bool{false, false}, okAndNg)
+	assert.Equal(t, (*User)(nil), result11)
 	assert.Equal(t, msg1, err.Error())
 
 	result12, ok, err := client.Repository.GetRepoContributors(context.Background(), owner, repo, "")
@@ -129,5 +129,10 @@ func TestNewRequestError(t *testing.T) {
 	result13, ok, err := client.User.GetUserInfo(context.Background())
 	assert.Equal(t, false, ok)
 	assert.Equal(t, (*User)(nil), result13)
+	assert.Equal(t, msg1, err.Error())
+
+	result14, ok, err := client.PullRequests.ListPullRequestCommits(context.Background(), owner, repo, "1")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, ([]*RepositoryCommit)(nil), result14)
 	assert.Equal(t, msg1, err.Error())
 }

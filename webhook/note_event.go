@@ -68,23 +68,29 @@ func (n *NoteEvent) GetRepo() *string {
 	return n.Repository.Name
 }
 func (n *NoteEvent) GetHtmlURL() *string {
-	if n.Repository == nil {
+	if n.Attributes == nil {
 		return nil
 	}
 
-	return n.Repository.HTMLURL
+	return n.Attributes.URL
 }
 func (n *NoteEvent) GetBase() *string {
-	return nil
+	if n.PR == nil {
+		return nil
+	}
+
+	return n.PR.TargetBranch
 }
 func (n *NoteEvent) GetHead() *string {
-	return nil
+	if n.PR == nil || n.PR.SourceBranch == nil ||
+		n.PR.Source == nil || n.PR.Source.Path == nil {
+		return nil
+	}
+
+	head := *n.PR.Source.Path + "/" + *n.PR.SourceBranch
+	return &head
 }
 func (n *NoteEvent) GetNumber() *string {
-	if n.Attributes != nil && n.Attributes.Number != nil {
-		no := strconv.Itoa(*n.Attributes.Number)
-		return &no
-	}
 
 	if n.PR != nil && n.PR.Number != nil {
 		no := strconv.Itoa(*n.PR.Number)
@@ -100,20 +106,26 @@ func (n *NoteEvent) GetNumber() *string {
 }
 func (n *NoteEvent) GetAuthor() *string {
 	if n.Issue != nil && n.Issue.Author != nil {
-		if n.Issue.Author.Login != nil {
-			return n.Issue.Author.Login
-		}
 		return n.Issue.Author.UserName
 	}
 
 	if n.PR != nil && n.PR.Author != nil {
-		if n.PR.Author.Login != nil {
-			return n.PR.Author.Login
-		}
 		return n.PR.Author.UserName
 	}
 
 	return nil
+}
+func (n *NoteEvent) GetCommentID() *string {
+	if n.Attributes == nil || n.Attributes.CommentID == nil {
+		return nil
+	}
+	return n.Attributes.CommentID
+}
+func (n *NoteEvent) GetCommentKind() *string {
+	if n.Attributes == nil || n.Attributes.CommentKind == nil {
+		return nil
+	}
+	return n.Attributes.CommentKind
 }
 func (n *NoteEvent) GetComment() *string {
 	if n.Attributes == nil || n.Attributes.Comment == nil {
@@ -125,20 +137,10 @@ func (n *NoteEvent) GetCommenter() *string {
 	if n.User == nil {
 		return nil
 	}
-	if n.User.Login != nil {
-		return n.User.Login
-	}
 
 	return n.User.UserName
 }
 func (n *NoteEvent) ListLabels() []*string {
-	if len(n.Labels) == 0 {
-		return nil
-	}
 
-	labels := make([]*string, 0, len(n.Labels))
-	for _, p := range n.Labels {
-		labels = append(labels, &p.Name)
-	}
-	return labels
+	return nil
 }

@@ -63,3 +63,18 @@ func (s *PullRequestsService) ListPullRequestLinkingIssues(ctx context.Context, 
 	resp, err := s.api.Do(ctx, req, &linkingPRList)
 	return linkingPRList, successGetData(resp), err
 }
+
+// ListPullRequestCommits 获取某Pull Request的所有Commit信息
+//
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#10-%e8%8e%b7%e5%8f%96%e6%9f%90pull-request%e7%9a%84%e6%89%80%e6%9c%89commit%e4%bf%a1%e6%81%af
+func (s *PullRequestsService) ListPullRequestCommits(ctx context.Context, owner, repo, number string) ([]*RepositoryCommit, bool, error) {
+	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/commits", owner, repo, number)
+	req, err := newRequest(s.api, http.MethodGet, urlStr, nil)
+	if err != nil {
+		return nil, false, err
+	}
+
+	var commitList []*RepositoryCommit
+	resp, err := s.api.Do(ctx, req, &commitList)
+	return commitList, successGetData(resp), err
+}

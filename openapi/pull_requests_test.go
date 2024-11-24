@@ -105,3 +105,27 @@ func TestListPullRequestLinkingIssues(t *testing.T) {
 		assert.Equal(t, d1, d2)
 	}
 }
+
+func TestListPullRequestCommits(t *testing.T) {
+
+	client, mux, _ := mockServer(t)
+
+	want := new([]*RepositoryCommit)
+	_ = readTestdata(t, prTestDataDir+"pull_requests_commits.json", want)
+
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/15/commits", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
+		_ = json.NewEncoder(w).Encode(want)
+	})
+
+	ctx := context.Background()
+	got, ok, err := client.PullRequests.ListPullRequestCommits(ctx, owner, repo, "15")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, ok)
+
+	for i := range *want {
+		d1, _ := json.Marshal(*(*want)[i])
+		d2, _ := json.Marshal(*got[i])
+		assert.Equal(t, d1, d2)
+	}
+}

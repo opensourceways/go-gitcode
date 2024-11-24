@@ -134,35 +134,32 @@ type Repository struct {
 }
 
 type RepositoryCommit struct {
-	NodeID      *string   `json:"node_id,omitempty"`
-	SHA         *string   `json:"sha,omitempty"`
-	Commit      *Commit   `json:"commit,omitempty"`
-	Author      *User     `json:"author,omitempty"`
-	Committer   *User     `json:"committer,omitempty"`
-	Parents     []*Commit `json:"parents,omitempty"`
-	HTMLURL     *string   `json:"html_url,omitempty"`
-	URL         *string   `json:"url,omitempty"`
-	CommentsURL *string   `json:"comments_url,omitempty"`
+	SHA         *string     `json:"sha,omitempty"`
+	Commit      *Commit     `json:"commit,omitempty"`
+	Author      *CommitUser `json:"author,omitempty"`
+	Committer   *CommitUser `json:"committer,omitempty"`
+	Parents     *Commit     `json:"parents,omitempty"`
+	HTMLURL     *string     `json:"html_url,omitempty"`
+	URL         *string     `json:"url,omitempty"`
+	CommentsURL *string     `json:"comments_url,omitempty"`
 }
 
 type Commit struct {
-	SHA       *string       `json:"sha,omitempty"`
-	Author    *CommitAuthor `json:"author,omitempty"`
-	Committer *CommitAuthor `json:"committer,omitempty"`
-	Message   *string       `json:"message,omitempty"`
-	Parents   []*Commit     `json:"parents,omitempty"`
-	HTMLURL   *string       `json:"html_url,omitempty"`
-	URL       *string       `json:"url,omitempty"`
-
-	// CommentCount is the number of GitHub comments on the commit. This
-	// is only populated for requests that fetch GitHub data like
-	// Pulls.ListCommits, Repositories.ListCommits, etc.
-	CommentCount *int `json:"comment_count,omitempty"`
+	SHA         *string     `json:"sha,omitempty"`
+	Author      *CommitUser `json:"author,omitempty"`
+	Committer   *CommitUser `json:"committer,omitempty"`
+	Message     *string     `json:"message,omitempty"`
+	Parents     *Commit     `json:"parents,omitempty"`
+	HTMLURL     *string     `json:"html_url,omitempty"`
+	URL         *string     `json:"url,omitempty"`
+	CommentsURL *int        `json:"comments_url,omitempty"`
 }
 
-type CommitAuthor struct {
-	Name  *string `json:"name,omitempty"`
-	Email *string `json:"email,omitempty"`
+type CommitUser struct {
+	Login *string    `json:"login,omitempty"`
+	Name  *string    `json:"name,omitempty"`
+	Email *string    `json:"email,omitempty"`
+	Date  *timestamp `json:"date,omitempty"`
 }
 
 type CommitFile struct {
