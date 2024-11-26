@@ -99,7 +99,7 @@ func TestNewRequestError(t *testing.T) {
 		Body: "fauygiahsgdbviahsd",
 	})
 	assert.Equal(t, false, ok)
-	assert.Equal(t, (*PullRequestComment)(nil), result7)
+	assert.Equal(t, (*SimpleComment)(nil), result7)
 	assert.Equal(t, msg1, err.Error())
 	result8, ok, err := client.PullRequests.AddLabelsToPullRequest(context.Background(), owner, repo, "1", []string{"bug1"})
 	assert.Equal(t, false, ok)

@@ -23,14 +23,14 @@ import (
 // CreatePullRequestComment 提交 pull request 评论
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#4-%e6%8f%90%e4%ba%a4pull-request-%e8%af%84%e8%ae%ba
-func (s *PullRequestsService) CreatePullRequestComment(ctx context.Context, owner, repo, number string, comment *PullRequestCommentRequest) (*PullRequestComment, bool, error) {
+func (s *PullRequestsService) CreatePullRequestComment(ctx context.Context, owner, repo, number string, comment *PullRequestCommentRequest) (*SimpleComment, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s/comments", owner, repo, number)
 	req, err := newRequest(s.api, http.MethodPost, urlStr, comment)
 	if err != nil {
 		return nil, false, err
 	}
 
-	addedComment := new(PullRequestComment)
+	addedComment := new(SimpleComment)
 	resp, err := s.api.Do(ctx, req, addedComment)
 	return addedComment, successCreated(resp), err
 }

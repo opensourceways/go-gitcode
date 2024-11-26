@@ -14,6 +14,7 @@
 package openapi
 
 import (
+	"encoding/json"
 	"net/url"
 )
 
@@ -80,10 +81,10 @@ type IssueRequest struct {
 }
 
 type IssueComment struct {
-	ID        *int64     `json:"id,omitempty"`
-	Body      *string    `json:"body,omitempty"`
-	User      *User      `json:"user,omitempty"`
-	CreatedAt *timestamp `json:"created_at,omitempty"`
-	UpdatedAt *timestamp `json:"updated_at,omitempty"`
-	Target    *Issue     `json:"target,omitempty"`
+	ID        *json.Number `json:"id,omitempty"`
+	Body      *string      `json:"body,omitempty"`
+	User      *User        `json:"user,omitempty"`
+	CreatedAt *timestamp   `json:"created_at,omitempty"`
+	UpdatedAt *timestamp   `json:"updated_at,omitempty"`
+	Target    *Issue       `json:"target,omitempty"`
 }
