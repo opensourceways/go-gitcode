@@ -72,8 +72,8 @@ type MergeAbleState struct {
 
 type PullRequestRequest struct {
 	ID              int64       `json:"id,omitempty"`
-	Title           string      `json:"title,omitempty" required:"true"`
-	Body            string      `json:"body,omitempty" required:"true"`
+	Title           string      `json:"title,omitempty"`
+	Body            string      `json:"body,omitempty"`
 	State           string      `json:"state,omitempty"`
 	Labels          string      `json:"labels,omitempty"`
 	MilestoneNumber string      `json:"milestone_number,omitempty"`

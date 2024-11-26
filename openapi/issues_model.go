@@ -67,7 +67,7 @@ type PullRequestLinks struct {
 }
 
 type IssueRequest struct {
-	Repository    string `json:"repo,omitempty"  required:"true"` // 仓库地址
+	Repository    string `json:"repo,omitempty"` // 仓库地址
 	Title         string `json:"title,omitempty"`
 	Body          string `json:"body,omitempty"`
 	Labels        string `json:"labels,omitempty"`   // 用逗号分开的标签
