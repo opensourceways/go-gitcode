@@ -13,14 +13,18 @@
 // limitations under the License.
 package webhook
 
+import "github.com/opensourceways/go-gitcode/openapi"
+
 type PushEvent struct {
-	UUID         *string  `json:"uuid,omitempty"`
-	EventType    *string  `json:"event_name,omitempty"`
-	ObjectKind   *string  `json:"object_kind,omitempty"`
-	ManualBuild  *bool    `json:"manual_build,omitempty"`
-	Repository   *Project `json:"project,omitempty"`
-	SourceBranch *string  `json:"git_branch,omitempty"`
-	Author       *string  `json:"user_username,omitempty"`
+	UUID         *string            `json:"uuid,omitempty"`
+	EventType    *string            `json:"event_name,omitempty"`
+	ObjectKind   *string            `json:"object_kind,omitempty"`
+	ManualBuild  *bool              `json:"manual_build,omitempty"`
+	Repository   *Project           `json:"project,omitempty"`
+	SourceBranch *string            `json:"git_branch,omitempty"`
+	Author       *string            `json:"user_username,omitempty"`
+	CreateTime   *openapi.Timestamp `json:"created_at,omitempty"`
+	UpdatedTime  *openapi.Timestamp `json:"updated_at,omitempty"`
 }
 
 func (p *PushEvent) GetAction() *string {
@@ -74,6 +78,10 @@ func (p *PushEvent) GetComment() *string {
 func (p *PushEvent) GetCommenter() *string {
 	return nil
 }
-func (p *PushEvent) ListLabels() []*string {
+func (p *PushEvent) GetCreateTime() *string {
+	return nil
+}
+
+func (p *PushEvent) GetUpdateTime() *string {
 	return nil
 }

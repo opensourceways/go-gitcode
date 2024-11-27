@@ -26,16 +26,18 @@ type Project struct {
 }
 
 type Attributes struct {
-	Action       *string  `json:"action,omitempty"`
-	State        *string  `json:"state,omitempty"`
-	Number       *int     `json:"iid,omitempty"`
-	CommentID    *string  `json:"discussion_id,omitempty"`
-	Comment      *string  `json:"description,omitempty"`
-	CommentKind  *string  `json:"noteable_type,omitempty"`
-	URL          *string  `json:"url,omitempty"`
-	TargetBranch *string  `json:"target_branch,omitempty"`
-	Source       *Project `json:"source,omitempty"`
-	SourceBranch *string  `json:"source_branch,omitempty"`
+	Action       *string            `json:"action,omitempty"`
+	State        *string            `json:"state,omitempty"`
+	Number       *int               `json:"iid,omitempty"`
+	CommentID    *string            `json:"discussion_id,omitempty"`
+	Comment      *string            `json:"description,omitempty"`
+	CommentKind  *string            `json:"noteable_type,omitempty"`
+	URL          *string            `json:"url,omitempty"`
+	TargetBranch *string            `json:"target_branch,omitempty"`
+	Source       *Project           `json:"source,omitempty"`
+	SourceBranch *string            `json:"source_branch,omitempty"`
+	CreateTime   *openapi.Timestamp `json:"created_at,omitempty"`
+	UpdatedTime  *openapi.Timestamp `json:"updated_at,omitempty"`
 }
 
 type IssuePart struct {
@@ -125,14 +127,18 @@ func (iss *IssueEvent) GetComment() *string {
 func (iss *IssueEvent) GetCommenter() *string {
 	return nil
 }
-func (iss *IssueEvent) ListLabels() []*string {
-	if len(iss.Labels) == 0 {
+func (iss *IssueEvent) GetCreateTime() *string {
+	if iss.Attributes == nil || iss.Attributes.CreateTime == nil {
 		return nil
 	}
 
-	labels := make([]*string, 0, len(iss.Labels))
-	for _, p := range iss.Labels {
-		labels = append(labels, &p.Title)
+	return iss.Attributes.CreateTime.ToString()
+}
+
+func (iss *IssueEvent) GetUpdateTime() *string {
+	if iss.Attributes == nil || iss.Attributes.UpdatedTime == nil {
+		return nil
 	}
-	return labels
+
+	return iss.Attributes.UpdatedTime.ToString()
 }

@@ -140,7 +140,18 @@ func (n *NoteEvent) GetCommenter() *string {
 
 	return n.User.UserName
 }
-func (n *NoteEvent) ListLabels() []*string {
+func (n *NoteEvent) GetCreateTime() *string {
+	if n.Attributes == nil || n.Attributes.CreateTime == nil {
+		return nil
+	}
 
-	return nil
+	return n.Attributes.CreateTime.ToString()
+}
+
+func (n *NoteEvent) GetUpdateTime() *string {
+	if n.Attributes == nil || n.Attributes.UpdatedTime == nil {
+		return nil
+	}
+
+	return n.Attributes.UpdatedTime.ToString()
 }

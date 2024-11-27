@@ -26,8 +26,8 @@ type Organization struct {
 	PrivateRepos *int       `json:"private_repos,omitempty"`
 	Followers    *int       `json:"followers,omitempty"`
 	FollowCount  *int       `json:"follow_count,omitempty"`
-	CreatedAt    *timestamp `json:"created_at,omitempty"`
-	UpdatedAt    *timestamp `json:"updated_at,omitempty"`
+	CreatedAt    *Timestamp `json:"created_at,omitempty"`
+	UpdatedAt    *Timestamp `json:"updated_at,omitempty"`
 	Members      *string    `json:"members,omitempty"`
 	Public       *bool      `json:"public,omitempty"`
 	Type         *string    `json:"type,omitempty"`

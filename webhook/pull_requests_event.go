@@ -118,14 +118,18 @@ func (pr *PullRequestEvent) GetComment() *string {
 func (pr *PullRequestEvent) GetCommenter() *string {
 	return nil
 }
-func (pr *PullRequestEvent) ListLabels() []*string {
-	if len(pr.Labels) == 0 {
+func (pr *PullRequestEvent) GetCreateTime() *string {
+	if pr.Attributes == nil || pr.Attributes.CreateTime == nil {
 		return nil
 	}
 
-	labels := make([]*string, 0, len(pr.Labels))
-	for _, p := range pr.Labels {
-		labels = append(labels, &p.Title)
+	return pr.Attributes.CreateTime.ToString()
+}
+
+func (pr *PullRequestEvent) GetUpdateTime() *string {
+	if pr.Attributes == nil || pr.Attributes.UpdatedTime == nil {
+		return nil
 	}
-	return labels
+
+	return pr.Attributes.UpdatedTime.ToString()
 }

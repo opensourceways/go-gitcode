@@ -25,9 +25,9 @@ type Repository struct {
 	Homepage                  *string                `json:"homepage,omitempty"`
 	DefaultBranch             *string                `json:"default_branch,omitempty"`
 	MasterBranch              *string                `json:"master_branch,omitempty"`
-	CreatedAt                 *timestamp             `json:"created_at,omitempty"`
-	PushedAt                  *timestamp             `json:"pushed_at,omitempty"`
-	UpdatedAt                 *timestamp             `json:"updated_at,omitempty"`
+	CreatedAt                 *Timestamp             `json:"created_at,omitempty"`
+	PushedAt                  *Timestamp             `json:"pushed_at,omitempty"`
+	UpdatedAt                 *Timestamp             `json:"updated_at,omitempty"`
 	HTMLURL                   *string                `json:"html_url,omitempty"`
 	CloneURL                  *string                `json:"clone_url,omitempty"`
 	GitURL                    *string                `json:"git_url,omitempty"`
@@ -159,7 +159,7 @@ type CommitUser struct {
 	Login *string    `json:"login,omitempty"`
 	Name  *string    `json:"name,omitempty"`
 	Email *string    `json:"email,omitempty"`
-	Date  *timestamp `json:"date,omitempty"`
+	Date  *Timestamp `json:"date,omitempty"`
 }
 
 type CommitFile struct {

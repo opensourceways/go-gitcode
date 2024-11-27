@@ -69,7 +69,6 @@ func createIssue(t *testing.T) {
 	assert.Equal(t, "*****", *issue.GetAuthor())
 	assert.Equal(t, (*string)(nil), issue.GetComment())
 	assert.Equal(t, (*string)(nil), issue.GetCommenter())
-	assert.Equal(t, 0, len(issue.ListLabels()))
 
 	issue = new(IssueEvent)
 	assert.Equal(t, (*string)(nil), issue.GetAction())
@@ -83,7 +82,6 @@ func createIssue(t *testing.T) {
 	assert.Equal(t, (*string)(nil), issue.GetAuthor())
 	assert.Equal(t, (*string)(nil), issue.GetComment())
 	assert.Equal(t, (*string)(nil), issue.GetCommenter())
-	assert.Equal(t, 0, len(issue.ListLabels()))
 }
 
 func createPR(t *testing.T) {
@@ -118,7 +116,6 @@ func createPR(t *testing.T) {
 	assert.Equal(t, "****", *pr.GetAuthor())
 	assert.Equal(t, (*string)(nil), pr.GetComment())
 	assert.Equal(t, (*string)(nil), pr.GetCommenter())
-	assert.Equal(t, 0, len(pr.ListLabels()))
 
 	pr = new(PullRequestEvent)
 	assert.Equal(t, (*string)(nil), pr.GetAction())
@@ -132,7 +129,6 @@ func createPR(t *testing.T) {
 	assert.Equal(t, (*string)(nil), pr.GetAuthor())
 	assert.Equal(t, (*string)(nil), pr.GetComment())
 	assert.Equal(t, (*string)(nil), pr.GetCommenter())
-	assert.Equal(t, 0, len(pr.ListLabels()))
 }
 
 func notePR(t *testing.T) {
@@ -167,7 +163,6 @@ func notePR(t *testing.T) {
 	assert.Equal(t, "****", *note.GetAuthor())
 	assert.Equal(t, "/lgtm\n/approve", *note.GetComment())
 	assert.Equal(t, "****", *note.GetCommenter())
-	assert.Equal(t, 0, len(note.ListLabels()))
 }
 
 func noteIssue(t *testing.T) {
@@ -202,7 +197,6 @@ func noteIssue(t *testing.T) {
 	assert.Equal(t, "****", *note.GetAuthor())
 	assert.Equal(t, "oiugbfaijub", *note.GetComment())
 	assert.Equal(t, "****", *note.GetCommenter())
-	assert.Equal(t, 0, len(note.ListLabels()))
 
 	note = new(NoteEvent)
 	assert.Equal(t, (*string)(nil), note.GetAction())
@@ -216,7 +210,6 @@ func noteIssue(t *testing.T) {
 	assert.Equal(t, (*string)(nil), note.GetAuthor())
 	assert.Equal(t, (*string)(nil), note.GetComment())
 	assert.Equal(t, (*string)(nil), note.GetCommenter())
-	assert.Equal(t, 0, len(note.ListLabels()))
 }
 
 func readWebHookTestdata(t *testing.T, path string, ptr any) []byte {
