@@ -27,7 +27,6 @@ import (
 )
 
 const (
-	noteEvent   = "Note Hook"
 	payloadData = "{\n  \"note\": \"/ibforuorg/community-test/pulls/2#note_30974945\" \n }"
 )
 
@@ -151,7 +150,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
-					req.Header.Set(headerEventToken, "1234")
+					req.Header.Set(headerEventToken, "sha256=36acf017ea0974457577506ef75268ac93ed6d61864ee994f438b63916ed1736")
 					return req
 				}(),
 			},
@@ -178,7 +177,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
-					req.Header.Set(headerEventToken, "1234")
+					req.Header.Set(headerEventToken, "sha256=f585860d0ca237e0550da0e166370b9c372e8aeb2e639b0ac9884cd52681c576")
 					return req
 				}(),
 			},
@@ -208,7 +207,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 					req.Header.Set(headerUserAgent, headerUserAgentValue)
 					req.Header.Set(headerContentTypeName, headerContentTypeJsonValue)
 					req.Header.Set(headerEventType, noteEvent)
-					req.Header.Set(headerEventToken, "1234")
+					req.Header.Set(headerEventToken, "sha256=36acf017ea0974457577506ef75268ac93ed6d61864ee994f438b63916ed1736")
 
 					_, _ = io.Copy(io.Discard, req.Body)
 					return req
@@ -216,7 +215,7 @@ func TestGitCodeAuthenticationAuth(t *testing.T) {
 			},
 			"",
 			func(i *args) {
-				assert.Equal(t, i.r.payload.String(), "")
+				assert.Equal(t, "", i.r.payload.String())
 			},
 		},
 		{
@@ -479,14 +478,7 @@ func TestGitCodeAuthenticationGetEventGUID(t *testing.T) {
 	}
 }
 
-func TestGitCodeAuthenticationsignSuccess(t *testing.T) {
-
-	assert.Equal(t, false, signSuccess("", " "))
-	assert.Equal(t, true, signSuccess("", ""))
-	assert.Equal(t, true, signSuccess("1231", "1231"))
-}
-
-func TestGitCodeAuthenticationhandleErr(t *testing.T) {
+func TestGitCodeAuthenticationHandleErr(t *testing.T) {
 
 	assert.Equal(t, fmt.Errorf(httpStatusCodeIncorrectErrorFormat, http.StatusAccepted), handleErr(httptest.NewRecorder(), http.StatusAccepted, ""))
 	assert.Equal(t, errorNilResponse, handleErr(nil, http.StatusBadRequest, ""))
@@ -518,4 +510,61 @@ func TestReadPayload(t *testing.T) {
 	assert.Equal(t, p, payload)
 	assert.Equal(t, e, err1)
 
+}
+
+func TestSignSuccess(t *testing.T) {
+	type args struct {
+		token   string
+		signKey string
+		payload *bytes.Buffer
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "Test with valid token",
+			args: args{
+				token:   "sha256=3938a65bf0a111e17a7dfe928ea0c73a38c5af80006a939a81c46b372e8f8815",
+				signKey: "secret",
+				payload: bytes.NewBufferString("{\n    \"content\": \"MTI0MTQxMjQxMjQ=\",\n    \"message\": \"fas\",\n    \"branch\": \"test1-patch-1\"\n}"),
+			},
+			want: true,
+		},
+		{
+			name: "Test with invalid token prefix",
+			args: args{
+				token:   "md5=123456",
+				signKey: "secret",
+				payload: bytes.NewBufferString("test payload"),
+			},
+			want: false,
+		},
+		{
+			name: "Test with empty token",
+			args: args{
+				token:   "",
+				signKey: "secret",
+				payload: bytes.NewBufferString("test payload"),
+			},
+			want: false,
+		},
+		{
+			name: "Test with empty payload",
+			args: args{
+				token:   "sha256=123456",
+				signKey: "secret",
+				payload: bytes.NewBufferString(""),
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := signSuccess(tt.args.token, tt.args.signKey, tt.args.payload); got != tt.want {
+				t.Errorf("signSuccess() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

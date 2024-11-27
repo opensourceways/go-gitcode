@@ -25,7 +25,7 @@ func TestCreatePullRequestComment(t *testing.T) {
 
 	client, mux, _ := mockServer(t)
 
-	want := new(PullRequestComment)
+	want := new(SimpleComment)
 	_ = readTestdata(t, prTestDataDir+"pull_requests_create_comment.json", want)
 
 	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/25/comments", func(w http.ResponseWriter, r *http.Request) {

@@ -13,6 +13,8 @@
 // limitations under the License.
 package openapi
 
+import "encoding/json"
+
 // PullRequest represents a GitHub pull request on a repository.
 type PullRequest struct {
 	ID             *int64          `json:"id,omitempty"`
@@ -72,8 +74,8 @@ type MergeAbleState struct {
 
 type PullRequestRequest struct {
 	ID              int64       `json:"id,omitempty"`
-	Title           string      `json:"title,omitempty" required:"true"`
-	Body            string      `json:"body,omitempty" required:"true"`
+	Title           string      `json:"title,omitempty"`
+	Body            string      `json:"body,omitempty"`
 	State           string      `json:"state,omitempty"`
 	Labels          string      `json:"labels,omitempty"`
 	MilestoneNumber string      `json:"milestone_number,omitempty"`
@@ -82,12 +84,16 @@ type PullRequestRequest struct {
 	Target          PullRequest `json:"target,omitempty"`
 }
 
+type SimpleComment struct {
+	Body string `json:"body,omitempty"`
+}
+
 type PullRequestComment struct {
-	ID        *string    `json:"id,omitempty"`
-	Body      *string    `json:"body,omitempty"`
-	User      *User      `json:"user,omitempty"`
-	CreatedAt *timestamp `json:"created_at,omitempty"`
-	UpdatedAt *timestamp `json:"updated_at,omitempty"`
+	ID        *json.Number `json:"id,omitempty"`
+	Body      *string      `json:"body,omitempty"`
+	User      *User        `json:"user,omitempty"`
+	CreatedAt *timestamp   `json:"created_at,omitempty"`
+	UpdatedAt *timestamp   `json:"updated_at,omitempty"`
 }
 
 type PullRequestCommentRequest struct {
