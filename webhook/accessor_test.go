@@ -27,7 +27,6 @@ import (
 
 const (
 	webhookTestDataDir = "testdata" + string(os.PathSeparator) + "webhook" + string(os.PathSeparator)
-	htmlUrl            = "https://gitcode.com/ibforuorg/test1"
 )
 
 func TestGetAccessor(t *testing.T) {
@@ -45,7 +44,7 @@ func createIssue(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/0", buf)
-	req.Header.Set(headerEventType, "Issue Hook")
+	req.Header.Set(headerEventType, issueEvent)
 	req.Header.Set(headerEventGUID, "1231321")
 	w := httptest.NewRecorder()
 
@@ -55,7 +54,7 @@ func createIssue(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "Issue Hook", *got2)
+	assert.Equal(t, issueEvent, *got2)
 	assert.Equal(t, "1231321", *got3)
 
 	issue, _ := got1.(*IssueEvent)
@@ -63,7 +62,7 @@ func createIssue(t *testing.T) {
 	assert.Equal(t, "opened", *issue.GetState())
 	assert.Equal(t, "ibforuorg", *issue.GetOrg())
 	assert.Equal(t, "test1", *issue.GetRepo())
-	assert.Equal(t, htmlUrl, *issue.GetHtmlURL())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/issues/4", *issue.GetHtmlURL())
 	assert.Equal(t, (*string)(nil), issue.GetBase())
 	assert.Equal(t, (*string)(nil), issue.GetHead())
 	assert.Equal(t, "4", *issue.GetNumber())
@@ -94,7 +93,7 @@ func createPR(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
-	req.Header.Set(headerEventType, "Merge Request Hook")
+	req.Header.Set(headerEventType, pullRequestEvent)
 	req.Header.Set(headerEventGUID, "fasgasd")
 	w := httptest.NewRecorder()
 
@@ -104,7 +103,7 @@ func createPR(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "Merge Request Hook", *got2)
+	assert.Equal(t, pullRequestEvent, *got2)
 	assert.Equal(t, "fasgasd", *got3)
 
 	pr, _ := got1.(*PullRequestEvent)
@@ -112,9 +111,9 @@ func createPR(t *testing.T) {
 	assert.Equal(t, "opened", *pr.GetState())
 	assert.Equal(t, "ibforuorg", *pr.GetOrg())
 	assert.Equal(t, "test1", *pr.GetRepo())
-	assert.Equal(t, htmlUrl, *pr.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), pr.GetBase())
-	assert.Equal(t, (*string)(nil), pr.GetHead())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/merge_requests/4", *pr.GetHtmlURL())
+	assert.Equal(t, "main", *pr.GetBase())
+	assert.Equal(t, "ibforuorg/test1/24124124124", *pr.GetHead())
 	assert.Equal(t, "4", *pr.GetNumber())
 	assert.Equal(t, "****", *pr.GetAuthor())
 	assert.Equal(t, (*string)(nil), pr.GetComment())
@@ -143,7 +142,7 @@ func notePR(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/2", buf)
-	req.Header.Set(headerEventType, "Note Hook")
+	req.Header.Set(headerEventType, noteEvent)
 	req.Header.Set(headerEventGUID, "651234123")
 	w := httptest.NewRecorder()
 
@@ -153,7 +152,7 @@ func notePR(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "Note Hook", *got2)
+	assert.Equal(t, noteEvent, *got2)
 	assert.Equal(t, "651234123", *got3)
 
 	note, _ := got1.(*NoteEvent)
@@ -161,9 +160,9 @@ func notePR(t *testing.T) {
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
-	assert.Equal(t, htmlUrl, *note.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), note.GetBase())
-	assert.Equal(t, (*string)(nil), note.GetHead())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/merge_requests/4#note_71e9657489bcddbed4c0a9d2b1e29eb7c8ab26c3", *note.GetHtmlURL())
+	assert.Equal(t, "main", *note.GetBase())
+	assert.Equal(t, "ibforuorg/test1/24124124124", *note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())
 	assert.Equal(t, "****", *note.GetAuthor())
 	assert.Equal(t, "/lgtm\n/approve", *note.GetComment())
@@ -178,7 +177,7 @@ func noteIssue(t *testing.T) {
 	buf := &bytes.Buffer{}
 	buf.Write(data)
 	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/2", buf)
-	req.Header.Set(headerEventType, "Note Hook")
+	req.Header.Set(headerEventType, noteEvent)
 	req.Header.Set(headerEventGUID, "151231321")
 	w := httptest.NewRecorder()
 
@@ -188,7 +187,7 @@ func noteIssue(t *testing.T) {
 	d2, _ := json.Marshal(got1)
 	assert.Equal(t, d1, d2)
 
-	assert.Equal(t, "Note Hook", *got2)
+	assert.Equal(t, noteEvent, *got2)
 	assert.Equal(t, "151231321", *got3)
 
 	note, _ := got1.(*NoteEvent)
@@ -196,7 +195,7 @@ func noteIssue(t *testing.T) {
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
-	assert.Equal(t, htmlUrl, *note.GetHtmlURL())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/issues/4#note_d3ab73b290d6fcd8800177e2d34545c755af3af1", *note.GetHtmlURL())
 	assert.Equal(t, (*string)(nil), note.GetBase())
 	assert.Equal(t, (*string)(nil), note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())
