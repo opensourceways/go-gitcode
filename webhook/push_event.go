@@ -30,6 +30,9 @@ type PushEvent struct {
 func (p *PushEvent) GetAction() *string {
 	return nil
 }
+func (p *PushEvent) GetActionDetail() *string {
+	return nil
+}
 func (p *PushEvent) GetState() *string {
 	return nil
 }

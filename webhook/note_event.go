@@ -42,6 +42,9 @@ func (n *NoteEvent) GetAction() *string {
 
 	return nil
 }
+func (n *NoteEvent) GetActionDetail() *string {
+	return nil
+}
 func (n *NoteEvent) GetState() *string {
 	if n.Issue != nil && n.Issue.State != nil {
 		return n.Issue.State

@@ -47,6 +47,13 @@ func (pr *PullRequestEvent) GetAction() *string {
 
 	return pr.Attributes.Action
 }
+func (pr *PullRequestEvent) GetActionDetail() *string {
+	if pr.Attributes == nil {
+		return nil
+	}
+
+	return pr.Attributes.ActionDetail
+}
 func (pr *PullRequestEvent) GetState() *string {
 	if pr.Attributes == nil {
 		return nil

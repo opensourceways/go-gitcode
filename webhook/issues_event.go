@@ -27,6 +27,7 @@ type Project struct {
 
 type Attributes struct {
 	Action       *string            `json:"action,omitempty"`
+	ActionDetail *string            `json:"update_reason,omitempty"`
 	State        *string            `json:"state,omitempty"`
 	Number       *int               `json:"iid,omitempty"`
 	CommentID    *string            `json:"discussion_id,omitempty"`
@@ -66,6 +67,14 @@ func (iss *IssueEvent) GetAction() *string {
 	}
 
 	return iss.Attributes.Action
+}
+
+func (iss *IssueEvent) GetActionDetail() *string {
+	if iss.Attributes == nil {
+		return nil
+	}
+
+	return iss.Attributes.ActionDetail
 }
 func (iss *IssueEvent) GetState() *string {
 	if iss.Attributes == nil {
