@@ -39,3 +39,18 @@ func (s *RepositoryService) GetRepoContributors(ctx context.Context, owner, repo
 	resp, err := s.api.Do(ctx, req, &contributors)
 	return contributors, successGetData(resp), err
 }
+
+// GetRepoContentByPath 获取仓库具体路径下的内容
+//
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/#2-%e8%8e%b7%e5%8f%96%e4%bb%93%e5%ba%93%e5%85%b7%e4%bd%93%e8%b7%af%e5%be%84%e4%b8%8b%e7%9a%84%e5%86%85%e5%ae%b9
+func (s *RepositoryService) GetRepoContentByPath(ctx context.Context, owner, repo, path, ref string) (*RepositoryContent, bool, error) {
+	urlStr := fmt.Sprintf("repos/%s/%s/contents/%s?ref=%s", owner, repo, path, ref)
+	req, err := newRequest(s.api, http.MethodGet, urlStr, nil)
+	if err != nil {
+		return nil, false, err
+	}
+
+	content := new(RepositoryContent)
+	resp, err := s.api.Do(ctx, req, content)
+	return content, successGetData(resp), err
+}

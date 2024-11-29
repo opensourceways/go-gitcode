@@ -84,6 +84,10 @@ type PullRequestRequest struct {
 	Target          PullRequest `json:"target,omitempty"`
 }
 
+type PullRequestRequestMerge struct {
+	Method string `json:"merge_method,omitempty"`
+}
+
 type SimpleComment struct {
 	Body string `json:"body,omitempty"`
 }
