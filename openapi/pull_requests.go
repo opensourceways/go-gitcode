@@ -98,9 +98,11 @@ func (s *PullRequestsService) GetPullRequestChangeFiles(ctx context.Context, own
 // MergePullRequest 合并Pull Request
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/pulls/#2-%e5%90%88%e5%b9%b6pull-request
-func (s *PullRequestsService) MergePullRequest(ctx context.Context, owner, repo, number string, merge *PullRequestRequestMerge) (*PullRequestMergedResult, bool, error) {
+func (s *PullRequestsService) MergePullRequest(ctx context.Context, owner, repo, number, mergeMethod string) (*PullRequestMergedResult, bool, error) {
 	urlStr := fmt.Sprintf("repos/%s/%s/pulls/%s", owner, repo, number)
-	req, err := newRequest(s.api, http.MethodPut, urlStr, merge)
+	req, err := newRequest(s.api, http.MethodPut, urlStr, &PullRequestRequestMerge{
+		Method: mergeMethod,
+	})
 	if err != nil {
 		return nil, false, err
 	}
