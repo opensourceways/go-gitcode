@@ -15,6 +15,9 @@ package webhook
 
 import (
 	"bytes"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -58,7 +61,7 @@ func (a *GitCodeAuthentication) GetEventGUID() string {
 const (
 	headerEventType      = "X-GitCode-Event"
 	headerEventGUID      = "X-GitCode-Delivery"
-	headerEventToken     = "X-GitCode-Token"
+	headerEventToken     = "X-GitCode-Signature-256"
 	headerUserAgent      = "User-Agent"
 	headerUserAgentValue = "git-gitcode-hook"
 
@@ -109,7 +112,7 @@ func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) (er
 	}
 
 	// Validate the payload with our HMAC secret.
-	if !signSuccess(token, a.signKey) {
+	if !signSuccess(token, a.signKey, a.payload) {
 		return handleErr(w, http.StatusUnauthorized, headerInvalidTokenErrorMessage), false
 	}
 
@@ -148,6 +151,14 @@ func handleErr(w http.ResponseWriter, errCode int, errMsg string) error {
 	return errors.New(errMsg)
 }
 
-func signSuccess(token, signKey string) bool {
-	return signKey == token
+func signSuccess(token, signKey string, payload *bytes.Buffer) bool {
+	if !strings.HasPrefix(token, "sha256=") {
+		return false
+	}
+
+	mac := hmac.New(sha256.New, []byte(signKey))
+	mac.Write(payload.Bytes())
+
+	expected := hex.EncodeToString(mac.Sum(nil))
+	return expected == token[7:]
 }
