@@ -101,7 +101,7 @@ func (n *NoteEvent) GetID() *string {
 	}
 
 	if n.Issue != nil && n.Issue.ID != nil {
-		no := n.PR.ID.String()
+		no := n.Issue.ID.String()
 		return &no
 	}
 
