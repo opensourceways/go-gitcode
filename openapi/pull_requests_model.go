@@ -121,6 +121,6 @@ type PullRequestOperationLog struct {
 
 type PullRequestMergedResult struct {
 	SHA     *string `json:"sha,omitempty"`
-	Merged  *string `json:"merged,omitempty"`
+	Merged  *bool   `json:"merged,omitempty"`
 	Message *string `json:"message,omitempty"`
 }
