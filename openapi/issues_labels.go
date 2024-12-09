@@ -106,3 +106,19 @@ func (s *IssuesService) RemoveLabelsFromIssue(ctx context.Context, owner, repo, 
 	resp, err := s.api.Do(ctx, req, nil)
 	return successModified(resp), err
 }
+
+// GetIssueLabels 获取企业某个Issue所有标签
+//
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/issues/#8%e8%8e%b7%e5%8f%96%e4%bc%81%e4%b8%9a%e6%9f%90%e4%b8%aaissue%e6%89%80%e6%9c%89%e6%a0%87%e7%ad%be
+func (s *IssuesService) GetIssueLabels(ctx context.Context, owner, issueID, page string) ([]*Label, bool, error) {
+	urlStr := fmt.Sprintf("enterprises/%s/issues/%s/labels", owner, issueID)
+	req, err := newRequest(s.api, http.MethodGet, urlStr,
+		&url.Values{"page": []string{page}, "per_page": []string{"100"}})
+	if err != nil {
+		return nil, false, err
+	}
+
+	var havingLabels []*Label
+	resp, err := s.api.Do(ctx, req, &havingLabels)
+	return havingLabels, successGetData(resp), err
+}

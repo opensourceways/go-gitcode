@@ -93,6 +93,20 @@ func (n *NoteEvent) GetHead() *string {
 	head := *n.PR.Source.Path + "/" + *n.PR.SourceBranch
 	return &head
 }
+func (n *NoteEvent) GetID() *string {
+
+	if n.PR != nil && n.PR.ID != nil {
+		no := n.PR.ID.String()
+		return &no
+	}
+
+	if n.Issue != nil && n.Issue.ID != nil {
+		no := n.PR.ID.String()
+		return &no
+	}
+
+	return nil
+}
 func (n *NoteEvent) GetNumber() *string {
 
 	if n.PR != nil && n.PR.Number != nil {

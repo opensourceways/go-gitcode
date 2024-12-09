@@ -43,7 +43,11 @@ func (t *Timestamp) MarshalJSON() ([]byte, error) {
 }
 
 func (t *Timestamp) ToString() *string {
-	b, _ := t.MarshalJSON()
-	s := string(b)
-	return &s
+	b := make([]byte, 0, len(time.RFC3339))
+	if !time.Time(*t).IsZero() {
+		b = time.Time(*t).AppendFormat(b, time.RFC3339)
+		s := string(b)
+		return &s
+	}
+	return nil
 }

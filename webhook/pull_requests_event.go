@@ -14,6 +14,7 @@
 package webhook
 
 import (
+	"encoding/json"
 	"github.com/opensourceways/go-gitcode/openapi"
 	"strconv"
 )
@@ -26,6 +27,7 @@ type PRPart struct {
 	TargetBranch *string       `json:"target_branch,omitempty"`
 	Source       *Project      `json:"source,omitempty"`
 	SourceBranch *string       `json:"source_branch,omitempty"`
+	ID           *json.Number  `json:"id,omitempty"`
 }
 
 type PullRequestEvent struct {
@@ -101,6 +103,14 @@ func (pr *PullRequestEvent) GetHead() *string {
 func (pr *PullRequestEvent) GetNumber() *string {
 	if pr.Attributes != nil && pr.Attributes.Number != nil {
 		n := strconv.Itoa(*pr.Attributes.Number)
+		return &n
+	}
+
+	return nil
+}
+func (pr *PullRequestEvent) GetID() *string {
+	if pr.Attributes != nil && pr.Attributes.ID != nil {
+		n := pr.Attributes.ID.String()
 		return &n
 	}
 

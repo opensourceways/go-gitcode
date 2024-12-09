@@ -14,6 +14,7 @@
 package webhook
 
 import (
+	"encoding/json"
 	"github.com/opensourceways/go-gitcode/openapi"
 	"strconv"
 )
@@ -26,6 +27,7 @@ type Project struct {
 }
 
 type Attributes struct {
+	ID           *json.Number       `json:"id,omitempty"`
 	Action       *string            `json:"action,omitempty"`
 	ActionDetail *string            `json:"update_reason,omitempty"`
 	State        *string            `json:"state,omitempty"`
@@ -46,6 +48,7 @@ type IssuePart struct {
 	State  *string       `json:"state,omitempty"`
 	Number *int          `json:"iid,omitempty"`
 	Author *openapi.User `json:"author,omitempty"`
+	ID     *json.Number  `json:"id,omitempty"`
 }
 
 type IssueEvent struct {
@@ -113,6 +116,14 @@ func (iss *IssueEvent) GetHead() *string {
 func (iss *IssueEvent) GetNumber() *string {
 	if iss.Attributes != nil && iss.Attributes.Number != nil {
 		n := strconv.Itoa(*iss.Attributes.Number)
+		return &n
+	}
+
+	return nil
+}
+func (iss *IssueEvent) GetID() *string {
+	if iss.Attributes != nil && iss.Attributes.ID != nil {
+		n := iss.Attributes.ID.String()
 		return &n
 	}
 

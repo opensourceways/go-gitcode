@@ -66,6 +66,9 @@ func (p *PushEvent) GetHead() *string {
 func (p *PushEvent) GetNumber() *string {
 	return nil
 }
+func (p *PushEvent) GetID() *string {
+	return nil
+}
 func (p *PushEvent) GetAuthor() *string {
 	return p.Author
 }
