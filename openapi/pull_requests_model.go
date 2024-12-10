@@ -110,7 +110,7 @@ type PullRequestCommentRequest struct {
 type PullRequestOperationLog struct {
 	Project        *string    `json:"project,omitempty"`
 	CreatedAt      *Timestamp `json:"created_at,omitempty"`
-	DiscussionID   *int64     `json:"discussion_id,omitempty"`
+	DiscussionID   *string    `json:"discussion_id,omitempty"`
 	ID             *int64     `json:"id,omitempty"`
 	Content        *string    `json:"content,omitempty"`
 	Action         *string    `json:"action,omitempty"`
