@@ -14,15 +14,15 @@
 package openapi
 
 import (
+	"encoding/json"
 	"net/url"
 )
 
 // Label represents a GitCode label on an Issue
 type Label struct {
-	ID           int64  `json:"id,omitempty"`
-	Name         string `json:"name,omitempty"`
-	Color        string `json:"color,omitempty"`
-	RepositoryId int64  `json:"repository_id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Color string `json:"color,omitempty"`
+	Title string `json:"title,omitempty"`
 }
 
 func (l *Label) Form() *url.Values {
@@ -68,7 +68,7 @@ type PullRequestLinks struct {
 }
 
 type IssueRequest struct {
-	Repository    string `json:"repo,omitempty"  required:"true"` // 仓库地址
+	Repository    string `json:"repo,omitempty"` // 仓库地址
 	Title         string `json:"title,omitempty"`
 	Body          string `json:"body,omitempty"`
 	Labels        string `json:"labels,omitempty"`   // 用逗号分开的标签
@@ -81,10 +81,10 @@ type IssueRequest struct {
 }
 
 type IssueComment struct {
-	ID        *int64     `json:"id,omitempty"`
-	Body      *string    `json:"body,omitempty"`
-	User      *User      `json:"user,omitempty"`
-	CreatedAt *timestamp `json:"created_at,omitempty"`
-	UpdatedAt *timestamp `json:"updated_at,omitempty"`
-	Target    *Issue     `json:"target,omitempty"`
+	ID        *json.Number `json:"id,omitempty"`
+	Body      *string      `json:"body,omitempty"`
+	User      *User        `json:"user,omitempty"`
+	CreatedAt *timestamp   `json:"created_at,omitempty"`
+	UpdatedAt *timestamp   `json:"updated_at,omitempty"`
+	Target    *Issue       `json:"target,omitempty"`
 }

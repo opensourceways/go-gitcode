@@ -17,11 +17,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"net/url"
+	"reflect"
 	"runtime"
 	"strings"
 	"time"
@@ -55,7 +55,7 @@ func NewAPIClientWithAuthorization(token []byte) *APIClient {
 				req.Header.Set(headerAuthorization, "Bearer "+string(token))
 				req.Header.Set(headerUserAgentName, headerUserAgentValue)
 				req.Header.Set(headerMediaTypeName, headerMediaTypeValue)
-				return createTransport(nil).RoundTrip(req)
+				return createTransport().RoundTrip(req)
 			},
 		),
 		Timeout: 90 * time.Second,
@@ -76,13 +76,10 @@ func NewAPIClientWithAuthorization(token []byte) *APIClient {
 	return c
 }
 
-func createTransport(localAddr net.Addr) *http.Transport {
+func createTransport() *http.Transport {
 	dialer := &net.Dialer{
 		Timeout:   30 * time.Second,
 		KeepAlive: 30 * time.Second,
-	}
-	if localAddr != nil {
-		dialer.LocalAddr = localAddr
 	}
 	return &http.Transport{
 		DialContext:           transportDialContext(dialer),
@@ -128,6 +125,11 @@ func newRequest(c *APIClient, method, urlStr string, body any, handlers ...Reque
 }
 
 func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*http.Response, error) {
+
+	if receiver != nil && reflect.TypeOf(receiver).Kind() != reflect.Pointer {
+		return nil, respReceiverNotAnPointerError
+	}
+
 	var resp *http.Response
 	var err error
 
@@ -148,21 +150,20 @@ func (c *APIClient) Do(ctx context.Context, req *http.Request, receiver any) (*h
 	if err != nil {
 		return resp, err
 	}
+
+	return parseResp(resp, receiver)
+}
+
+func parseResp(resp *http.Response, receiver any) (*http.Response, error) {
 	defer resp.Body.Close()
 
-	switch receiver := receiver.(type) {
-	case nil:
-	case io.Writer:
-		_, err = io.Copy(receiver, resp.Body)
-	default:
-		decErr := json.NewDecoder(resp.Body).Decode(receiver)
-		if decErr == io.EOF {
-			decErr = nil // ignore EOF errors caused by empty response body
-		}
-		if decErr != nil {
-			fmt.Println(decErr)
-			err = decErr
-		}
+	if receiver == nil {
+		return resp, nil
+	}
+
+	err := json.NewDecoder(resp.Body).Decode(receiver)
+	if err == io.EOF {
+		err = nil // ignore EOF errors caused by empty response body
 	}
 	return resp, err
 }

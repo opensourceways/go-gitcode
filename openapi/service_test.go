@@ -14,7 +14,9 @@
 package openapi
 
 import (
+	"bytes"
 	"encoding/json"
+	"github.com/stretchr/testify/assert"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -60,6 +62,15 @@ func mockServer(t *testing.T) (client *APIClient, mux *http.ServeMux, serverURL 
 	t.Cleanup(server.Close)
 
 	return client, mux, server.URL
+}
+
+func TestBuildRequestForm(t *testing.T) {
+	assert.Equal(t, (*bytes.Buffer)(nil), buildRequestForm(nil))
+
+	type dummy struct {
+		A string
+	}
+	assert.Equal(t, (*bytes.Buffer)(nil), buildRequestForm(&dummy{}))
 }
 
 func readTestdata(t *testing.T, path string, ptr any) []byte {

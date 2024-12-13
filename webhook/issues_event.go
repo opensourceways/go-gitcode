@@ -21,16 +21,21 @@ import (
 type Project struct {
 	Name      *string `json:"name,omitempty"`
 	Namespace *string `json:"namespace,omitempty"`
+	Path      *string `json:"path_with_namespace,omitempty"`
 	HTMLURL   *string `json:"web_url,omitempty"`
 }
 
 type Attributes struct {
-	Action          *string `json:"action,omitempty"`
-	State           *string `json:"state,omitempty"`
-	Number          *int    `json:"iid,omitempty"`
-	CommentID       *string `json:"discussion_id,omitempty"`
-	Comment         *string `json:"note,omitempty"`
-	CommentCategory *string `json:"noteable_type,omitempty"`
+	Action       *string  `json:"action,omitempty"`
+	State        *string  `json:"state,omitempty"`
+	Number       *int     `json:"iid,omitempty"`
+	CommentID    *string  `json:"discussion_id,omitempty"`
+	Comment      *string  `json:"description,omitempty"`
+	CommentKind  *string  `json:"noteable_type,omitempty"`
+	URL          *string  `json:"url,omitempty"`
+	TargetBranch *string  `json:"target_branch,omitempty"`
+	Source       *Project `json:"source,omitempty"`
+	SourceBranch *string  `json:"source_branch,omitempty"`
 }
 
 type IssuePart struct {
@@ -82,11 +87,11 @@ func (iss *IssueEvent) GetRepo() *string {
 	return iss.Repository.Name
 }
 func (iss *IssueEvent) GetHtmlURL() *string {
-	if iss.Repository == nil {
+	if iss.Attributes == nil {
 		return nil
 	}
 
-	return iss.Repository.HTMLURL
+	return iss.Attributes.URL
 }
 func (iss *IssueEvent) GetBase() *string {
 	return nil
@@ -100,22 +105,19 @@ func (iss *IssueEvent) GetNumber() *string {
 		return &n
 	}
 
-	if iss.Issue != nil && iss.Issue.Number != nil {
-		n := strconv.Itoa(*iss.Issue.Number)
-		return &n
-	}
-
 	return nil
 }
 func (iss *IssueEvent) GetAuthor() *string {
 	if iss.User == nil {
 		return nil
 	}
-	if iss.User.Login != nil {
-		return iss.User.Login
-	}
-
 	return iss.User.UserName
+}
+func (iss *IssueEvent) GetCommentID() *string {
+	return nil
+}
+func (iss *IssueEvent) GetCommentKind() *string {
+	return nil
 }
 func (iss *IssueEvent) GetComment() *string {
 	return nil
@@ -130,7 +132,7 @@ func (iss *IssueEvent) ListLabels() []*string {
 
 	labels := make([]*string, 0, len(iss.Labels))
 	for _, p := range iss.Labels {
-		labels = append(labels, &p.Name)
+		labels = append(labels, &p.Title)
 	}
 	return labels
 }
