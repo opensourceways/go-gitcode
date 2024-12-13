@@ -21,12 +21,14 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"testing"
 )
 
 const (
 	webhookTestDataDir = "testdata" + string(os.PathSeparator) + "webhook" + string(os.PathSeparator)
+	htmlUrl            = "https://gitcode.com/ibforuorg/test1/issues/4"
 )
 
 func TestGetAccessor(t *testing.T) {
@@ -35,6 +37,20 @@ func TestGetAccessor(t *testing.T) {
 	createPR(t)
 	notePR(t)
 	noteIssue(t)
+	pushCode(t)
+
+	buf := &bytes.Buffer{}
+	buf.Write([]byte("kjhygadsskhj"))
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
+	req.Header.Set(headerEventType, "Dummy Hook")
+	req.Header.Set(headerEventGUID, "fasgasd")
+	w := httptest.NewRecorder()
+
+	a := new(GitCodeAccessor)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
+	assert.Equal(t, nil, got1)
+	assert.Equal(t, "Dummy Hook", *got2)
+	assert.Equal(t, "fasgasd", *got3)
 }
 
 func createIssue(t *testing.T) {
@@ -59,29 +75,64 @@ func createIssue(t *testing.T) {
 
 	issue, _ := got1.(*IssueEvent)
 	assert.Equal(t, "open", *issue.GetAction())
+	assert.Equal(t, (*string)(nil), issue.GetActionDetail())
 	assert.Equal(t, "opened", *issue.GetState())
 	assert.Equal(t, "ibforuorg", *issue.GetOrg())
 	assert.Equal(t, "test1", *issue.GetRepo())
-	assert.Equal(t, "https://gitcode.com/ibforuorg/test1/issues/4", *issue.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), issue.GetBase())
-	assert.Equal(t, (*string)(nil), issue.GetHead())
+	assert.Equal(t, htmlUrl, *issue.GetHtmlURL())
 	assert.Equal(t, "4", *issue.GetNumber())
+	assert.Equal(t, "515443", *issue.GetID())
 	assert.Equal(t, "*****", *issue.GetAuthor())
-	assert.Equal(t, (*string)(nil), issue.GetComment())
-	assert.Equal(t, (*string)(nil), issue.GetCommenter())
+	assert.Equal(t, "2024-10-26T10:28:03+08:00", *issue.GetCreateTime())
+	assert.Equal(t, "2024-10-26T10:28:03+08:00", *issue.GetUpdateTime())
 
 	issue = new(IssueEvent)
-	assert.Equal(t, (*string)(nil), issue.GetAction())
-	assert.Equal(t, (*string)(nil), issue.GetState())
-	assert.Equal(t, (*string)(nil), issue.GetOrg())
-	assert.Equal(t, (*string)(nil), issue.GetRepo())
-	assert.Equal(t, (*string)(nil), issue.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), issue.GetBase())
-	assert.Equal(t, (*string)(nil), issue.GetHead())
-	assert.Equal(t, (*string)(nil), issue.GetNumber())
-	assert.Equal(t, (*string)(nil), issue.GetAuthor())
-	assert.Equal(t, (*string)(nil), issue.GetComment())
-	assert.Equal(t, (*string)(nil), issue.GetCommenter())
+	rt := reflect.TypeOf(issue)
+	n := rt.NumMethod()
+	for i := 0; i < n; i++ {
+		rm := rt.Method(i)
+		ret := rm.Func.Call([]reflect.Value{reflect.ValueOf(issue)})
+		assert.Equal(t, (*string)(nil), ret[0].Interface())
+	}
+}
+
+func pushCode(t *testing.T) {
+	want := GitCodeAccessor{Push: new(PushEvent)}
+	data := readWebHookTestdata(t, webhookTestDataDir+"push_code.json", want.Push)
+
+	buf := &bytes.Buffer{}
+	buf.Write(data)
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
+	req.Header.Set(headerEventType, "Push Hook")
+	req.Header.Set(headerEventGUID, "fasgasd")
+	w := httptest.NewRecorder()
+
+	a := new(GitCodeAccessor)
+	got1, _, got2, got3 := a.GetAccessor(w, req)
+	d1, _ := json.Marshal(want.Push)
+	d2, _ := json.Marshal(got1)
+	assert.Equal(t, d1, d2)
+
+	assert.Equal(t, "Push Hook", *got2)
+	assert.Equal(t, "fasgasd", *got3)
+
+	pr, _ := got1.(*PushEvent)
+	assert.Equal(t, (*string)(nil), pr.GetAction())
+	assert.Equal(t, (*string)(nil), pr.GetState())
+	assert.Equal(t, "ibforuorg", *pr.GetOrg())
+	assert.Equal(t, "org-repo-role-member-manage", *pr.GetRepo())
+	assert.Equal(t, "https://gitcode.com/ibforuorg/org-repo-role-member-manage", *pr.GetHtmlURL())
+	assert.Equal(t, "dev", *pr.GetBase())
+	assert.Equal(t, "ibforu", *pr.GetAuthor())
+
+	pr = new(PushEvent)
+	rt := reflect.TypeOf(pr)
+	n := rt.NumMethod()
+	for i := 0; i < n; i++ {
+		rm := rt.Method(i)
+		ret := rm.Func.Call([]reflect.Value{reflect.ValueOf(pr)})
+		assert.Equal(t, (*string)(nil), ret[0].Interface())
+	}
 }
 
 func createPR(t *testing.T) {
@@ -106,6 +157,7 @@ func createPR(t *testing.T) {
 
 	pr, _ := got1.(*PullRequestEvent)
 	assert.Equal(t, "open", *pr.GetAction())
+	assert.Equal(t, "", *pr.GetActionDetail())
 	assert.Equal(t, "opened", *pr.GetState())
 	assert.Equal(t, "ibforuorg", *pr.GetOrg())
 	assert.Equal(t, "test1", *pr.GetRepo())
@@ -113,22 +165,19 @@ func createPR(t *testing.T) {
 	assert.Equal(t, "main", *pr.GetBase())
 	assert.Equal(t, "ibforuorg/test1/24124124124", *pr.GetHead())
 	assert.Equal(t, "4", *pr.GetNumber())
+	assert.Equal(t, "190370", *pr.GetID())
 	assert.Equal(t, "****", *pr.GetAuthor())
-	assert.Equal(t, (*string)(nil), pr.GetComment())
-	assert.Equal(t, (*string)(nil), pr.GetCommenter())
+	assert.Equal(t, "2024-10-26T10:32:40+08:00", *pr.GetCreateTime())
+	assert.Equal(t, "2024-10-26T10:32:41+08:00", *pr.GetUpdateTime())
 
 	pr = new(PullRequestEvent)
-	assert.Equal(t, (*string)(nil), pr.GetAction())
-	assert.Equal(t, (*string)(nil), pr.GetState())
-	assert.Equal(t, (*string)(nil), pr.GetOrg())
-	assert.Equal(t, (*string)(nil), pr.GetRepo())
-	assert.Equal(t, (*string)(nil), pr.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), pr.GetBase())
-	assert.Equal(t, (*string)(nil), pr.GetHead())
-	assert.Equal(t, (*string)(nil), pr.GetNumber())
-	assert.Equal(t, (*string)(nil), pr.GetAuthor())
-	assert.Equal(t, (*string)(nil), pr.GetComment())
-	assert.Equal(t, (*string)(nil), pr.GetCommenter())
+	rt := reflect.TypeOf(pr)
+	n := rt.NumMethod()
+	for i := 0; i < n; i++ {
+		rm := rt.Method(i)
+		ret := rm.Func.Call([]reflect.Value{reflect.ValueOf(pr)})
+		assert.Equal(t, (*string)(nil), ret[0].Interface())
+	}
 }
 
 func notePR(t *testing.T) {
@@ -153,6 +202,7 @@ func notePR(t *testing.T) {
 
 	note, _ := got1.(*NoteEvent)
 	assert.Equal(t, "open", *note.GetAction())
+	assert.Equal(t, (*string)(nil), note.GetActionDetail())
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
@@ -160,9 +210,14 @@ func notePR(t *testing.T) {
 	assert.Equal(t, "main", *note.GetBase())
 	assert.Equal(t, "ibforuorg/test1/24124124124", *note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())
+	assert.Equal(t, "190370", *note.GetID())
 	assert.Equal(t, "****", *note.GetAuthor())
+	assert.Equal(t, "71e9657489bcddbed4c0a9d2b1e29eb7c8ab26c3", *note.GetCommentID())
+	assert.Equal(t, "MergeRequest", *note.GetCommentKind())
 	assert.Equal(t, "/lgtm\n/approve", *note.GetComment())
 	assert.Equal(t, "****", *note.GetCommenter())
+	assert.Equal(t, "2024-10-26T11:44:15+08:00", *note.GetCreateTime())
+	assert.Equal(t, "2024-10-26T11:44:15+08:00", *note.GetUpdateTime())
 }
 
 func noteIssue(t *testing.T) {
@@ -187,6 +242,7 @@ func noteIssue(t *testing.T) {
 
 	note, _ := got1.(*NoteEvent)
 	assert.Equal(t, (*string)(nil), note.GetAction())
+	assert.Equal(t, (*string)(nil), note.GetActionDetail())
 	assert.Equal(t, "opened", *note.GetState())
 	assert.Equal(t, "ibforuorg", *note.GetOrg())
 	assert.Equal(t, "test1", *note.GetRepo())
@@ -194,22 +250,23 @@ func noteIssue(t *testing.T) {
 	assert.Equal(t, (*string)(nil), note.GetBase())
 	assert.Equal(t, (*string)(nil), note.GetHead())
 	assert.Equal(t, "4", *note.GetNumber())
+	assert.Equal(t, "515443", *note.GetID())
 	assert.Equal(t, "****", *note.GetAuthor())
+	assert.Equal(t, "d3ab73b290d6fcd8800177e2d34545c755af3af1", *note.GetCommentID())
+	assert.Equal(t, "Issue", *note.GetCommentKind())
 	assert.Equal(t, "oiugbfaijub", *note.GetComment())
 	assert.Equal(t, "****", *note.GetCommenter())
+	assert.Equal(t, "2024-10-26T11:42:05+08:00", *note.GetCreateTime())
+	assert.Equal(t, "2024-10-26T11:42:05+08:00", *note.GetUpdateTime())
 
 	note = new(NoteEvent)
-	assert.Equal(t, (*string)(nil), note.GetAction())
-	assert.Equal(t, (*string)(nil), note.GetState())
-	assert.Equal(t, (*string)(nil), note.GetOrg())
-	assert.Equal(t, (*string)(nil), note.GetRepo())
-	assert.Equal(t, (*string)(nil), note.GetHtmlURL())
-	assert.Equal(t, (*string)(nil), note.GetBase())
-	assert.Equal(t, (*string)(nil), note.GetHead())
-	assert.Equal(t, (*string)(nil), note.GetNumber())
-	assert.Equal(t, (*string)(nil), note.GetAuthor())
-	assert.Equal(t, (*string)(nil), note.GetComment())
-	assert.Equal(t, (*string)(nil), note.GetCommenter())
+	rt := reflect.TypeOf(note)
+	n := rt.NumMethod()
+	for i := 0; i < n; i++ {
+		rm := rt.Method(i)
+		ret := rm.Func.Call([]reflect.Value{reflect.ValueOf(note)})
+		assert.Equal(t, (*string)(nil), ret[0].Interface())
+	}
 }
 
 func readWebHookTestdata(t *testing.T, path string, ptr any) []byte {
