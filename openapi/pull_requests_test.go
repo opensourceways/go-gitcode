@@ -40,6 +40,7 @@ func TestGetPullRequest(t *testing.T) {
 	d1, _ := json.Marshal(*want)
 	d2, _ := json.Marshal(*got)
 	assert.Equal(t, d1, d2)
+	assert.Equal(t, (*string)(nil), got.ClosedAt.ToString())
 }
 
 func TestUpdatePullRequest(t *testing.T) {
@@ -128,4 +129,71 @@ func TestListPullRequestCommits(t *testing.T) {
 		d2, _ := json.Marshal(*got[i])
 		assert.Equal(t, d1, d2)
 	}
+}
+
+func TestGetPullRequestChangeFiles(t *testing.T) {
+
+	client, mux, _ := mockServer(t)
+
+	want := new([]*CommitFile)
+	_ = readTestdata(t, prTestDataDir+"pull_requests_files.json", want)
+
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/16/files", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
+		_ = json.NewEncoder(w).Encode(want)
+	})
+
+	ctx := context.Background()
+	got, ok, err := client.PullRequests.GetPullRequestChangeFiles(ctx, owner, repo, "16")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, ok)
+
+	for i := range *want {
+		d1, _ := json.Marshal(*(*want)[i])
+		d2, _ := json.Marshal(*got[i])
+		assert.Equal(t, d1, d2)
+	}
+}
+
+func TestListPullRequestOperationLogs(t *testing.T) {
+
+	client, mux, _ := mockServer(t)
+
+	want := new([]*PullRequestOperationLog)
+	_ = readTestdata(t, prTestDataDir+"pull_requests_files.json", want)
+
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/17/operate_logs", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
+		_ = json.NewEncoder(w).Encode(want)
+	})
+
+	ctx := context.Background()
+	got, ok, err := client.PullRequests.ListPullRequestOperationLogs(ctx, owner, repo, "17", "asc", "1")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, ok)
+
+	for i := range *want {
+		d1, _ := json.Marshal(*(*want)[i])
+		d2, _ := json.Marshal(*got[i])
+		assert.Equal(t, d1, d2)
+	}
+}
+
+func TestMergePullRequest(t *testing.T) {
+
+	client, mux, _ := mockServer(t)
+
+	want := new(PullRequestMergedResult)
+	_ = readTestdata(t, prTestDataDir+"pull_requests_merge.json", want)
+
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/18/merge", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
+		_ = json.NewEncoder(w).Encode(want)
+	})
+
+	ctx := context.Background()
+	got, ok, err := client.PullRequests.MergePullRequest(ctx, owner, repo, "18", "merge")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, ok)
+	assert.Equal(t, *want, *got)
 }

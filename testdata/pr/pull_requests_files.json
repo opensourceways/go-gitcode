@@ -1,0 +1,22 @@
+[
+  {
+    "sha": "aafe9aa00e5bdf48f0af9da74c14bc15764de899",
+    "filename": "sigs/infrastructrue/repo-info.yaml",
+    "additions": 3,
+    "deletions": 0,
+    "blob_id": "728f6063b42fa327a9d145d72ced19ffb6558a2c",
+    "blob_url": "https://gitcode.com/openUBMC-test/community/blob/aafe9aa00e5bdf48f0af9da74c14bc15764de899/sigs/infrastructrue/repo-info.yaml",
+    "raw_url": "https://raw.gitcode.com/openUBMC-test/community/raw/aafe9aa00e5bdf48f0af9da74c14bc15764de899/sigs/infrastructrue/repo-info.yaml",
+    "patch": {
+      "diff": "@@ -11,5 +11,8 @@\n   description: \"openUBMC official website in my community\"\n   type: privacy\n - name: websit1es\n+  description: \"openUBMC official website in my community\"\n+  type: privacy\n+- name: bbbbbbb\n   description: \"openUBMC official website in my community\"\n   type: privacy\n\\ No newline at end of file\n",
+      "old_path": "sigs/infrastructrue/repo-info.yaml",
+      "new_path": "sigs/infrastructrue/repo-info.yaml",
+      "a_mode": "100644",
+      "b_mode": "100644",
+      "new_file": false,
+      "renamed_file": false,
+      "deleted_file": false,
+      "too_large": false
+    }
+  }
+]

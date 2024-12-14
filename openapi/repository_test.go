@@ -58,3 +58,24 @@ func TestGetRepoContributors(t *testing.T) {
 		assert.Equal(t, d1, d2)
 	}
 }
+
+func TestGetRepoContentByPath(t *testing.T) {
+
+	client, mux, _ := mockServer(t)
+
+	want := new(RepositoryContent)
+	_ = readTestdata(t, reposTestDataDir+"repository_file_content.json", want)
+
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/contents/2.txt", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
+		_ = json.NewEncoder(w).Encode(want)
+	})
+
+	ctx := context.Background()
+	got, ok, err := client.Repository.GetRepoContentByPath(ctx, owner, repo, "2.txt", "main")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, ok)
+	d1, _ := json.Marshal(*want)
+	d2, _ := json.Marshal(*got)
+	assert.Equal(t, d1, d2)
+}

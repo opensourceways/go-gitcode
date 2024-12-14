@@ -177,3 +177,29 @@ func TestRemoveLabelsFromIssue(t *testing.T) {
 	assert.Equal(t, true, ok)
 
 }
+
+func TestGetIssueLabels(t *testing.T) {
+
+	client, mux, _ := mockServer(t)
+
+	var labels []*Label
+	_ = readTestdata(t, issuesTestDataDir+"issues_having_labels.json", &labels)
+
+	mux.HandleFunc("/enterprises/"+owner+"/issues/5342/labels", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
+		err := json.NewEncoder(w).Encode(labels)
+		if err != nil {
+			t.Errorf("Issues.GetIssueLabels mock response data error: %v", err)
+		}
+	})
+
+	result, ok, err := client.Issues.GetIssueLabels(context.Background(), owner, "5342", "1")
+	if err != nil {
+		t.Errorf("Issues.GetIssueLabels returned error: %v", err)
+	}
+	assert.Equal(t, true, ok)
+	for i := range labels {
+		assert.Equal(t, *labels[i], *result[i])
+	}
+
+}

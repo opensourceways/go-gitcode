@@ -41,7 +41,7 @@ func TestGetAccessor(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	buf.Write([]byte("kjhygadsskhj"))
-	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/11", buf)
 	req.Header.Set(headerEventType, "Dummy Hook")
 	req.Header.Set(headerEventGUID, "fasgasd")
 	w := httptest.NewRecorder()
@@ -141,7 +141,7 @@ func createPR(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	buf.Write(data)
-	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/1", buf)
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/2", buf)
 	req.Header.Set(headerEventType, pullRequestEvent)
 	req.Header.Set(headerEventGUID, "fasgasd")
 	w := httptest.NewRecorder()
@@ -186,7 +186,7 @@ func notePR(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	buf.Write(data)
-	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/2", buf)
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/21", buf)
 	req.Header.Set(headerEventType, noteEvent)
 	req.Header.Set(headerEventGUID, "651234123")
 	w := httptest.NewRecorder()
@@ -226,7 +226,7 @@ func noteIssue(t *testing.T) {
 
 	buf := &bytes.Buffer{}
 	buf.Write(data)
-	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/2", buf)
+	req, _ := http.NewRequest(http.MethodPost, "http://localhost:8080/26", buf)
 	req.Header.Set(headerEventType, noteEvent)
 	req.Header.Set(headerEventGUID, "151231321")
 	w := httptest.NewRecorder()

@@ -57,3 +57,29 @@ func TestRemoveLabelsFromPullRequest(t *testing.T) {
 	assert.Equal(t, nil, err)
 	assert.Equal(t, true, ok)
 }
+
+func TestGetLabelsOfPullRequest(t *testing.T) {
+
+	client, mux, _ := mockServer(t)
+
+	var labels []*Label
+	_ = readTestdata(t, prTestDataDir+"pull_requests_add_labels.json", &labels)
+
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/pulls/4432/labels", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
+		err := json.NewEncoder(w).Encode(labels)
+		if err != nil {
+			t.Errorf("PR.GetLabelsOfPullRequest mock response data error: %v", err)
+		}
+	})
+
+	result, ok, err := client.PullRequests.GetLabelsOfPullRequest(context.Background(), owner, repo, "4432")
+	if err != nil {
+		t.Errorf("PR.GetLabelsOfPullRequest returned error: %v", err)
+	}
+	assert.Equal(t, true, ok)
+	for i := range labels {
+		assert.Equal(t, *labels[i], *result[i])
+	}
+
+}

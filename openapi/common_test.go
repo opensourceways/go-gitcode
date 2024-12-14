@@ -135,4 +135,47 @@ func TestNewRequestError(t *testing.T) {
 	assert.Equal(t, false, ok)
 	assert.Equal(t, ([]*RepositoryCommit)(nil), result14)
 	assert.Equal(t, msg1, err.Error())
+
+	result15, ok, err := client.Issues.GetIssueLabels(context.Background(), owner, "15423", "1")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, ([]*Label)(nil), result15)
+	assert.Equal(t, msg1, err.Error())
+
+	result16, ok, err := client.PullRequests.GetPullRequestChangeFiles(context.Background(), owner, repo, "1")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, ([]*CommitFile)(nil), result16)
+	assert.Equal(t, msg1, err.Error())
+
+	result17, ok, err := client.PullRequests.ListPullRequestOperationLogs(context.Background(), owner, repo, "1", "asc", "1")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, ([]*PullRequestOperationLog)(nil), result17)
+	assert.Equal(t, msg1, err.Error())
+
+	result18, ok, err := client.PullRequests.MergePullRequest(context.Background(), owner, repo, "1", "merge")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, (*PullRequestMergedResult)(nil), result18)
+	assert.Equal(t, msg1, err.Error())
+
+	result19, ok, err := client.PullRequests.ListPullRequestComments(context.Background(), owner, repo, "1", "1", "pr_comment")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, ([]*PullRequestComment)(nil), result19)
+	assert.Equal(t, msg1, err.Error())
+
+	ok, err = client.PullRequests.UpdatePullRequestComment(context.Background(), owner, repo, "11234", "1fasd")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, msg1, err.Error())
+
+	ok, err = client.PullRequests.DeletePullRequestComment(context.Background(), owner, repo, "11234")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, msg1, err.Error())
+
+	result20, ok, err := client.PullRequests.GetLabelsOfPullRequest(context.Background(), owner, repo, "1")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, ([]*Label)(nil), result20)
+	assert.Equal(t, msg1, err.Error())
+
+	result21, ok, err := client.Repository.GetRepoContentByPath(context.Background(), owner, repo, "1.txt", "main")
+	assert.Equal(t, false, ok)
+	assert.Equal(t, (*RepositoryContent)(nil), result21)
+	assert.Equal(t, msg1, err.Error())
 }

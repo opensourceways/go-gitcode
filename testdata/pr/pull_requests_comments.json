@@ -1,0 +1,28 @@
+[
+  {
+    "id": 40480995,
+    "body": "### CLA Signature Pass  \n\n[@ibforu](https://gitcode.com/ibforu), thanks for your pull request. All authors of the commits have signed the CLA. :wave: ",
+    "created_at": "2024-12-11T14:38:33+08:00",
+    "updated_at": "2024-12-11T14:38:33+08:00",
+    "user": {
+      "id": "*****",
+      "login": "ibforu",
+      "name": "ibforu",
+      "html_url": "https://gitcode.com/ibforu"
+    },
+    "comment_type": "pr_comment"
+  },
+  {
+    "id": 40480992,
+    "body": "/check-cla",
+    "created_at": "2024-12-11T14:38:27+08:00",
+    "updated_at": "2024-12-11T14:38:27+08:00",
+    "user": {
+      "id": "*****",
+      "login": "ibforu2nd",
+      "name": "ibforu2nd",
+      "html_url": "https://gitcode.com/ibforu2nd"
+    },
+    "comment_type": "pr_comment"
+  }
+]
