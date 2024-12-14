@@ -69,7 +69,7 @@ func TestListIssueLinkingPullRequests(t *testing.T) {
 	prs := new([]*PullRequest)
 	_ = readTestdata(t, issuesTestDataDir+"issues_linking_prs.json", prs)
 
-	mux.HandleFunc(prefixUrlPath+owner+"/issues/1/pull_requests", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc(prefixUrlPath+owner+"/"+repo+"/issues/1/pull_requests", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(headerContentTypeName, headerContentTypeJsonValue)
 		err := json.NewEncoder(w).Encode(prs)
 		if err != nil {

@@ -1,0 +1,44 @@
+[
+  {
+    "content": "merged from codehub, merge_commit_sha: 4611038dd702189de610066d460c83b176622135",
+    "id": 1545977,
+    "action": "merged",
+    "merge_request_id": 190370,
+    "created_at": "2024-11-05T07:18:28+08:00",
+    "updated_at": "2024-11-05T07:18:28+08:00",
+    "discussion_id": "53d69f3a1375f8a7193979f36c3a7f2e367c160b",
+    "project": "ibforuorg/test1",
+    "user": {
+      "id": "*******",
+      "name": "ibforu",
+      "login": "ibforu",
+      "nick_name": "ibforu",
+      "state": "active",
+      "email": "4123@gmail.com",
+      "name_cn": "",
+      "web_url": "https://gitcode.com/ibforu"
+    },
+    "action_type": "merged"
+  },
+  {
+    "content": "add label help wanted, question",
+    "id": 1545965,
+    "action": "label",
+    "merge_request_id": 190370,
+    "created_at": "2024-11-05T06:56:04+08:00",
+    "updated_at": "2024-11-05T06:56:04+08:00",
+    "discussion_id": "de222761ed4f522bf815f40267c2d465428a381d",
+    "project": "ibforuorg/test1",
+    "user": {
+      "id": "*******",
+      "name": "ibforu",
+      "login": "ibforu",
+      "nick_name": "ibforu",
+      "state": "active",
+      "email": "4123@gmail.com",
+      "name_cn": "",
+      "web_url": "https://gitcode.com/ibforu"
+    },
+    "action_type": "label"
+  }
+]

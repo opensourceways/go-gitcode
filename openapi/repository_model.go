@@ -25,9 +25,9 @@ type Repository struct {
 	Homepage                  *string                `json:"homepage,omitempty"`
 	DefaultBranch             *string                `json:"default_branch,omitempty"`
 	MasterBranch              *string                `json:"master_branch,omitempty"`
-	CreatedAt                 *timestamp             `json:"created_at,omitempty"`
-	PushedAt                  *timestamp             `json:"pushed_at,omitempty"`
-	UpdatedAt                 *timestamp             `json:"updated_at,omitempty"`
+	CreatedAt                 *Timestamp             `json:"created_at,omitempty"`
+	PushedAt                  *Timestamp             `json:"pushed_at,omitempty"`
+	UpdatedAt                 *Timestamp             `json:"updated_at,omitempty"`
 	HTMLURL                   *string                `json:"html_url,omitempty"`
 	CloneURL                  *string                `json:"clone_url,omitempty"`
 	GitURL                    *string                `json:"git_url,omitempty"`
@@ -159,21 +159,31 @@ type CommitUser struct {
 	Login *string    `json:"login,omitempty"`
 	Name  *string    `json:"name,omitempty"`
 	Email *string    `json:"email,omitempty"`
-	Date  *timestamp `json:"date,omitempty"`
+	Date  *Timestamp `json:"date,omitempty"`
+}
+
+type CommitPatch struct {
+	Diff        *string `json:"diff,omitempty"`
+	OldPath     *string `json:"old_path,omitempty"`
+	NewPath     *string `json:"new_path,omitempty"`
+	NewFile     *bool   `json:"new_file,omitempty"`
+	RenamedFile *bool   `json:"renamed_file,omitempty"`
+	DeletedFile *bool   `json:"deleted_file,omitempty"`
+	TooLarge    *bool   `json:"too_large,omitempty"`
 }
 
 type CommitFile struct {
-	SHA              *string `json:"sha,omitempty"`
-	Filename         *string `json:"filename,omitempty"`
-	Additions        *int    `json:"additions,omitempty"`
-	Deletions        *int    `json:"deletions,omitempty"`
-	Changes          *int    `json:"changes,omitempty"`
-	Status           *string `json:"status,omitempty"`
-	Patch            *string `json:"patch,omitempty"`
-	BlobURL          *string `json:"blob_url,omitempty"`
-	RawURL           *string `json:"raw_url,omitempty"`
-	ContentsURL      *string `json:"contents_url,omitempty"`
-	PreviousFilename *string `json:"previous_filename,omitempty"`
+	SHA              *string      `json:"sha,omitempty"`
+	Filename         *string      `json:"filename,omitempty"`
+	Additions        *int         `json:"additions,omitempty"`
+	Deletions        *int         `json:"deletions,omitempty"`
+	Changes          *int         `json:"changes,omitempty"`
+	Status           *string      `json:"status,omitempty"`
+	Patch            *CommitPatch `json:"patch,omitempty"`
+	BlobURL          *string      `json:"blob_url,omitempty"`
+	RawURL           *string      `json:"raw_url,omitempty"`
+	ContentsURL      *string      `json:"contents_url,omitempty"`
+	PreviousFilename *string      `json:"previous_filename,omitempty"`
 }
 
 // RepositoryContent represents a file or directory in a github repository.
@@ -183,7 +193,7 @@ type RepositoryContent struct {
 	// If Target is set, Path will be the symlink path.
 	Target   *string `json:"target,omitempty"`
 	Encoding *string `json:"encoding,omitempty"`
-	Size     *int    `json:"size,omitempty"`
+	Size     *int64  `json:"size,omitempty"`
 	Name     *string `json:"name,omitempty"`
 	Path     *string `json:"path,omitempty"`
 	// Content contains the actual file content, which may be encoded.

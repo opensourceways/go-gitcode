@@ -17,7 +17,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"net/url"
 )
 
 // UpdateIssue 更新Issue
@@ -39,8 +38,8 @@ func (s *IssuesService) UpdateIssue(ctx context.Context, owner, number string, i
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/issues/#7-%e8%8e%b7%e5%8f%96-issue-%e5%85%b3%e8%81%94%e7%9a%84-pull-requests
 func (s *IssuesService) ListIssueLinkingPullRequests(ctx context.Context, owner, repo, number string) ([]*PullRequest, bool, error) {
-	urlStr := fmt.Sprintf("repos/%s/issues/%s/pull_requests", owner, number)
-	req, err := newRequest(s.api, http.MethodGet, urlStr, &url.Values{"repo": []string{repo}}, RequestHandler{t: Query})
+	urlStr := fmt.Sprintf("repos/%s/%s/issues/%s/pull_requests", owner, repo, number)
+	req, err := newRequest(s.api, http.MethodGet, urlStr, nil)
 	if err != nil {
 		return nil, false, err
 	}

@@ -46,9 +46,9 @@ type Issue struct {
 	Assignee         *User             `json:"assignee,omitempty"`
 	Repository       *Repository       `json:"repository,omitempty"`
 	Labels           []*Label          `json:"labels,omitempty"`
-	CreatedAt        *timestamp        `json:"created_at,omitempty"`
-	UpdatedAt        *timestamp        `json:"updated_at,omitempty"`
-	ClosedAt         *timestamp        `json:"finished_at,omitempty"`
+	CreatedAt        *Timestamp        `json:"created_at,omitempty"`
+	UpdatedAt        *Timestamp        `json:"updated_at,omitempty"`
+	ClosedAt         *Timestamp        `json:"finished_at,omitempty"`
 	ClosedBy         *User             `json:"closed_by,omitempty"`
 
 	PullRequestLinks *PullRequestLinks `json:"pull_request,omitempty"`
@@ -64,7 +64,7 @@ type PullRequestLinks struct {
 	HTMLURL  *string    `json:"html_url,omitempty"`
 	DiffURL  *string    `json:"diff_url,omitempty"`
 	PatchURL *string    `json:"patch_url,omitempty"`
-	MergedAt *timestamp `json:"merged_at,omitempty"`
+	MergedAt *Timestamp `json:"merged_at,omitempty"`
 }
 
 type IssueRequest struct {
@@ -84,7 +84,7 @@ type IssueComment struct {
 	ID        *json.Number `json:"id,omitempty"`
 	Body      *string      `json:"body,omitempty"`
 	User      *User        `json:"user,omitempty"`
-	CreatedAt *timestamp   `json:"created_at,omitempty"`
-	UpdatedAt *timestamp   `json:"updated_at,omitempty"`
+	CreatedAt *Timestamp   `json:"created_at,omitempty"`
+	UpdatedAt *Timestamp   `json:"updated_at,omitempty"`
 	Target    *Issue       `json:"target,omitempty"`
 }

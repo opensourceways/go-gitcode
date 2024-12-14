@@ -14,6 +14,7 @@
 package webhook
 
 import (
+	"encoding/json"
 	"github.com/opensourceways/go-gitcode/openapi"
 	"strconv"
 )
@@ -26,6 +27,7 @@ type PRPart struct {
 	TargetBranch *string       `json:"target_branch,omitempty"`
 	Source       *Project      `json:"source,omitempty"`
 	SourceBranch *string       `json:"source_branch,omitempty"`
+	ID           *json.Number  `json:"id,omitempty"`
 }
 
 type PullRequestEvent struct {
@@ -46,6 +48,13 @@ func (pr *PullRequestEvent) GetAction() *string {
 	}
 
 	return pr.Attributes.Action
+}
+func (pr *PullRequestEvent) GetActionDetail() *string {
+	if pr.Attributes == nil {
+		return nil
+	}
+
+	return pr.Attributes.ActionDetail
 }
 func (pr *PullRequestEvent) GetState() *string {
 	if pr.Attributes == nil {
@@ -99,6 +108,14 @@ func (pr *PullRequestEvent) GetNumber() *string {
 
 	return nil
 }
+func (pr *PullRequestEvent) GetID() *string {
+	if pr.Attributes != nil && pr.Attributes.ID != nil {
+		n := pr.Attributes.ID.String()
+		return &n
+	}
+
+	return nil
+}
 func (pr *PullRequestEvent) GetAuthor() *string {
 	if pr.User == nil {
 		return nil
@@ -118,14 +135,18 @@ func (pr *PullRequestEvent) GetComment() *string {
 func (pr *PullRequestEvent) GetCommenter() *string {
 	return nil
 }
-func (pr *PullRequestEvent) ListLabels() []*string {
-	if len(pr.Labels) == 0 {
+func (pr *PullRequestEvent) GetCreateTime() *string {
+	if pr.Attributes == nil || pr.Attributes.CreateTime == nil {
 		return nil
 	}
 
-	labels := make([]*string, 0, len(pr.Labels))
-	for _, p := range pr.Labels {
-		labels = append(labels, &p.Title)
+	return pr.Attributes.CreateTime.ToString()
+}
+
+func (pr *PullRequestEvent) GetUpdateTime() *string {
+	if pr.Attributes == nil || pr.Attributes.UpdatedTime == nil {
+		return nil
 	}
-	return labels
+
+	return pr.Attributes.UpdatedTime.ToString()
 }

@@ -42,6 +42,9 @@ func (n *NoteEvent) GetAction() *string {
 
 	return nil
 }
+func (n *NoteEvent) GetActionDetail() *string {
+	return nil
+}
 func (n *NoteEvent) GetState() *string {
 	if n.Issue != nil && n.Issue.State != nil {
 		return n.Issue.State
@@ -89,6 +92,20 @@ func (n *NoteEvent) GetHead() *string {
 
 	head := *n.PR.Source.Path + "/" + *n.PR.SourceBranch
 	return &head
+}
+func (n *NoteEvent) GetID() *string {
+
+	if n.PR != nil && n.PR.ID != nil {
+		no := n.PR.ID.String()
+		return &no
+	}
+
+	if n.Issue != nil && n.Issue.ID != nil {
+		no := n.Issue.ID.String()
+		return &no
+	}
+
+	return nil
 }
 func (n *NoteEvent) GetNumber() *string {
 
@@ -140,7 +157,18 @@ func (n *NoteEvent) GetCommenter() *string {
 
 	return n.User.UserName
 }
-func (n *NoteEvent) ListLabels() []*string {
+func (n *NoteEvent) GetCreateTime() *string {
+	if n.Attributes == nil || n.Attributes.CreateTime == nil {
+		return nil
+	}
 
-	return nil
+	return n.Attributes.CreateTime.ToString()
+}
+
+func (n *NoteEvent) GetUpdateTime() *string {
+	if n.Attributes == nil || n.Attributes.UpdatedTime == nil {
+		return nil
+	}
+
+	return n.Attributes.UpdatedTime.ToString()
 }

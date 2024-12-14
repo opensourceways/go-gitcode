@@ -22,10 +22,10 @@ type PullRequest struct {
 	State          *string         `json:"state,omitempty"`
 	Title          *string         `json:"title,omitempty"`
 	Body           *string         `json:"body,omitempty"`
-	CreatedAt      *timestamp      `json:"created_at,omitempty"`
-	UpdatedAt      *timestamp      `json:"updated_at,omitempty"`
-	ClosedAt       *timestamp      `json:"closed_at,omitempty"`
-	MergedAt       *timestamp      `json:"merged_at,omitempty"`
+	CreatedAt      *Timestamp      `json:"created_at,omitempty"`
+	UpdatedAt      *Timestamp      `json:"updated_at,omitempty"`
+	ClosedAt       *Timestamp      `json:"closed_at,omitempty"`
+	MergedAt       *Timestamp      `json:"merged_at,omitempty"`
 	Labels         []*Label        `json:"labels,omitempty"`
 	User           *User           `json:"user,omitempty"`
 	Draft          *bool           `json:"draft,omitempty"`
@@ -84,6 +84,10 @@ type PullRequestRequest struct {
 	Target          PullRequest `json:"target,omitempty"`
 }
 
+type PullRequestRequestMerge struct {
+	Method string `json:"merge_method,omitempty"`
+}
+
 type SimpleComment struct {
 	Body string `json:"body,omitempty"`
 }
@@ -92,8 +96,8 @@ type PullRequestComment struct {
 	ID        *json.Number `json:"id,omitempty"`
 	Body      *string      `json:"body,omitempty"`
 	User      *User        `json:"user,omitempty"`
-	CreatedAt *timestamp   `json:"created_at,omitempty"`
-	UpdatedAt *timestamp   `json:"updated_at,omitempty"`
+	CreatedAt *Timestamp   `json:"created_at,omitempty"`
+	UpdatedAt *Timestamp   `json:"updated_at,omitempty"`
 }
 
 type PullRequestCommentRequest struct {
@@ -105,18 +109,18 @@ type PullRequestCommentRequest struct {
 // PullRequestOperationLog represents a comment in a GitHub DiscussionCommentEvent.
 type PullRequestOperationLog struct {
 	Project        *string    `json:"project,omitempty"`
-	CreatedAt      *timestamp `json:"created_at,omitempty"`
-	DiscussionID   *int64     `json:"discussion_id,omitempty"`
+	CreatedAt      *Timestamp `json:"created_at,omitempty"`
+	DiscussionID   *string    `json:"discussion_id,omitempty"`
 	ID             *int64     `json:"id,omitempty"`
 	Content        *string    `json:"content,omitempty"`
 	Action         *string    `json:"action,omitempty"`
 	MergeRequestId *int64     `json:"merge_request_id,omitempty"`
-	UpdatedAt      *timestamp `json:"updated_at,omitempty"`
+	UpdatedAt      *Timestamp `json:"updated_at,omitempty"`
 	User           *User      `json:"user,omitempty"`
 }
 
 type PullRequestMergedResult struct {
 	SHA     *string `json:"sha,omitempty"`
-	Merged  *string `json:"merged,omitempty"`
+	Merged  *bool   `json:"merged,omitempty"`
 	Message *string `json:"message,omitempty"`
 }

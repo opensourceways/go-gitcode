@@ -1,0 +1,16 @@
+{
+  "type": "file",
+  "encoding": "base64",
+  "size": 89,
+  "name": "openEuler-WSL-23.09.zip.sha256sum",
+  "path": "openEuler-23.09/WSL/openEuler-WSL-23.09.zip.sha256sum",
+  "content": "MmJlMjNiOWMwOTdkMGJmMzg3ZWZmNWZhYjAxOWY4M2FmOWZhOWNhYTY4YzM4OWZjYWFkZDRlYzgzYmFmN2JmMiAgb3BlbkV1bGVyLVdTTC0yMy4wOS56aXA=",
+  "sha": "c1708cd1e9719d3e696ae4e64df235b6b452ce2f",
+  "url": "https://api.gitcode.com/api/v5/repos/ibforuorg/test1/contents/openEuler-23.09/WSL/openEuler-WSL-23.09.zip.sha256sum",
+  "html_url": "https://gitcode.com/ibforuorg/test1/blob/pr1/openEuler-23.09/WSL/openEuler-WSL-23.09.zip.sha256sum",
+  "download_url": "https://raw.gitcode.com/ibforuorg/test1/blobs/c1708cd1e9719d3e696ae4e64df235b6b452ce2f/openEuler-23.09/WSL/openEuler-WSL-23.09.zip.sha256sum",
+  "_links": {
+    "self": "https://api.gitcode.com/api/v5/repos/ibforuorg/test1/contents/openEuler-23.09/WSL/openEuler-WSL-23.09.zip.sha256sum",
+    "html": "https://gitcode.com/ibforuorg/test1/blob/pr1/openEuler-23.09/WSL/openEuler-WSL-23.09.zip.sha256sum"
+  }
+}

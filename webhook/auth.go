@@ -116,6 +116,8 @@ func (a *GitCodeAuthentication) Auth(w http.ResponseWriter, r *http.Request) (er
 		return handleErr(w, http.StatusUnauthorized, headerInvalidTokenErrorMessage), false
 	}
 
+	a.eventGUID = r.Header.Get(headerEventGUID)
+
 	return nil, false
 }
 
