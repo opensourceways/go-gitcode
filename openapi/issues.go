@@ -19,6 +19,21 @@ import (
 	"net/http"
 )
 
+// CreateIssue 创建Issue
+//
+// api Docs: https://docs.gitcode.com/docs/openapi/repos/issues/#1-%E5%88%9B%E5%BB%BAissue
+func (s *IssuesService) CreateIssue(ctx context.Context, owner string, issueContent *IssueRequest) (*Issue, bool, error) {
+	urlStr := fmt.Sprintf("repos/%s/issues", owner)
+	req, err := newRequest(s.api, http.MethodPost, urlStr, issueContent)
+	if err != nil {
+		return nil, false, err
+	}
+
+	createdIssue := new(Issue)
+	resp, err := s.api.Do(ctx, req, createdIssue)
+	return createdIssue, successCreated(resp), err
+}
+
 // UpdateIssue 更新Issue
 //
 // api Docs: https://docs.gitcode.com/docs/openapi/repos/issues/#2-%e6%9b%b4%e6%96%b0issue
